@@ -9,12 +9,12 @@ class WatchListCubit extends Cubit<WatchListState>{
   WatchListRepository watchListRepository=WatchListRepository();
   fetchWatchList(String userId) async{
     debugPrint("Music Category Screen Bloc State Management");
-    try{
+    /*try{*/
       final List<WatchListModel> slider=await watchListRepository.fetchWatchList(userId);
       print("Slider Length ${slider.length}");
       emit(LoadedState(slider));
-    }catch(e){
+   /* }catch(e){
       emit(ErrorState("Error in api $e"));
-    }
+    }*/
   }
 }

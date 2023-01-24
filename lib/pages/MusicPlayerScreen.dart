@@ -1,7 +1,6 @@
 import 'dart:convert';
 import 'dart:isolate';
 import 'dart:ui';
-
 import 'package:awesome_snackbar_content/awesome_snackbar_content.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_downloader/flutter_downloader.dart';
@@ -14,10 +13,12 @@ import 'package:just_audio/just_audio.dart';
 import 'package:just_audio_background/just_audio_background.dart';
 import 'package:lottie/lottie.dart';
 import 'package:mtott/const.dart';
+import 'package:mtott/pages/DashBoardScreen.dart';
 import 'package:mtott/utility/theme/Database.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:shimmer/shimmer.dart';
 import '../Service/cubit/MusicCategoryTypeCubit.dart';
 import '../Service/model/CommentModel.dart';
 import '../Service/state/MusicCategoryTypeState.dart';
@@ -152,9 +153,7 @@ class _MusicPlayerScreenState extends State<MusicPlayerScreen>
   @override
   void initState() {
     _controller = AnimationController(vsync: this);
-    setState(() {
-      context.read<MusicCategoryTypeCubit>().fetchMusicCategoryType(widget.title);
-    });
+
 
     FlutterDownloader.registerCallback(downloadCallback);
     playMusic();
@@ -187,7 +186,9 @@ class _MusicPlayerScreenState extends State<MusicPlayerScreen>
   @override
   void dispose() {
     player.dispose();
+    _controller.dispose();
     IsolateNameServer.removePortNameMapping('downloader_send_port');
+
     super.dispose();
     WidgetsBinding.instance.removeObserver(this);
   }
@@ -231,7 +232,6 @@ class _MusicPlayerScreenState extends State<MusicPlayerScreen>
     if (resp.statusCode == 200) {
       if (result["status"]) {
         comment.clear();
-
         showComment(id);
         final banner = AwesomeSnackbarContent(
             title: 'Success',
@@ -308,9 +308,13 @@ class _MusicPlayerScreenState extends State<MusicPlayerScreen>
         ],
       ),
       body: BlocBuilder<MusicCategoryTypeCubit, MusicCategoryTypeState>(
-
         builder: (context, state) {
-          if (state is MusicCategoryTypeLoadedState) {
+          if (state is MusicCategoryTypeLoadingState) {
+            return Center(child:CircularProgressIndicator(
+                strokeWidth: 5.0,
+                color: Theme.of(context).brightness==Brightness.dark?Colors.white:Colors.black));
+          }
+          else if (state is MusicCategoryTypeLoadedState) {
             return PageView.builder(
                 controller: pageController,
                 physics: const BouncingScrollPhysics(),
@@ -318,7 +322,6 @@ class _MusicPlayerScreenState extends State<MusicPlayerScreen>
                 itemCount: state.slider.length,
                 onPageChanged: (value) {
                   debugPrint("Current Value $value");
-
                   setState(() {
 
                     player.stop();
@@ -693,8 +696,6 @@ class _MusicPlayerScreenState extends State<MusicPlayerScreen>
                     ),
                   );
                 });
-          } else if (state is MusicCategoryTypeLoadingState) {
-            return const Center(child: CircularProgressIndicator());
           }
           return const Center(child: CircularProgressIndicator());
         },

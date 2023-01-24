@@ -2,7 +2,6 @@
 //
 //     final watchListModel = watchListModelFromJson(jsonString);
 
-import 'package:meta/meta.dart';
 import 'dart:convert';
 
 WatchListModel watchListModelFromJson(String str) => WatchListModel.fromJson(json.decode(str));
@@ -18,18 +17,18 @@ class WatchListModel {
 
   bool status;
   String message;
-  List<List<Datum>> data;
+  List<Datum> data;
 
   factory WatchListModel.fromJson(Map<String, dynamic> json) => WatchListModel(
     status: json["status"],
     message: json["message"],
-    data: List<List<Datum>>.from(json["data"].map((x) => List<Datum>.from(x.map((x) => Datum.fromJson(x))))),
+    data: List<Datum>.from(json["data"].map((x) => Datum.fromJson(x))),
   );
 
   Map<String, dynamic> toJson() => {
     "status": status,
     "message": message,
-    "data": List<dynamic>.from(data.map((x) => List<dynamic>.from(x.map((x) => x.toJson())))),
+    "data": List<dynamic>.from(data.map((x) => x.toJson())),
   };
 }
 
@@ -90,15 +89,15 @@ class Datum {
   String seriesCover;
 
   factory Datum.fromJson(Map<String, dynamic> json) => Datum(
-    id: json["id"],
-    languageId: json["language_id"]??"",
-    genreId: json["genre_id"]??"",
-    movieType: json["movie_type"]??"",
+    id: json["id"]??'',
+    languageId: json["language_id"]??'',
+    genreId: json["genre_id"]??'',
+    movieType: json["movie_type"]??'',
     movieTitle: json["movie_title"]??"",
     movieCover: json["movie_cover"]??"",
     moviePoster: json["movie_poster"]??"",
     movieUrl: json["movie_url"]??"",
-    videoId: json["video_id"]??"",
+    videoId: json["video_id"]??'',
     movieDesc: json["movie_desc"]??"",
     totalViews: json["total_views"]??"",
     totalRate: json["total_rate"]??"",
@@ -110,7 +109,6 @@ class Datum {
     status: json["status"]??"",
     director: json["director"]??"",
     price: json["price"]??"",
-
     isTopPick: json["is_top_pick"]??"",
     seriesName: json["series_name"]??"",
     seriesDesc: json["series_desc"]??"",
@@ -139,7 +137,6 @@ class Datum {
     "status": status,
     "director": director,
     "price": price,
-
     "is_top_pick": isTopPick,
     "series_name": seriesName,
     "series_desc": seriesDesc,

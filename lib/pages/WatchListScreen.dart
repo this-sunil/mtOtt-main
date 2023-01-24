@@ -115,15 +115,15 @@ class _WatchListScreenState extends State<WatchListScreen> {
 
                       leading: CircleAvatar(
                           maxRadius: 35,
-                          backgroundImage: NetworkImage(state.slider[index].data[index][index].movieCover.isEmpty?"$baseUrl/images/series/${state.slider[index].data[index][index].seriesCover}":"$baseUrl/images/movies/${state.slider[index].data[index][index].movieCover}")),
-                      title: Text(state.slider[index].data[index][index].movieTitle.isEmpty?state.slider[index].data[index][index].seriesName:state.slider[index].data[index][index].movieTitle),
+                          backgroundImage: NetworkImage(state.slider[index].data[index].movieCover.isEmpty?"$baseUrl/images/series/${state.slider[index].data[index].seriesCover}":"$baseUrl/images/movies/${state.slider[index].data[index].movieCover}")),
+                      title: Text(state.slider[index].data[index].movieTitle.isEmpty?state.slider[index].data[index].seriesName:state.slider[index].data[index].movieTitle),
 
                       onLongPress: (){
-                        multipleSelection(state.slider[index].data[index][0].id);
+                        multipleSelection(state.slider[index].data[index].id);
                       },
-                     trailing: selectItem.contains(state.slider[index].data[index][0].id)?IconButton(onPressed: (){
-                       removeWatchlist(state.slider[index].data[index][0].id);
-                       selectItem.remove(state.slider[index].data[index][0].id);
+                     trailing: selectItem.contains(state.slider[index].data[index].id)?IconButton(onPressed: (){
+                       removeWatchlist(state.slider[index].data[index].id);
+                       selectItem.remove(state.slider[index].data[index].id);
 
                      },icon: const Icon(Icons.delete,color: Colors.white)):null,
                     ),

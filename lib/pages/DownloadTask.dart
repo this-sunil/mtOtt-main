@@ -100,8 +100,8 @@ class _MyDownloadState extends State<MyDownload> {
     if (Platform.isIOS) return true;
 
 
-    if (widget.platform == TargetPlatform.android )
-      // && androidInfo.version.sdkInt! <= 28)
+    if (widget.platform == TargetPlatform.android)
+
         {
       final status = await Permission.storage.status;
       if (status != PermissionStatus.granted) {

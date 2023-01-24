@@ -9,8 +9,8 @@ import 'package:dio/dio.dart';
 /*To Call The Api*/
 class MusicCategoryTypeRepository{
   Repository repository=Repository();
-  List<MusicCategoryTypeModel> model=[];
 
+  List<MusicCategoryTypeModel> model=[];
   /*Start Music sub Category Screen Api With Bloc State Management*/
   Future<List<MusicCategoryTypeModel>> fetchMusicCategory(String musicType) async{
 
@@ -22,15 +22,14 @@ class MusicCategoryTypeRepository{
     });
     final res=await repository.sendRequest.post(musicCategoryType,data: formData);
     repository.sendRequest.interceptors.add(PrettyDioLogger());
+
     final result=musicCategoryTypeModelFromJson(res.data);
     if(res.statusCode==200){
       model.clear();
-      debugPrint("Music Category ${model.length}");
+      debugPrint("Music Category Type ${musicType}");
       if(result.data.isNotEmpty){
 
-        for(int i=0;i<result.data.length;i++){
-          model.add(MusicCategoryTypeModel(status:result.status, message: result.message, data: result.data));
-        }
+        result.data.map((e) =>  model.add(MusicCategoryTypeModel(status:result.status, message: result.message, data: result.data))).toList();
       }
 
 

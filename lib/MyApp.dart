@@ -48,8 +48,6 @@ class MyApp extends StatelessWidget {
           BlocProvider(create: (context)=>LatestChannelCubit()),
           BlocProvider(create: (context)=>GenresCubit()),
           BlocProvider(create: (context)=>PopularCubit()),
-          BlocProvider(create: (context)=>MusicCategoryTypeCubit()),
-
           BlocProvider(create: (context)=>SeriesCubit()),
           BlocProvider(create: (context)=>SeasonCubit()),
           BlocProvider(create: (context)=>SearchCubit()),
