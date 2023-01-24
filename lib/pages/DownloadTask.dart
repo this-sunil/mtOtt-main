@@ -369,27 +369,27 @@ class DownloadItem extends StatelessWidget {
         mainAxisSize: MainAxisSize.min,
         mainAxisAlignment: MainAxisAlignment.end,
         children: [
-          Text('Failed', style: TextStyle(color: Colors.red)),
+          const Text('Failed', style: TextStyle(color: Colors.red)),
           RawMaterialButton(
             onPressed: () {
               onActionClick(item);
             },
-            child: Icon(
-              Icons.refresh,
-              color: Colors.green,
+            shape: const CircleBorder(),
+            constraints: const BoxConstraints(minHeight: 32.0, minWidth: 32.0),
+            child: const Icon(
+              Icons.refresh_outlined,
+              color: Colors.deepPurpleAccent,
             ),
-            shape: CircleBorder(),
-            constraints: BoxConstraints(minHeight: 32.0, minWidth: 32.0),
           )
         ],
       );
     }
     else if (item.status == DownloadTaskStatus.canceled) {
-      return Text('Canceled', style: TextStyle(color: Colors.red));
+      return const Text('Canceled', style: TextStyle(color: Colors.red));
     }
 
     else if (item.status == DownloadTaskStatus.enqueued) {
-      return Text('Pending', style: TextStyle(color: Colors.orange));
+      return const Text('Pending', style: TextStyle(color: Colors.orange));
     }
     else {
       return null;
