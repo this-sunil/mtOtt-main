@@ -310,9 +310,7 @@ class _MusicPlayerScreenState extends State<MusicPlayerScreen>
       body: BlocBuilder<MusicCategoryTypeCubit, MusicCategoryTypeState>(
         builder: (context, state) {
           if (state is MusicCategoryTypeLoadingState) {
-            return Center(child:CircularProgressIndicator(
-                strokeWidth: 5.0,
-                color: Theme.of(context).brightness==Brightness.dark?Colors.white:Colors.black));
+            return Center(child:CircularProgressIndicator());
           }
           else if (state is MusicCategoryTypeLoadedState) {
             return PageView.builder(
