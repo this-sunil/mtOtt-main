@@ -19,6 +19,7 @@ import 'package:mtott/pages/WebseriesScreen.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import '../Service/cubit/InternetCubit.dart';
 import '../main.dart';
+import 'DownloadTask.dart';
 import 'InternetConnection.dart';
 import 'MusicScreen.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -145,7 +146,7 @@ class _DashBoardScreenState extends State<DashBoardScreen> with WidgetsBindingOb
                       onTap: (){
                         Navigator.push(context, PageRouteBuilder(
                           transitionDuration: const Duration(seconds: 1),
-                          pageBuilder: (context, animation, secondaryAnimation) =>  DownloadScreen(),
+                          pageBuilder: (context, animation, secondaryAnimation) =>  MyDownload(platform: Theme.of(context).platform),
                           transitionsBuilder: (context, animation, secondaryAnimation, child) {
                             const begin = Offset(0.0, 1.0);
                             const end = Offset.zero;

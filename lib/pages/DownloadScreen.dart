@@ -78,7 +78,6 @@ class _DownloadScreenState extends State<DownloadScreen> {
   void dispose() {
     IsolateNameServer.removePortNameMapping('downloader_send_port');
     super.dispose();
-
   }
   @override
   Widget build(BuildContext context) {
@@ -147,13 +146,14 @@ class _DownloadScreenState extends State<DownloadScreen> {
                                 true,
                                 allowCellular: true,
                                 saveInPublicStorage: true,
-                                fileName:snapshot.data![index].title+DateTime.now().day.toString(),
+                                fileName:snapshot.data![index].title,
                                 showNotification: true);
                             print("TaskId $taskId ${snapshot.data![index].url}");
 
                           }
                           if(status==DownloadTaskStatus.undefined){
                               print("hi");
+
                          }
                          else if(status==DownloadTaskStatus.failed){
                            String? id=await FlutterDownloader.retry(taskId: taskId!);
@@ -197,7 +197,7 @@ class _DownloadScreenState extends State<DownloadScreen> {
 
                   });
             }
-            return Center(child: CircularProgressIndicator());
+            return const Center(child: CircularProgressIndicator());
           },
         ),
       ),
