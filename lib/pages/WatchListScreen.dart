@@ -115,8 +115,8 @@ class _WatchListScreenState extends State<WatchListScreen> {
 
                       leading: CircleAvatar(
                           maxRadius: 35,
-                          backgroundImage: NetworkImage(state.slider[index].data[index][0].movieCover.isEmpty?"$baseUrl/images/series/${state.slider[index].data[index][0].seriesCover}":"$baseUrl/images/movies/${state.slider[index].data[index][0].movieCover}")),
-                      title: Text(state.slider[index].data[index][0].movieTitle.isEmpty?state.slider[index].data[index][0].seriesName:state.slider[index].data[index][0].movieTitle),
+                          backgroundImage: NetworkImage(state.slider[index].data[index][index].movieCover.isEmpty?"$baseUrl/images/series/${state.slider[index].data[index][index].seriesCover}":"$baseUrl/images/movies/${state.slider[index].data[index][index].movieCover}")),
+                      title: Text(state.slider[index].data[index][index].movieTitle.isEmpty?state.slider[index].data[index][index].seriesName:state.slider[index].data[index][index].movieTitle),
 
                       onLongPress: (){
                         multipleSelection(state.slider[index].data[index][0].id);

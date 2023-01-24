@@ -33,9 +33,9 @@ class DatabaseHelper{
     database=await init();
     database.insert("Download", {"currentId":id,"url":url,"title":title,"description":description,"seasonId":seasonId,"type":type,"imgPath":imgPath,"seriesId":seriesId});
   }
-  removeDownload(String id) async{
+  removeDownload(String title) async{
     database=await init();
-    database.delete("Download",where: "currentId=?",whereArgs: [id]).then((value) => debugPrint("Download remove Successfully"));
+    database.delete("Download",where: "title=?",whereArgs: [title]).then((value) => debugPrint("Download remove Successfully"));
   }
   Future<List<Download>> fetchDownload() async {
     database=await init();

@@ -18,6 +18,7 @@ import '../Service/cubit/SeriesCubit.dart';
 import '../Service/state/SeasonState.dart';
 import '../Service/state/SeriesState.dart';
 import '../const.dart';
+import 'DownloadTask.dart';
 import 'SearchScreen.dart';
 
 class TvSeriesScreen extends StatefulWidget {
@@ -124,14 +125,11 @@ class _TvSeriesScreenState extends State<TvSeriesScreen>
                 style: TextStyle(
                     color: scroll == true ? Colors.grey : Colors.white)),
             flexibleSpace: FlexibleSpaceBar(
-              background: Hero(
-                tag: widget.id,
-                child: Container(
-                  decoration: BoxDecoration(
-                    image: DecorationImage(
-                      fit: BoxFit.cover,
-                      image: NetworkImage(widget.imgPath),
-                    ),
+              background: Container(
+                decoration: BoxDecoration(
+                  image: DecorationImage(
+                    fit: BoxFit.cover,
+                    image: NetworkImage(widget.imgPath),
                   ),
                 ),
               ),
@@ -365,40 +363,38 @@ class _TvSeriesScreenState extends State<TvSeriesScreen>
                                       ],
                                     ),
                                     onPressed: () async {
-                                      var status =
-                                          await Permission.storage.request();
-                                      if (status.isGranted) {
-                                        final baseStorage =
-                                            await getExternalStorageDirectory();
 
-                                        await FlutterDownloader.enqueue(
-                                                url: state.slider[index]
-                                                    .data[index].episodeUrl,
-                                                savedDir: baseStorage!.path,
-                                                openFileFromNotification: true,
-                                                allowCellular: true,
-                                                saveInPublicStorage: true,
-                                                fileName: state.slider[index]
-                                                    .data[index].episodeTitle,
-                                                showNotification: true)
-                                            .then((value) {
-                                          helper.addDownload(
-                                              state
-                                                  .slider[index].data[index].id,
-                                              state.slider[index].data[index]
-                                                  .episodeTitle,
-                                              state.slider[index].data[index]
-                                                  .episodeUrl,
-                                              '',
-                                              state.slider[index].data[index]
-                                                  .seasonId,
-                                              "$baseUrl/images/episodes/${state.slider[index].data[index].episodePoster}",
-                                              state.slider[index].data[index]
-                                                  .seriesId,
-                                              state.slider[index].data[index]
-                                                  .episodeType);
-                                        });
-                                      }
+                                      helper.addDownload(
+                                          state
+                                              .slider[index].data[index].id,
+                                          state.slider[index].data[index]
+                                              .episodeTitle,
+                                          state.slider[index].data[index]
+                                              .episodeUrl,
+                                          '',
+                                          state.slider[index].data[index]
+                                              .seasonId,
+                                          "$baseUrl/images/episodes/${state.slider[index].data[index].episodePoster}",
+                                          state.slider[index].data[index]
+                                              .seriesId,
+                                          state.slider[index].data[index]
+                                              .episodeType);
+                                      Navigator.push(context, PageRouteBuilder(
+                                        transitionDuration: const Duration(seconds: 1),
+                                        pageBuilder: (context, animation, secondaryAnimation) =>  MyDownload(platform: Theme.of(context).platform),
+                                        transitionsBuilder: (context, animation, secondaryAnimation, child) {
+                                          const begin = Offset(0.0, 1.0);
+                                          const end = Offset.zero;
+                                          const curve = Curves.ease;
+
+                                          var tween = Tween(begin: begin, end: end).chain(CurveTween(curve: curve));
+
+                                          return SlideTransition(
+                                            position: animation.drive(tween),
+                                            child: child,
+                                          );
+                                        },
+                                      ));
                                     },
                                   ),
                                 ),

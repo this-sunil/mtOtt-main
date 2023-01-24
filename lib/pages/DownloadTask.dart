@@ -8,16 +8,12 @@ import 'package:mtott/utility/theme/Database.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:path_provider_android/path_provider_android.dart';
 import 'package:permission_handler/permission_handler.dart';
-
 import '../main.dart';
 import 'MyItems.dart';
-
-
-
 class MyDownload extends StatefulWidget {
   final TargetPlatform? platform;
 
-  MyDownload({this.platform});
+  const MyDownload({super.key, this.platform});
 
   @override
   _MyDownloadState createState() => _MyDownloadState();
@@ -28,9 +24,6 @@ class _MyDownloadState extends State<MyDownload> {
   late bool _isLoading;
   late bool _permissionReady;
   late String _localPath;
-
-
-
   late List<MyItem> itemsList;
   DatabaseHelper helper=DatabaseHelper();
   @override
@@ -91,11 +84,7 @@ class _MyDownloadState extends State<MyDownload> {
 
     itemsList = [];
     helper.fetchDownload().then((value) => itemsList.addAll(value.map((e) => MyItem(image: e.image, name: e.title, url: e.url)).toList()));
-    /*itemsList.addAll(
-        _documents.map((doc) => MyItem(name: doc['name'].toString(),
-            url: doc['link'].toString(), image: '')
-        )
-    );*/
+
     _permissionReady = await _checkPermission();
 
     if (_permissionReady) {
@@ -178,7 +167,7 @@ class _MyDownloadState extends State<MyDownload> {
                           }
                         });
                       },
-                      onActionClick: (myItem)async {
+                      onActionClick: (myItem) async{
                         if (myItem.status == DownloadTaskStatus.undefined) {
                           myItem.itemID = await FlutterDownloader.enqueue(
                             url: myItem.url,
@@ -192,25 +181,25 @@ class _MyDownloadState extends State<MyDownload> {
                         }
                         else if (myItem.status == DownloadTaskStatus.running) {
                           await FlutterDownloader.pause(taskId: myItem.itemID!);
-                          //    _pauseDownload(myItem);
+                          pauseDownload(myItem);
                         }
                         else if (myItem.status == DownloadTaskStatus.paused) {
                           String? newTaskId = await FlutterDownloader.resume(taskId: myItem.itemID!);
                           myItem.itemID = newTaskId;
-                          //_resumeDownload(myItem);
+                          resumeDownload(myItem);
                         }
                         else if (myItem.status == DownloadTaskStatus.complete) {
                           await FlutterDownloader.remove(
                               taskId: myItem.itemID!, shouldDeleteContent: true);
                           await _prepare();
                           setState(() {});
-                          // _delete(myItem);
+                          delete(myItem);
                         }
                         else if (myItem.status == DownloadTaskStatus.failed) {
                           String? newTaskId = await FlutterDownloader.retry(taskId: myItem.itemID!);
                           myItem.itemID = newTaskId;
 
-                          //_retryDownload(myItem);
+                          //retryDownload(myItem);
                         }
                       }
                   ),).toList())
@@ -227,7 +216,7 @@ class _MyDownloadState extends State<MyDownload> {
     }
   }
 
-  void _requestDownload(MyItem item) async {
+  void requestDownload(MyItem item) async {
     item.itemID = await FlutterDownloader.enqueue(
       url: item.url,
       savedDir: _localPath,
@@ -316,6 +305,8 @@ class DownloadItem extends StatelessWidget {
       return RawMaterialButton(
         onPressed: () {
           onActionClick(item);
+
+
         },
         child: Icon(Icons.file_download_outlined),
         shape: CircleBorder(),
@@ -357,6 +348,10 @@ class DownloadItem extends StatelessWidget {
           RawMaterialButton(
             onPressed: () {
               onActionClick(item);
+              DatabaseHelper helper=DatabaseHelper();
+              helper.removeDownload(myItem.name);
+              helper.fetchDownload();
+
             },
             child: Icon(
               Icons.delete_outlined,
