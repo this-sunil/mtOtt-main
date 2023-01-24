@@ -1,0 +1,47 @@
+{
+  "project_info": {
+    "project_number": "461044600282",
+    "project_id": "mtott-8b5e9",
+    "storage_bucket": "mtott-8b5e9.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:461044600282:android:a60c810eefe5d9b58ec4e3",
+        "android_client_info": {
+          "package_name": "com.mt.mtott"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "461044600282-rcltd02a62ejmc9fa6r0ts4kehbhq9i4.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.mt.mtott",
+            "certificate_hash": "808b672c6b28443652d88b7f7db081809db98769"
+          }
+        },
+        {
+          "client_id": "461044600282-ns6s8ss98lg4ae9gsmeb8hvi2uf3d9mj.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCuzT5YDSPavsJ-GBLkL8rsmQkUGyb7Cjs"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "461044600282-ns6s8ss98lg4ae9gsmeb8hvi2uf3d9mj.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

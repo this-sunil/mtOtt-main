@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">MTOTT</string>
+    <string name="facebook_app_id">726616961659363</string>
+    <string name="facebook_client_token">431dfff03f65321df2deea822332a485</string>
+    <string name="fb_login_protocol_scheme">fb726616961659363</string>
+</resources>
