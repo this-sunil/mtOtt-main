@@ -22,6 +22,7 @@ import 'package:mtott/pages/GenresCategoryScreen.dart';
 import 'package:mtott/pages/ShowScreen.dart';
 import 'package:mtott/pages/TVSeriesScreen.dart';
 import 'package:mtott/pages/TopPicksScreen.dart';
+import 'package:mtott/plan/PlanScreen.dart';
 import 'package:shimmer/shimmer.dart';
 import '../Service/admob/AdHelper.dart';
 import '../Service/cubit/RunningHomeSliderCubit.dart';
@@ -308,20 +309,39 @@ class _HomeScreenState extends State<HomeScreen> {
                                       highlightColor: Colors.transparent,
                                       splashColor: Colors.transparent,
                                       onTap: (){
-                                        Navigator.push(context,PageRouteBuilder(
-                                          transitionDuration: const Duration(seconds: 1),
-                                          pageBuilder: (context, animation, secondaryAnimation) =>  DetailsScreen(id: state.slider[index].data[index].id,url: state.slider[index].data[index].movieUrl, title: state.slider[index].data[index].movieTitle,  type: state.slider[index].data[index].movieType, imgPath: "$baseUrl/images/movies/${state.slider[index].data[index].moviePoster}", seriesId:'', description:state.slider[index].data[index].movieDesc, mType: 'movie',),
-                                          transitionsBuilder: (context, animation, secondaryAnimation, child) {
-                                            const begin = Offset(0.0, 1.0);
-                                            const end = Offset.zero;
-                                            const curve = Curves.ease;
-                                            var tween = Tween(begin: begin, end: end).chain(CurveTween(curve: curve));
-                                            return SlideTransition(
-                                              position: animation.drive(tween),
-                                              child: child,
-                                            );
-                                          },
-                                        ));
+                                        if(state.slider[index].data[index].price!="0"){
+                                          Navigator.push(context,PageRouteBuilder(
+                                            transitionDuration: const Duration(seconds: 1),
+                                            pageBuilder: (context, animation, secondaryAnimation) =>  const PlanScreen(),
+                                            transitionsBuilder: (context, animation, secondaryAnimation, child) {
+                                              const begin = Offset(0.0, 1.0);
+                                              const end = Offset.zero;
+                                              const curve = Curves.ease;
+                                              var tween = Tween(begin: begin, end: end).chain(CurveTween(curve: curve));
+                                              return SlideTransition(
+                                                position: animation.drive(tween),
+                                                child: child,
+                                              );
+                                            },
+                                          ));
+                                        }
+                                        else{
+                                          Navigator.push(context,PageRouteBuilder(
+                                            transitionDuration: const Duration(seconds: 1),
+                                            pageBuilder: (context, animation, secondaryAnimation) =>  DetailsScreen(id: state.slider[index].data[index].id,url: state.slider[index].data[index].movieUrl, title: state.slider[index].data[index].movieTitle,  type: state.slider[index].data[index].movieType, imgPath: "$baseUrl/images/movies/${state.slider[index].data[index].moviePoster}", seriesId:'', description:state.slider[index].data[index].movieDesc, mType: 'movie',),
+                                            transitionsBuilder: (context, animation, secondaryAnimation, child) {
+                                              const begin = Offset(0.0, 1.0);
+                                              const end = Offset.zero;
+                                              const curve = Curves.ease;
+                                              var tween = Tween(begin: begin, end: end).chain(CurveTween(curve: curve));
+                                              return SlideTransition(
+                                                position: animation.drive(tween),
+                                                child: child,
+                                              );
+                                            },
+                                          ));
+                                        }
+
                                       },
                                       child: Padding(
                                         padding: const EdgeInsets.all(4.0),

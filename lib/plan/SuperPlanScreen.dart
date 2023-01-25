@@ -207,10 +207,10 @@ class _SuperPlanScreenState extends State<SuperPlanScreen> with TickerProviderSt
                 physics: const BouncingScrollPhysics(),
                   controller: tabController,
                   children: [
-                    data.isNotEmpty?mobilePlan():CircularProgressIndicator(),
-                    data.isNotEmpty?basicPlan():CircularProgressIndicator(),
-                    data.isNotEmpty?standardPlan():CircularProgressIndicator(),
-                    data.isNotEmpty?premiumPlan():CircularProgressIndicator(),
+                    data.isNotEmpty?mobilePlan():Center(child: CircularProgressIndicator()),
+                    data.isNotEmpty?basicPlan():Center(child: CircularProgressIndicator()),
+                    data.isNotEmpty?standardPlan():Center(child: CircularProgressIndicator()),
+                    data.isNotEmpty?premiumPlan():Center(child: CircularProgressIndicator()),
               ]),
             ),
             Padding(

@@ -172,7 +172,7 @@ class _MoviesScreenState extends State<MoviesScreen> {
                     viewportFraction: .7,
                     enlargeCenterPage: true,
                     onPageChanged: (int index,_){},
-                  ),)
+                  ))
               );
             },
 

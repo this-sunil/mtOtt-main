@@ -116,10 +116,12 @@ String username="";
           album: widget.subtitle,
           title: widget.title,
           artUri: Uri.parse(widget.imgPath),
+
         ),
       ),
         preload: false,
       );
+
 
       player.play();
       player.positionStream.listen((event) {
@@ -142,8 +144,10 @@ String username="";
             position=Duration.zero;
             player.stop();
           });
+          player.setShuffleModeEnabled(true);
           pageController.nextPage(duration: const Duration(seconds: 1), curve:Curves.easeOutExpo);
         }
+
       });
 
     }

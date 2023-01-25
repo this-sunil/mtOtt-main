@@ -4,7 +4,16 @@ const String login="$baseUrl/userapi/api.php?method=login";
 const String socialSignIn="$baseUrl/userapi/api.php?method=googlelogin";
 const String register="$baseUrl/userapi/api.php?method=register";
 const String appName="MT OTT";
+/*Ads Settings*/
+const String bannerAdUnitIdAndroid="ca-app-pub-3940256099942544/6300978111";
+const String bannerAdUnitIdIos="ca-app-pub-3940256099942544/2934735716";
 
+const String interstitialAdUnitIdAndroid="ca-app-pub-3940256099942544/1033173712";
+const String interstitialAdUnitIdIos="ca-app-pub-3940256099942544/4411468910";
+
+const String rewardedAdUnitIdAndroid="ca-app-pub-3940256099942544/5224354917";
+const String rewardedAdUnitIdIos="ca-app-pub-3940256099942544/1712485313";
+/*End Ads Settings*/
 /*Home Screen Api Start*/
 const String banner="$baseUrl/userapi/api.php?method=banner_for_home_upcoming";
 const String runningBanner="$baseUrl/userapi/api.php?method=banner_for_home_running";

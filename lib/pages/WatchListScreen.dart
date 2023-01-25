@@ -20,12 +20,12 @@ class WatchListScreen extends StatefulWidget {
 class _WatchListScreenState extends State<WatchListScreen> {
 
   HashSet selectItem=HashSet();
-  multipleSelection(String id){
-    if(selectItem.contains(id)){
-      selectItem.remove(id);
+  multipleSelection(int index,){
+    if(selectItem.contains(index)){
+      selectItem.remove(index);
     }
     else{
-      selectItem.add(id);
+      selectItem.add(index);
     }
     setState(() {});
   }
@@ -119,11 +119,11 @@ class _WatchListScreenState extends State<WatchListScreen> {
                       title: Text(state.slider[index].data[index].movieTitle.isEmpty?state.slider[index].data[index].seriesName:state.slider[index].data[index].movieTitle),
 
                       onLongPress: (){
-                        multipleSelection(state.slider[index].data[index].id);
+                        multipleSelection(index);
                       },
-                     trailing: selectItem.contains(state.slider[index].data[index].id)?IconButton(onPressed: (){
+                     trailing: selectItem.contains(index)?IconButton(onPressed: (){
                        removeWatchlist(state.slider[index].data[index].id);
-                       selectItem.remove(state.slider[index].data[index].id);
+                       selectItem.remove(index);
 
                      },icon: const Icon(Icons.delete,color: Colors.white)):null,
                     ),
