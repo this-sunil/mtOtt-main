@@ -3,7 +3,6 @@ import 'dart:convert';
 import 'dart:isolate';
 import 'dart:ui';
 import 'package:awesome_snackbar_content/awesome_snackbar_content.dart';
-import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -19,7 +18,6 @@ import 'package:mtott/Service/state/MoreLikeState.dart';
 import 'package:mtott/Service/state/SeasonState.dart';
 import 'package:mtott/Service/state/SeriesState.dart';
 import 'package:perfect_volume_control/perfect_volume_control.dart';
-import 'package:permission_handler/permission_handler.dart';
 import 'package:pod_player/pod_player.dart';
 import 'package:share_plus_dialog/share_plus_dialog.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -32,6 +30,7 @@ import '../const.dart';
 import '../main.dart';
 import '../plan/PlanScreen.dart';
 import '../utility/theme/Database.dart';
+import 'DownloadTask.dart';
 import 'MoreLikeScreen.dart';
 
 import 'package:path_provider/path_provider.dart';
@@ -225,32 +224,7 @@ class _DetailsScreenState extends State<DetailsScreen>
     send.send([id, status, progress]);
   }
 
-  Future download(String url, String title) async {
-    var status = await Permission.storage.request();
-    if (status.isGranted) {
-      final baseStorage = await getExternalStorageDirectory();
 
-      await FlutterDownloader.enqueue(
-              url: url,
-              savedDir: baseStorage!.path,
-              openFileFromNotification: true,
-              allowCellular: true,
-              saveInPublicStorage: true,
-              fileName: title,
-              showNotification: true)
-          .then((value) {
-        helper.addDownload(
-            widget.id,
-            widget.title,
-            widget.url,
-            widget.description,
-            "${widget.seasonId}",
-            widget.imgPath,
-            widget.type,
-            widget.seriesId);
-      });
-    }
-  }
 
   bool downloading = false;
   var progressString = "";
@@ -780,7 +754,31 @@ class _DetailsScreenState extends State<DetailsScreen>
                               /* var tempDir = await getTemporaryDirectory();
                           String fullPath = "${tempDir.path}/${widget.title}.mp4";*/
 
-                              download(widget.url, widget.title);
+                              helper.addDownload(
+                                  widget.id,
+                                  widget.title,
+                                  widget.url,
+                                  widget.description,
+                                  "${widget.seasonId}",
+                                  widget.imgPath,
+                                  widget.type,
+                                  widget.seriesId);
+                              Navigator.push(context, PageRouteBuilder(
+                                transitionDuration: const Duration(seconds: 1),
+                                pageBuilder: (context, animation, secondaryAnimation) =>  MyDownload(platform: Theme.of(context).platform),
+                                transitionsBuilder: (context, animation, secondaryAnimation, child) {
+                                  const begin = Offset(0.0, 1.0);
+                                  const end = Offset.zero;
+                                  const curve = Curves.ease;
+
+                                  var tween = Tween(begin: begin, end: end).chain(CurveTween(curve: curve));
+
+                                  return SlideTransition(
+                                    position: animation.drive(tween),
+                                    child: child,
+                                  );
+                                },
+                              ));
                             },
                             child: Row(
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -1098,25 +1096,25 @@ class _DetailsScreenState extends State<DetailsScreen>
                                             ],
                                           ),
                                           onPressed: () async {
-                                            var status = await Permission
-                                                .storage
-                                                .request();
-                                            if (status.isGranted) {
-                                              final baseStorage =
-                                                  await getExternalStorageDirectory();
+                                            helper.addDownload( state.slider[index].data[index].id,  state.slider[index].data[index].episodeTitle,  state.slider[index].data[index].episodeUrl,  '',  state.slider[index].data[index].seasonId, "$baseUrl/images/episodes/${state.slider[index].data[index].episodePoster}",  state.slider[index].data[index].seriesId,  state.slider[index].data[index].episodeType);
+                                            Navigator.push(context, PageRouteBuilder(
+                                              transitionDuration: const Duration(seconds: 1),
+                                              pageBuilder: (context, animation, secondaryAnimation) =>  MyDownload(platform: Theme.of(context).platform),
+                                              transitionsBuilder: (context, animation, secondaryAnimation, child) {
+                                                const begin = Offset(0.0, 1.0);
+                                                const end = Offset.zero;
+                                                const curve = Curves.ease;
 
-                                              await FlutterDownloader.enqueue(
-                                                  url: url,
-                                                  savedDir: baseStorage!.path,
-                                                  openFileFromNotification:
-                                                      true,
-                                                  allowCellular: true,
-                                                  saveInPublicStorage: true,
-                                                  fileName: state.slider[index].data[index].episodeTitle,
-                                                  showNotification: true).then((value){
-                                                    helper.addDownload( state.slider[index].data[index].id,  state.slider[index].data[index].episodeTitle,  state.slider[index].data[index].episodeUrl,  '',  state.slider[index].data[index].seasonId, "$baseUrl/images/episodes/${state.slider[index].data[index].episodePoster}",  state.slider[index].data[index].seriesId,  state.slider[index].data[index].episodeType);
-                                              });
-                                            }
+                                                var tween = Tween(begin: begin, end: end).chain(CurveTween(curve: curve));
+
+                                                return SlideTransition(
+                                                  position: animation.drive(tween),
+                                                  child: child,
+                                                );
+                                              },
+                                            ));
+
+
                                           },
                                         ),
                                       ),

@@ -152,9 +152,10 @@ class _MyDownloadState extends State<MyDownload> {
         body: Builder(
           builder: (context) =>
           _isLoading
-              ?  Center(child: new CircularProgressIndicator(),)
+              ?  const Center(child:  CircularProgressIndicator(),)
               : _permissionReady ?
           ListView(
+              physics: const BouncingScrollPhysics(parent: AlwaysScrollableScrollPhysics()),
               children: itemsList.map((it) =>
                   DownloadItem(
                       myItem: it,

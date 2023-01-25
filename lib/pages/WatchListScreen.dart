@@ -20,12 +20,12 @@ class WatchListScreen extends StatefulWidget {
 class _WatchListScreenState extends State<WatchListScreen> {
 
   HashSet selectItem=HashSet();
-  multipleSelection(int index,){
-    if(selectItem.contains(index)){
-      selectItem.remove(index);
+  multipleSelection(String id){
+    if(selectItem.contains(id)){
+      selectItem.remove(id);
     }
     else{
-      selectItem.add(index);
+      selectItem.add(id);
     }
     setState(() {});
   }
@@ -34,7 +34,7 @@ class _WatchListScreenState extends State<WatchListScreen> {
     userId=pref.get("uid").toString();
     final resp=await post(Uri.parse(removeWatchList),body: {
       "userid":userId,
-      "watch":watchId,
+      "id":watchId,
     });
     final result=jsonDecode(resp.body);
     if(resp.statusCode==200){
@@ -119,11 +119,11 @@ class _WatchListScreenState extends State<WatchListScreen> {
                       title: Text(state.slider[index].data[index].movieTitle.isEmpty?state.slider[index].data[index].seriesName:state.slider[index].data[index].movieTitle),
 
                       onLongPress: (){
-                        multipleSelection(index);
+                        multipleSelection(state.slider[index].data[index].watchid);
                       },
-                     trailing: selectItem.contains(index)?IconButton(onPressed: (){
-                       removeWatchlist(state.slider[index].data[index].id);
-                       selectItem.remove(index);
+                     trailing: selectItem.contains(state.slider[index].data[index].watchid)?IconButton(onPressed: (){
+                       removeWatchlist(state.slider[index].data[index].watchid);
+                       selectItem.remove(state.slider[index].data[index].watchid);
 
                      },icon: const Icon(Icons.delete,color: Colors.white)):null,
                     ),

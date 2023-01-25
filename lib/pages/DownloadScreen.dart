@@ -5,7 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_downloader/flutter_downloader.dart';
 
 import 'package:flutter_svg/svg.dart';
-import 'package:html/parser.dart';
+
 import 'package:mtott/Service/model/Download.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:path_provider/path_provider.dart';
@@ -22,13 +22,7 @@ class DownloadScreen extends StatefulWidget {
 
 class _DownloadScreenState extends State<DownloadScreen> {
   HashSet<String> item=HashSet<String>();
-  List<String> movies=[
-    "Sultan",
-    "Brother",
-    "RamSetu",
-    "Brahmastra",
-    "MahaBharat",
-  ];
+
   DatabaseHelper helper=DatabaseHelper();
   HashSet selectItem=HashSet();
   ReceivePort port = ReceivePort();
@@ -121,7 +115,7 @@ class _DownloadScreenState extends State<DownloadScreen> {
             if(snapshot.hasData){
               return ListView.builder(
                   padding: EdgeInsets.zero,
-                  physics: BouncingScrollPhysics(parent: AlwaysScrollableScrollPhysics()),
+                  physics: const BouncingScrollPhysics(parent: AlwaysScrollableScrollPhysics()),
                   itemCount: snapshot.data!.length,
                   itemBuilder: (context,index){
                     return Card(

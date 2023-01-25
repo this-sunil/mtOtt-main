@@ -59,6 +59,7 @@ class Datum {
     required this.seriesDesc,
     required this.seriesPoster,
     required this.seriesCover,
+    required this.watchid,
   });
 
   String id;
@@ -87,6 +88,7 @@ class Datum {
   String seriesDesc;
   String seriesPoster;
   String seriesCover;
+  String watchid;
 
   factory Datum.fromJson(Map<String, dynamic> json) => Datum(
     id: json["id"]??'',
@@ -114,6 +116,7 @@ class Datum {
     seriesDesc: json["series_desc"]??"",
     seriesPoster: json["series_poster"]??"",
     seriesCover: json["series_cover"]??"",
+    watchid: json["watchid"],
   );
 
   Map<String, dynamic> toJson() => {
@@ -142,5 +145,6 @@ class Datum {
     "series_desc": seriesDesc,
     "series_poster": seriesPoster,
     "series_cover": seriesCover,
+    "watchid": watchid,
   };
 }
