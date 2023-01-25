@@ -73,7 +73,7 @@ class _MoviesScreenState extends State<MoviesScreen> {
                         options: CarouselOptions(
                           height: 160,
                           autoPlayCurve: Curves.easeInOutCubic,
-                          autoPlayAnimationDuration: const Duration(seconds: 5),
+                          autoPlayAnimationDuration: const Duration(seconds: 3),
                           autoPlay: true,
                           viewportFraction: .85,
                           enlargeCenterPage: true,

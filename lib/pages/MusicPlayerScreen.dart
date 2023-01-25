@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'dart:isolate';
 import 'dart:ui';
 import 'package:awesome_snackbar_content/awesome_snackbar_content.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_downloader/flutter_downloader.dart';
 import 'package:flutter_share/flutter_share.dart';
@@ -13,12 +14,11 @@ import 'package:just_audio/just_audio.dart';
 import 'package:just_audio_background/just_audio_background.dart';
 import 'package:lottie/lottie.dart';
 import 'package:mtott/const.dart';
-import 'package:mtott/pages/DashBoardScreen.dart';
 import 'package:mtott/utility/theme/Database.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:shimmer/shimmer.dart';
+
 import '../Service/cubit/MusicCategoryTypeCubit.dart';
 import '../Service/model/CommentModel.dart';
 import '../Service/state/MusicCategoryTypeState.dart';
@@ -99,12 +99,14 @@ class _MusicPlayerScreenState extends State<MusicPlayerScreen>
     }
     setState(() {});
   }
-
+String username="";
   final player = AudioPlayer();
   Duration duration = Duration.zero;
   Duration position = Duration.zero;
 
   playMusic() async {
+    SharedPreferences pref=await SharedPreferences.getInstance();
+    username=pref.getString("fullName").toString();
     await player.setAudioSource(
       AudioSource.uri(
         Uri.parse(
@@ -121,8 +123,6 @@ class _MusicPlayerScreenState extends State<MusicPlayerScreen>
 
       player.play();
       player.positionStream.listen((event) {
-        //print("Position at init " +position.toString());
-        //ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text("$duration")));
         if (mounted) {
           setState(() {
             position = event;
@@ -135,10 +135,16 @@ class _MusicPlayerScreenState extends State<MusicPlayerScreen>
           //ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text("$duration")));
         }
       });
-
-
-
-
+      player.playerStateStream.listen((event) {
+        if(event.processingState==ProcessingState.completed){
+          setState(() {
+            duration=Duration.zero;
+            position=Duration.zero;
+            player.stop();
+          });
+          pageController.nextPage(duration: const Duration(seconds: 1), curve:Curves.easeOutExpo);
+        }
+      });
 
     }
 
@@ -310,7 +316,7 @@ class _MusicPlayerScreenState extends State<MusicPlayerScreen>
       body: BlocBuilder<MusicCategoryTypeCubit, MusicCategoryTypeState>(
         builder: (context, state) {
           if (state is MusicCategoryTypeLoadingState) {
-            return Center(child:CircularProgressIndicator());
+            return const Center(child:CircularProgressIndicator());
           }
           else if (state is MusicCategoryTypeLoadedState) {
             return PageView.builder(
@@ -384,9 +390,8 @@ class _MusicPlayerScreenState extends State<MusicPlayerScreen>
                                 Text(state.slider[index].data[index].title,
                                     style: GoogleFonts.inter(
                                         color: Colors.white, fontSize: 16)),
-                               player.playing?Lottie.asset("asset/logo/wave.json",animate: true,width: 50,height: 50,onLoaded: (composition) {
-                                 // Configure the AnimationController with the duration of the
-                                 // Lottie file and start the animation.
+                               player.position!=player.duration?Lottie.asset("asset/logo/wave.json",animate: true,width: 50,height: 50,onLoaded: (composition) {
+
                                  _controller
                                    ..duration = composition.duration
                                    ..forward();
@@ -453,163 +458,123 @@ class _MusicPlayerScreenState extends State<MusicPlayerScreen>
                                                       Radius.circular(0),
                                                   bottomLeft:
                                                       Radius.circular(0))),
-                                          builder: (context) {
-                                            return StatefulBuilder(
-                                                builder: (context, setState) {
-                                              return SizedBox(
-                                                height: 400,
-                                                child: Card(
-                                                    margin: EdgeInsets.zero,
-                                                    clipBehavior:
-                                                        Clip.hardEdge,
-                                                    shape: const RoundedRectangleBorder(
-                                                        borderRadius: BorderRadius.only(
-                                                            topLeft: Radius
-                                                                .circular(20),
-                                                            topRight: Radius
-                                                                .circular(20),
-                                                            bottomRight:
-                                                                Radius
-                                                                    .circular(
-                                                                        0),
-                                                            bottomLeft: Radius
+                                          builder: (context) => SizedBox(
+                                            height: 500,
+                                            child: Card(
+                                                margin: EdgeInsets.zero,
+                                                clipBehavior:
+                                                Clip.hardEdge,
+                                                shape: const RoundedRectangleBorder(
+                                                    borderRadius: BorderRadius.only(
+                                                        topLeft: Radius
+                                                            .circular(20),
+                                                        topRight: Radius
+                                                            .circular(20),
+                                                        bottomRight:
+                                                        Radius
+                                                            .circular(
+                                                            0),
+                                                        bottomLeft: Radius
+                                                            .circular(
+                                                            0))),
+                                                child: Stack(
+                                                  alignment: Alignment
+                                                      .bottomCenter,
+                                                  children: [
+                                                    comment.isNotEmpty
+                                                        ? ListView
+                                                        .builder(
+                                                        itemCount:
+                                                        comment
+                                                            .length,
+                                                        physics: const BouncingScrollPhysics(
+                                                            parent:
+                                                            AlwaysScrollableScrollPhysics()),
+                                                        itemBuilder:
+                                                            (context,
+                                                            index) {
+                                                          return ListTile(
+                                                            leading: CircleAvatar(child: FirebaseAuth.instance.currentUser==null?SvgPicture.asset("asset/logo/user.svg"):CircleAvatar(backgroundImage: NetworkImage("${ FirebaseAuth.instance.currentUser!.photoURL}"))),
+                                                            title: Text(username),
+                                                            subtitle: Text(
+                                                                comment[index].data[index].commentText,
+                                                                style: TextStyle(color: Theme.of(context).brightness == Brightness.dark ? Colors.white : Colors.black)),
+                                                          );
+                                                        })
+                                                        : const Center(
+                                                        child:
+                                                        CircularProgressIndicator()),
+                                                    Padding(
+                                                      padding:
+                                                      const EdgeInsets
+                                                          .all(8.0),
+                                                      child: Container(
+                                                        width:
+                                                        MediaQuery.of(
+                                                            context)
+                                                            .size
+                                                            .width,
+                                                        height: 50,
+                                                        decoration: BoxDecoration(
+                                                            color: Colors
+                                                                .white,
+                                                            borderRadius:
+                                                            BorderRadius
                                                                 .circular(
-                                                                    0))),
-                                                    child: Stack(
-                                                      alignment: Alignment
-                                                          .bottomCenter,
-                                                      children: [
-                                                        comment.isNotEmpty
-                                                            ? ListView
-                                                                .builder(
-                                                                    itemCount:
-                                                                        comment
-                                                                            .length,
-                                                                    physics: const BouncingScrollPhysics(
-                                                                        parent:
-                                                                            AlwaysScrollableScrollPhysics()),
-                                                                    itemBuilder:
-                                                                        (context,
-                                                                            index) {
-                                                                      return ListTile(
-                                                                        title: Text(
-                                                                            comment[index].data[index].commentText,
-                                                                            style: TextStyle(color: Theme.of(context).brightness == Brightness.dark ? Colors.white : Colors.black)),
-                                                                      );
-                                                                    })
-                                                            : const Center(
-                                                                child:
-                                                                    CircularProgressIndicator()),
-                                                        Padding(
-                                                          padding:
-                                                              const EdgeInsets
-                                                                  .all(8.0),
-                                                          child: Container(
-                                                            width:
-                                                                MediaQuery.of(
-                                                                        context)
-                                                                    .size
-                                                                    .width,
-                                                            height: 50,
-                                                            decoration: BoxDecoration(
+                                                                20)),
+                                                        child: Center(
+                                                          child:
+                                                          TextFormField(
+                                                            style: TextStyle(
                                                                 color: Colors
-                                                                    .white,
-                                                                borderRadius:
-                                                                    BorderRadius
-                                                                        .circular(
-                                                                            20)),
-                                                            child: Center(
-                                                              child:
-                                                                  TextFormField(
-                                                                style: TextStyle(
-                                                                    color: Colors
-                                                                        .black),
-                                                                controller:
-                                                                    commentController,
-                                                                cursorColor:
-                                                                    Colors
-                                                                        .black54,
-                                                                autofocus:
-                                                                    true,
-                                                                decoration:
-                                                                    InputDecoration(
-                                                                  border:
-                                                                      InputBorder
-                                                                          .none,
-                                                                  hintText:
-                                                                      "Type here...",
-                                                                  hintStyle: const TextStyle(
-                                                                      color: Colors
-                                                                          .black),
-                                                                  prefixIcon:
-                                                                      Padding(
-                                                                    padding: const EdgeInsets
-                                                                            .all(
-                                                                        10.0),
-                                                                    child: imageUrl
-                                                                            .isNotEmpty
-                                                                        ? CircleAvatar(
-                                                                            backgroundImage: NetworkImage(imageUrl))
-                                                                        : Icon(Icons.account_circle_sharp),
-                                                                  ),
-                                                                  suffixIcon:
-                                                                      IconButton(
-                                                                          onPressed:
-                                                                              () {
-                                                                            setState(() {
-                                                                              comments(state.slider[index].data[index].id);
-                                                                            });
-                                                                          },
-                                                                          icon:
-                                                                              const Icon(Icons.send)),
-                                                                ),
+                                                                    .black),
+                                                            controller:
+                                                            commentController,
+                                                            cursorColor:
+                                                            Colors
+                                                                .black54,
+                                                            autofocus:
+                                                            true,
+                                                            decoration:
+                                                            InputDecoration(
+                                                              border:
+                                                              InputBorder
+                                                                  .none,
+                                                              hintText:
+                                                              "Type here...",
+                                                              hintStyle: const TextStyle(
+                                                                  color: Colors
+                                                                      .black),
+                                                              prefixIcon:
+                                                              Padding(
+                                                                padding: const EdgeInsets
+                                                                    .all(
+                                                                    10.0),
+                                                                child: imageUrl
+                                                                    .isNotEmpty
+                                                                    ? CircleAvatar(
+                                                                    backgroundImage: NetworkImage(imageUrl))
+                                                                    : Icon(Icons.account_circle_sharp),
                                                               ),
+                                                              suffixIcon:
+                                                              IconButton(
+                                                                  onPressed:
+                                                                      () {
+                                                                    setState(() {
+                                                                      comments(state.slider[index].data[index].id);
+                                                                    });
+                                                                  },
+                                                                  icon:
+                                                                  const Icon(Icons.send)),
                                                             ),
                                                           ),
                                                         ),
-                                                      ],
-                                                    )
-                                                    /*CommentBox(
-
-
-                                              userImage: CommentBox.commentImageParser(
-                                                  imageURLorPath: imageUrl),
-                                              child: commentChild(filedata),
-                                              labelText: 'Write a comment...',
-                                              errorText: 'Comment cannot be blank',
-                                              withBorder: true,
-                                              sendButtonMethod: () {
-                                                if (formKey.currentState!.validate()) {
-                                                  print(commentController.text);
-                                                  setState(() {
-                                                    FacebookAuth.instance.getUserData().then((value){
-                                                      debugPrint(value.toString());
-                                                      var values = {
-                                                        'name': value["name"],
-                                                        'pic': value["picture"]["data"]["url"]??"",
-                                                        'message': commentController.text,
-                                                        'date': '${DateTime.now()}'
-                                                      };
-                                                      filedata.insert(0, values);
-                                                      debugPrint(filedata.toString());
-                                                    });
-                                                  });
-
-                                                  FocusScope.of(context).unfocus();
-                                                } else {
-                                                  print("Not validated");
-                                                }
-                                              },
-                                              formKey: formKey,
-                                              commentController: commentController,
-                                              backgroundColor: Colors.black,
-                                              textColor: Colors.white,
-                                              sendWidget: const Icon(Icons.send_sharp, size: 30, color: Colors.white),
-                                            ),*/
+                                                      ),
                                                     ),
-                                              );
-                                            });
-                                          });
+                                                  ],
+                                                ),
+                                            ),
+                                          ));
                                     },
                                     icon: SvgPicture.asset(
                                         "asset/logo/comment.svg")),
@@ -647,18 +612,7 @@ class _MusicPlayerScreenState extends State<MusicPlayerScreen>
                                               "$baseUrl/${state.slider[index].data[index].musicCover}",
                                               state.slider[index].data[index]
                                                   .musicType);
-                                          //download(state.slider[index].data[index].id,"$baseUrl/${state.slider[index].data[index].music}",state.slider[index].data[index].title,"$baseUrl/${state.slider[index].data[index].musicCover}",state.slider[index].data[index].musicType);
-                                          /* await Dio().download("$baseUrl/${state.slider[index].data[index].music}", fullPath, onReceiveProgress: (rec, total) {
-                                     print("Rec: $rec , Total: $total");
 
-                                     setState(() {
-                                       */ /*downloading = true;
-                                progressString = ((rec / total) * 100).toStringAsFixed(0) + "%";*/ /*
-                                     });
-                                   }).then((value) {
-                                      helper.addDownload(state.slider[index].data[index].id,state.slider[index].data[index].title,state.slider[index].data[index].music,"","", "$baseUrl/${state.slider[index].data[index].musicCover}","",state.slider[index].data[index].musicType);
-                                      QuickAlert.show(context: context, type: QuickAlertType.success,title: "Music Download Successfully",animType: QuickAlertAnimType.slideInLeft,confirmBtnColor: Colors.green,borderRadius: 5);
-                                   });*/
                                         },
                                         icon: SvgPicture.asset(
                                             "asset/logo/downloads.svg",
@@ -680,11 +634,11 @@ class _MusicPlayerScreenState extends State<MusicPlayerScreen>
                                 inactiveColor: Colors.grey,
                                 activeColor: Colors.white,
                                 value: position.inSeconds.toDouble(),
+
                                 onChanged: (value) async {
-                                  position = Duration(seconds: value.toInt());
+                                  position = Duration(seconds: value.toDouble().toInt());
                                   setState(() {
                                     player.seek(position);
-
                                     //ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text("Position in Player ${position.toString()}")));
                                   });
                                 }),

@@ -109,8 +109,12 @@ class _FavouriteMusicScreenState extends State<FavouriteMusicScreen> {
                           multipleSelection(snapshot.data![index].title);
                         },
                         onTap: (){
+                          setState(() {
+                            context.read<MusicCategoryTypeCubit>().fetchMusicCategoryType(snapshot.data![index].subtitle);
+                            Navigator.push(context, MaterialPageRoute(builder: (context)=>MusicPlayerScreen(index:int.parse(snapshot.data![index].index),title: snapshot.data![index].subtitle,url: "$baseUrl/${snapshot.data![index].url}", subtitle: snapshot.data![index].title, imgPath: snapshot.data![index].image)));
+                          });
 
-                          Navigator.push(context, MaterialPageRoute(builder: (context)=>MusicPlayerScreen(index:int.parse(snapshot.data![index].index),title: snapshot.data![index].subtitle,url: "$baseUrl/${snapshot.data![index].url}", subtitle: snapshot.data![index].title, imgPath: snapshot.data![index].image)));
+
                         },
                       ),
                     );

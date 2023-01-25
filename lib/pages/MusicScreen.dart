@@ -224,7 +224,7 @@ class _MusicScreenState extends State<MusicScreen> {
                                   highlightColor:Colors.transparent,
                                   splashColor: Colors.transparent,
                                   onTap:(){
-
+                                    context.read<MusicCategoryTypeCubit>().fetchMusicCategoryType(state.slider[0].musicResponse[currentIndex].musicData[currentIndex].musicType);
                                     Navigator.push(context, MaterialPageRoute(builder: (context)=>MusicPlayerScreen(index: 0,title: state.slider[0].musicResponse[currentIndex].musicData[currentIndex].musicType,url: "$baseUrl/${state.slider[0].musicResponse[currentIndex].musicData[currentIndex].music}", subtitle: state.slider[0].musicResponse[currentIndex].name, imgPath: '$baseUrl/${state.slider[0].musicResponse[currentIndex].musicData[currentIndex].musicCover}',)));
                                   },
                                   child: Padding(

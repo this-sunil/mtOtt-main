@@ -81,11 +81,10 @@ class _TvSeriesScreenState extends State<TvSeriesScreen>
           SliverAppBar(
             floating: true,
             pinned: true,
-            backgroundColor: Theme.of(context).brightness == Brightness.dark
-                ? Colors.black
-                : const Color(0xFF333945),
+            stretch: true,
             forceElevated: scroll,
             expandedHeight: 300,
+
             actions: [
               IconButton(
                   onPressed: () {
@@ -124,12 +123,19 @@ class _TvSeriesScreenState extends State<TvSeriesScreen>
             title: Text(widget.title,
                 style: TextStyle(
                     color: scroll == true ? Colors.grey : Colors.white)),
-            flexibleSpace: FlexibleSpaceBar(
-              background: Container(
-                decoration: BoxDecoration(
-                  image: DecorationImage(
-                    fit: BoxFit.cover,
-                    image: NetworkImage(widget.imgPath),
+            flexibleSpace: Hero(
+              transitionOnUserGestures: true,
+              tag: "Series",
+              child: FlexibleSpaceBar(
+                stretchModes: const [
+                  StretchMode.zoomBackground,
+                ],
+                background: Container(
+                  decoration: BoxDecoration(
+                    image: DecorationImage(
+                      fit: BoxFit.cover,
+                      image: NetworkImage(widget.imgPath),
+                    ),
                   ),
                 ),
               ),
@@ -199,6 +205,8 @@ class _TvSeriesScreenState extends State<TvSeriesScreen>
                   shrinkWrap: true,
                   itemBuilder: (context, index) {
                     return InkWell(
+                      splashColor: Colors.transparent,
+                      highlightColor: Colors.transparent,
                       onTap: () {
                         Navigator.push(
                             context,
@@ -241,10 +249,6 @@ class _TvSeriesScreenState extends State<TvSeriesScreen>
                       child: Hero(
                         tag: state.slider[index].data[index].id,
                         child: Card(
-                            color:
-                                Theme.of(context).brightness == Brightness.dark
-                                    ? const Color(0xFF333945)
-                                    : Colors.white60,
                             elevation: 5,
                             child: Column(
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -333,11 +337,7 @@ class _TvSeriesScreenState extends State<TvSeriesScreen>
                                           borderRadius:
                                               BorderRadius.circular(5)),
                                       backgroundColor:
-                                          Theme.of(context).brightness ==
-                                                  Brightness.dark
-                                              ? const Color(0xFF333945)
-                                                  .withOpacity(.5)
-                                              : Colors.white60,
+                                      const Color(0xFF333945),
                                     ),
                                     child: Row(
                                       mainAxisAlignment:

@@ -79,13 +79,14 @@ class _DashBoardScreenState extends State<DashBoardScreen> with WidgetsBindingOb
               key:drawerKey,
 
               appBar: AppBar(
-                elevation: 0,
+
+
                 leading: IconButton(
                     onPressed: () {
                       drawerKey.currentState!.openDrawer();
                     },
                     icon: SvgPicture.asset("asset/logo/menu.svg",color: Theme.of(context).brightness == Brightness.dark?Colors.white:Colors.black)),
-                title: Text(widget.title,style: GoogleFonts.inter(fontSize: 20)),
+                title: Text(widget.title,style: GoogleFonts.inter(fontSize: 20,fontWeight: FontWeight.w500)),
                 actions: [
                   IconButton(
                       onPressed: () {

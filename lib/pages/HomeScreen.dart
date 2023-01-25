@@ -7,12 +7,10 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'package:http/http.dart';
 import 'package:mtott/Service/cubit/GenresCubit.dart';
-import 'package:mtott/Service/cubit/LanguageCubit.dart';
 import 'package:mtott/Service/cubit/LatestChannelCubit.dart';
 import 'package:mtott/Service/cubit/LatestMovieCubit.dart';
 import 'package:mtott/Service/cubit/ShowsCubit.dart';
 import 'package:mtott/Service/state/GenresState.dart';
-import 'package:mtott/Service/state/LanguageState.dart';
 import 'package:mtott/Service/state/LatestChannelState.dart';
 import 'package:mtott/Service/state/LatestMoviesState.dart';
 import 'package:mtott/Service/state/ShowsState.dart';
@@ -21,11 +19,9 @@ import 'package:mtott/pages/ChannelScreen.dart';
 import 'package:mtott/pages/DetailsScreen.dart';
 import 'package:mtott/pages/GeneresScreen.dart';
 import 'package:mtott/pages/GenresCategoryScreen.dart';
-import 'package:mtott/pages/LanguageScreen.dart';
 import 'package:mtott/pages/ShowScreen.dart';
 import 'package:mtott/pages/TVSeriesScreen.dart';
 import 'package:mtott/pages/TopPicksScreen.dart';
-import 'package:mtott/pages/ViewScreen.dart';
 import 'package:shimmer/shimmer.dart';
 import '../Service/admob/AdHelper.dart';
 import '../Service/cubit/RunningHomeSliderCubit.dart';
@@ -108,6 +104,7 @@ class _HomeScreenState extends State<HomeScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+
       body: SingleChildScrollView(
         physics: const BouncingScrollPhysics(),
         child: Column(
@@ -456,17 +453,21 @@ class _HomeScreenState extends State<HomeScreen> {
                                       },
                                     ));
                                   },
-                                  child: Padding(
-                                    padding: const EdgeInsets.all(4.0),
-                                    child: Container(
+                                  child: Hero(
+                                    transitionOnUserGestures: true,
+                                    tag:"Series",
+                                    child: Padding(
+                                      padding: const EdgeInsets.all(4.0),
+                                      child: Container(
 
-                                      height: 400,
-                                      width: 200,
-                                      decoration: BoxDecoration(
-                                        borderRadius:  BorderRadius.circular(12),
-                                        image: DecorationImage(
-                                          fit: BoxFit.cover,
-                                          image: NetworkImage("$baseUrl/images/series/${state.slider[index].data[index].seriesCover}"),
+                                        height: 400,
+                                        width: 200,
+                                        decoration: BoxDecoration(
+                                          borderRadius:  BorderRadius.circular(12),
+                                          image: DecorationImage(
+                                            fit: BoxFit.cover,
+                                            image: NetworkImage("$baseUrl/images/series/${state.slider[index].data[index].seriesCover}"),
+                                          ),
                                         ),
                                       ),
                                     ),
