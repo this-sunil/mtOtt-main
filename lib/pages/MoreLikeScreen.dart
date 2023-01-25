@@ -5,6 +5,8 @@ import 'package:flutter_svg/svg.dart';
 import '../Service/cubit/MoreLikeCubit.dart';
 import '../Service/state/MoreLikeState.dart';
 import '../const.dart';
+import '../main.dart';
+import '../plan/PlanScreen.dart';
 import 'DetailsScreen.dart';
 import 'SearchScreen.dart';
 
@@ -57,8 +59,31 @@ class _MoreLikeScreenState extends State<MoreLikeScreen> {
                   splashColor: Colors.transparent,
                   highlightColor: Colors.transparent,
                   onTap: (){
+                    if (planBuy == false || state.slider[index].data[index].price!="0") {
+                      Navigator.push(context, PageRouteBuilder(
+                        transitionDuration: const Duration(
+                            seconds: 1),
+                        pageBuilder: (context, animation,
+                            secondaryAnimation) => const PlanScreen(),
+                        transitionsBuilder: (context, animation,
+                            secondaryAnimation, child) {
+                          const begin = Offset(0.0, 1.0);
+                          const end = Offset.zero;
+                          const curve = Curves.ease;
+                          var tween = Tween(
+                              begin: begin, end: end).chain(
+                              CurveTween(curve: curve));
+                          return SlideTransition(
+                            position: animation.drive(tween),
+                            child: child,
+                          );
+                        },
+                      ));
+                    }
+                    else{
                     Navigator.push(context, MaterialPageRoute(builder: (context)=>DetailsScreen(id: state.slider[index].data[index].id, url: state.slider[index].data[index].movieUrl, title: state.slider[index].data[index].movieTitle, description: state.slider[index].data[index].movieDesc, type: state.slider[index].data[index].movieType, imgPath: "$baseUrl/images/movies/${state.slider[index].data[index].movieCover}", seriesId: '', mType: 'movie',)));
-                  },
+                    }
+                    },
                   child: Padding(
                     padding: const EdgeInsets.all(8.0),
                     child: Container(

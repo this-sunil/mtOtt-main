@@ -1,3 +1,4 @@
+/*
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/svg.dart';
@@ -8,7 +9,9 @@ import '../Service/state/LanguageState.dart';
 import '../const.dart';
 import 'SearchScreen.dart';
 import 'ViewScreen.dart';
-/*All Language Related Api*/
+*/
+/*All Language Related Api*//*
+
 class LanguageScreen extends StatefulWidget {
   const LanguageScreen({Key? key}) : super(key: key);
 
@@ -17,22 +20,7 @@ class LanguageScreen extends StatefulWidget {
 }
 
 class _LanguageScreenState extends State<LanguageScreen> {
-  List<String> languagetranslate=[
-    "हिंदी",
-    "বাংলা",
-    "తెలుగు",
-    "मराठी",
-    ""
-  ];
-  List<String> language=[
-    "asset/language/Hindi.png",
-    "asset/language/Bengali.png",
-    "asset/language/Telugu.png",
-    "asset/language/marathi.png",
-    "asset/language/Odia.png",
 
-  ];
-  List<String> languageCode=["Hindi","Bengali","Telugu","Marathi","Odia"];
   @override
   void initState() {
     debugPrint("Hello World");
@@ -135,3 +123,4 @@ class _LanguageScreenState extends State<LanguageScreen> {
     );
   }
 }
+*/

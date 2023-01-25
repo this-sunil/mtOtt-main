@@ -14,6 +14,7 @@ import 'package:mtott/pages/InitialSearchScreen.dart';
 import 'package:speech_to_text/speech_to_text.dart';
 
 import '../Service/cubit/MusicCategoryTypeCubit.dart';
+import '../plan/PlanScreen.dart';
 import 'MusicPlayerScreen.dart';
 import 'TVSeriesScreen.dart';
 class SearchScreen extends StatefulWidget {
@@ -196,31 +197,65 @@ class _SearchScreenState extends State<SearchScreen> {
                           print("Search State Length ${state.slider.length}");
                         return InkWell(
                           onTap: (){
-                            Navigator.push(context,PageRouteBuilder(
-                              transitionDuration: const Duration(seconds: 1),
-                              pageBuilder: (context, animation, secondaryAnimation) =>
-                                  DetailsScreen(
-                                      title:state.slider[0].searchResponse.movies[index].movieTitle,
-                                      url: state.slider[0].searchResponse.movies[index].movieUrl,
-                                      id: state.slider[0].searchResponse.movies[index].id,
-                                      description: state.slider[0].searchResponse.movies[index].movieDesc,
-                                      type: state.slider[0].searchResponse.movies[index].movieType,
-                                      mType: 'movie',
-                                      imgPath: "$baseUrl/images/movies/${state.slider[0].searchResponse.movies[index].moviePoster}",
-                                      seriesId: ''),
-                              transitionsBuilder: (context, animation, secondaryAnimation, child) {
-                                const begin = Offset(0.0, 1.0);
-                                const end = Offset.zero;
-                                const curve = Curves.ease;
+                            if (planBuy == false || state.slider[0].searchResponse.movies[index].price!="0") {
+                              Navigator.push(context, PageRouteBuilder(
+                                transitionDuration: const Duration(
+                                    seconds: 1),
+                                pageBuilder: (context, animation,
+                                    secondaryAnimation) => const PlanScreen(),
+                                transitionsBuilder: (context, animation,
+                                    secondaryAnimation, child) {
+                                  const begin = Offset(0.0, 1.0);
+                                  const end = Offset.zero;
+                                  const curve = Curves.ease;
+                                  var tween = Tween(
+                                      begin: begin, end: end).chain(
+                                      CurveTween(curve: curve));
+                                  return SlideTransition(
+                                    position: animation.drive(tween),
+                                    child: child,
+                                  );
+                                },
+                              ));
+                            }
+                            else {
+                              Navigator.push(context, PageRouteBuilder(
+                                transitionDuration: const Duration(seconds: 1),
+                                pageBuilder: (context, animation,
+                                    secondaryAnimation) =>
+                                    DetailsScreen(
+                                        title: state.slider[0].searchResponse
+                                            .movies[index].movieTitle,
+                                        url: state.slider[0].searchResponse
+                                            .movies[index].movieUrl,
+                                        id: state.slider[0].searchResponse
+                                            .movies[index].id,
+                                        description: state.slider[0]
+                                            .searchResponse.movies[index]
+                                            .movieDesc,
+                                        type: state.slider[0].searchResponse
+                                            .movies[index].movieType,
+                                        mType: 'movie',
+                                        imgPath: "$baseUrl/images/movies/${state
+                                            .slider[0].searchResponse
+                                            .movies[index].moviePoster}",
+                                        seriesId: ''),
+                                transitionsBuilder: (context, animation,
+                                    secondaryAnimation, child) {
+                                  const begin = Offset(0.0, 1.0);
+                                  const end = Offset.zero;
+                                  const curve = Curves.ease;
 
-                                var tween = Tween(begin: begin, end: end).chain(CurveTween(curve: curve));
+                                  var tween = Tween(begin: begin, end: end)
+                                      .chain(CurveTween(curve: curve));
 
-                                return SlideTransition(
-                                  position: animation.drive(tween),
-                                  child: child,
-                                );
-                              },
-                            ));
+                                  return SlideTransition(
+                                    position: animation.drive(tween),
+                                    child: child,
+                                  );
+                                },
+                              ));
+                            }
                           },
                           child: Card(
                             elevation: 5,
@@ -339,30 +374,51 @@ class _SearchScreenState extends State<SearchScreen> {
                                   splashColor: Colors.transparent,
                                   highlightColor: Colors.transparent,
                                   onTap: (){
-                                    Navigator.push(context,PageRouteBuilder(
-                                      transitionDuration: const Duration(seconds: 1),
-                                      pageBuilder: (context, animation, secondaryAnimation) =>
-                                          DetailsScreen(
-                                              title:state.slider[0].searchResponse.channels[index].channelTitle,
-                                              url: "$baseUrl/${state.slider[0].searchResponse.channels[index].channelPoster}",
-                                              id: state.slider[0].searchResponse.channels[index].id,
-                                              description: state.slider[0].searchResponse.channels[index].channelDesc,
-                                              type: state.slider[0].searchResponse.channels[index].channelType,
-                                              imgPath: "$baseUrl/images/${state.slider[0].searchResponse.channels[index].channelPoster}",
-                                              seriesId: '', mType: '',),
-                                      transitionsBuilder: (context, animation, secondaryAnimation, child) {
-                                        const begin = Offset(0.0, 1.0);
-                                        const end = Offset.zero;
-                                        const curve = Curves.ease;
 
-                                        var tween = Tween(begin: begin, end: end).chain(CurveTween(curve: curve));
+                                      Navigator.push(context, PageRouteBuilder(
+                                        transitionDuration: const Duration(
+                                            seconds: 1),
+                                        pageBuilder: (context, animation,
+                                            secondaryAnimation) =>
+                                            DetailsScreen(
+                                              title: state.slider[0]
+                                                  .searchResponse
+                                                  .channels[index].channelTitle,
+                                              url: "$baseUrl/${state.slider[0]
+                                                  .searchResponse
+                                                  .channels[index]
+                                                  .channelPoster}",
+                                              id: state.slider[0].searchResponse
+                                                  .channels[index].id,
+                                              description: state.slider[0]
+                                                  .searchResponse
+                                                  .channels[index].channelDesc,
+                                              type: state.slider[0]
+                                                  .searchResponse
+                                                  .channels[index].channelType,
+                                              imgPath: "$baseUrl/images/${state
+                                                  .slider[0].searchResponse
+                                                  .channels[index]
+                                                  .channelPoster}",
+                                              seriesId: '',
+                                              mType: '',),
+                                        transitionsBuilder: (context, animation,
+                                            secondaryAnimation, child) {
+                                          const begin = Offset(0.0, 1.0);
+                                          const end = Offset.zero;
+                                          const curve = Curves.ease;
 
-                                        return SlideTransition(
-                                          position: animation.drive(tween),
-                                          child: child,
-                                        );
-                                      },
-                                    ));
+                                          var tween = Tween(
+                                              begin: begin, end: end).chain(
+                                              CurveTween(curve: curve));
+
+                                          return SlideTransition(
+                                            position: animation.drive(tween),
+                                            child: child,
+                                          );
+                                        },
+                                      ));
+
                                   },
                                   child: Padding(
                                     padding: const EdgeInsets.symmetric(horizontal: 8.0),

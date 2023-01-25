@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -15,14 +17,16 @@ import 'package:mtott/Service/state/LatestChannelState.dart';
 import 'package:mtott/Service/state/LatestMoviesState.dart';
 import 'package:mtott/Service/state/ShowsState.dart';
 import 'package:mtott/const.dart';
+import 'package:mtott/main.dart';
 import 'package:mtott/pages/ChannelScreen.dart';
 import 'package:mtott/pages/DetailsScreen.dart';
-import 'package:mtott/pages/GeneresScreen.dart';
+
 import 'package:mtott/pages/GenresCategoryScreen.dart';
 import 'package:mtott/pages/ShowScreen.dart';
 import 'package:mtott/pages/TVSeriesScreen.dart';
 import 'package:mtott/pages/TopPicksScreen.dart';
 import 'package:mtott/plan/PlanScreen.dart';
+
 import 'package:shimmer/shimmer.dart';
 import '../Service/admob/AdHelper.dart';
 import '../Service/cubit/RunningHomeSliderCubit.dart';
@@ -30,6 +34,7 @@ import '../Service/cubit/UpComingHomeSliderCubit.dart';
 import '../Service/model/SettingModel.dart';
 import '../Service/state/RuningHomeState.dart';
 import '../Service/state/UpComingHomeSliderState.dart';
+import 'GeneresScreen.dart';
 
 
 /*Upcoming Banners Api Using with Bloc State Management*/
@@ -77,6 +82,7 @@ class _HomeScreenState extends State<HomeScreen> {
     context.read<ShowsCubit>().fetchTVShows();
     context.read<LatestChannelCubit>().fetchLatestChannel();
     context.read<GenresCubit>().fetchGenres();
+
     /*context.read<LanguageCubit>().fetchLanguages();*/
     BannerAd(
       adUnitId:AdHelper.bannerAdUnitId,
@@ -309,7 +315,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                       highlightColor: Colors.transparent,
                                       splashColor: Colors.transparent,
                                       onTap: (){
-                                        if(state.slider[index].data[index].price!="0"){
+                                        if(planBuy==false || state.slider[index].data[index].price!="0"){
                                           Navigator.push(context,PageRouteBuilder(
                                             transitionDuration: const Duration(seconds: 1),
                                             pageBuilder: (context, animation, secondaryAnimation) =>  const PlanScreen(),
@@ -591,23 +597,47 @@ class _HomeScreenState extends State<HomeScreen> {
                                 child: InkWell(
                                   highlightColor: Colors.transparent,
                                   splashColor: Colors.transparent,
-                                  onTap: (){
-                                    Navigator.push(context,PageRouteBuilder(
-                                      transitionDuration: const Duration(seconds: 1),
-                                      pageBuilder: (context, animation, secondaryAnimation) =>  DetailsScreen(id: state.slider[index].data[index].cid,url:state.slider[index].data[index].channelUrl, title: state.slider[index].data[index].channelTitle, description: state.slider[index].data[index].channelDesc,type: state.slider[index].data[index].channelType, imgPath: "$baseUrl/images/${state.slider[index].data[index].channelThumbnail}", seriesId: '',mType: '',),
-                                      transitionsBuilder: (context, animation, secondaryAnimation, child) {
-                                        const begin = Offset(0.0, 1.0);
-                                        const end = Offset.zero;
-                                        const curve = Curves.ease;
+                                  onTap: () {
 
-                                        var tween = Tween(begin: begin, end: end).chain(CurveTween(curve: curve));
 
-                                        return SlideTransition(
-                                          position: animation.drive(tween),
-                                          child: child,
-                                        );
-                                      },
-                                    ));
+                                      Navigator.push(context, PageRouteBuilder(
+                                        transitionDuration: const Duration(
+                                            seconds: 1),
+                                        pageBuilder: (context, animation,
+                                            secondaryAnimation) =>
+                                            DetailsScreen(
+                                              id: state.slider[index]
+                                                  .data[index].cid,
+                                              url: state.slider[index]
+                                                  .data[index].channelUrl,
+                                              title: state.slider[index]
+                                                  .data[index].channelTitle,
+                                              description: state.slider[index]
+                                                  .data[index].channelDesc,
+                                              type: state.slider[index]
+                                                  .data[index].channelType,
+                                              imgPath: "$baseUrl/images/${state
+                                                  .slider[index].data[index]
+                                                  .channelThumbnail}",
+                                              seriesId: '',
+                                              mType: '',),
+                                        transitionsBuilder: (context, animation,
+                                            secondaryAnimation, child) {
+                                          const begin = Offset(0.0, 1.0);
+                                          const end = Offset.zero;
+                                          const curve = Curves.ease;
+
+                                          var tween = Tween(
+                                              begin: begin, end: end).chain(
+                                              CurveTween(curve: curve));
+
+                                          return SlideTransition(
+                                            position: animation.drive(tween),
+                                            child: child,
+                                          );
+                                        },
+                                      ));
+
                                   },
                                   child: Card(
                                     margin: const EdgeInsets.all(2),
@@ -676,7 +706,7 @@ class _HomeScreenState extends State<HomeScreen> {
               onTap: (){
                 Navigator.push(context,PageRouteBuilder(
                   transitionDuration: const Duration(seconds: 1),
-                  pageBuilder: (context, animation, secondaryAnimation) =>  const GeneresScreen(),
+                  pageBuilder: (context, animation, secondaryAnimation) =>  const GenresScreen(),
                   transitionsBuilder: (context, animation, secondaryAnimation, child) {
                     const begin = Offset(0.0, 1.0);
                     const end = Offset.zero;

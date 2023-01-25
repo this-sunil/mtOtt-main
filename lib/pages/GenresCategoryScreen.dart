@@ -5,6 +5,8 @@ import 'package:mtott/Service/cubit/GenresCategoryCubit.dart';
 import 'package:mtott/Service/state/GenresCategoryState.dart';
 import 'package:mtott/const.dart';
 import 'package:mtott/pages/DetailsScreen.dart';
+import '../main.dart';
+import '../plan/PlanScreen.dart';
 import 'SearchScreen.dart';
 
 class GenresCategoryScreen extends StatefulWidget {
@@ -75,7 +77,46 @@ class _GenresCategoryScreenState extends State<GenresCategoryScreen> {
                       splashColor: Colors.transparent,
                       highlightColor: Colors.transparent,
                       onTap: (){
-                        Navigator.push(context, MaterialPageRoute(builder: (context)=>DetailsScreen(id: state.slider[index].data[index].id.toString(), url: "${state.slider[index].data[index].movieUrl}", title: "${state.slider[index].data[index].movieTitle}", description: "${state.slider[index].data[index].movieDesc}", type: "${state.slider[index].data[index].movieType}", imgPath: "$baseUrl/images/movies/${state.slider[index].data[index].movieCover}", seriesId: "", mType: '',)));
+                        if (planBuy == false || state.slider[index].data[index].price!="0") {
+                          Navigator.push(context, PageRouteBuilder(
+                            transitionDuration: const Duration(
+                                seconds: 1),
+                            pageBuilder: (context, animation,
+                                secondaryAnimation) => const PlanScreen(),
+                            transitionsBuilder: (context, animation,
+                                secondaryAnimation, child) {
+                              const begin = Offset(0.0, 1.0);
+                              const end = Offset.zero;
+                              const curve = Curves.ease;
+                              var tween = Tween(
+                                  begin: begin, end: end).chain(
+                                  CurveTween(curve: curve));
+                              return SlideTransition(
+                                position: animation.drive(tween),
+                                child: child,
+                              );
+                            },
+                          ));
+                        }
+                        else {
+                          Navigator.push(context, MaterialPageRoute(
+                              builder: (context) =>
+                                  DetailsScreen(
+                                    id: state.slider[index].data[index].id
+                                        .toString(),
+                                    url: "${state.slider[index].data[index]
+                                        .movieUrl}",
+                                    title: "${state.slider[index].data[index]
+                                        .movieTitle}",
+                                    description: "${state.slider[index]
+                                        .data[index].movieDesc}",
+                                    type: "${state.slider[index].data[index]
+                                        .movieType}",
+                                    imgPath: "$baseUrl/images/movies/${state
+                                        .slider[index].data[index].movieCover}",
+                                    seriesId: "",
+                                    mType: '',)));
+                        }
                       },
                       child: Hero(
                         tag: widget.id,

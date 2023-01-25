@@ -1,9 +1,15 @@
+import 'dart:convert';
+
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:google_mobile_ads/google_mobile_ads.dart';
+import 'package:http/http.dart';
 import 'package:mtott/pages/SplashScreen.dart';
 import 'package:mtott/utility/theme/ThemeCubit.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'const.dart';
 import 'package:flutter/material.dart';
+
+import 'main.dart';
 class MainScreen extends StatefulWidget {
   const MainScreen({Key? key}) : super(key: key);
 
@@ -16,10 +22,28 @@ class _MainScreenState extends State<MainScreen>{
   Future<InitializationStatus> _initGoogleMobileAds() {
     return MobileAds.instance.initialize();
   }
+  checkPlanBy() async{
+    SharedPreferences pref=await SharedPreferences.getInstance();
+    String uid=pref.getString("uid").toString();
+    final resp=await post(Uri.parse(checkPlanBuyApi),body: {
+      "user_id":uid,
+    });
+    final result=jsonDecode(resp.body);
+    if(resp.statusCode==200){
+      setState(() {
+        planBuy=result["status"];
+      });
+      debugPrint("Response in Plan Check Or not Buy Api ${resp.request!.url} and \n ${resp.body}");
+    }
+    else{
+      debugPrint("Error in Api ${resp.request!.url} and ${resp.statusCode}");
+    }
+  }
   @override
   void initState() {
 
     _initGoogleMobileAds();
+    checkPlanBy();
     super.initState();
   }
   @override

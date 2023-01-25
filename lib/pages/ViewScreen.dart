@@ -1,3 +1,4 @@
+/*
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'SearchScreen.dart';
@@ -61,3 +62,4 @@ class _ViewScreenState extends State<ViewScreen> {
     );
   }
 }
+*/

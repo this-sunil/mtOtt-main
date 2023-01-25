@@ -8,7 +8,6 @@ import 'package:shimmer/shimmer.dart';
 import '../Service/cubit/ShowsCubit.dart';
 import '../Service/state/ShowsState.dart';
 import '../const.dart';
-import 'DetailsScreen.dart';
 
 class ShowsScreen extends StatefulWidget {
   const ShowsScreen({Key? key}) : super(key: key);

@@ -1,8 +1,5 @@
 import 'dart:isolate';
 import 'dart:ui';
-
-import 'package:awesome_snackbar_content/awesome_snackbar_content.dart';
-import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_downloader/flutter_downloader.dart';
@@ -11,13 +8,12 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:html/parser.dart';
 import 'package:mtott/pages/DetailsScreen.dart';
 import 'package:mtott/utility/theme/Database.dart';
-import 'package:path_provider/path_provider.dart';
-import 'package:permission_handler/permission_handler.dart';
 import '../Service/cubit/SeasonCubit.dart';
 import '../Service/cubit/SeriesCubit.dart';
 import '../Service/state/SeasonState.dart';
 import '../Service/state/SeriesState.dart';
 import '../const.dart';
+
 import 'DownloadTask.dart';
 import 'SearchScreen.dart';
 
@@ -208,43 +204,48 @@ class _TvSeriesScreenState extends State<TvSeriesScreen>
                       splashColor: Colors.transparent,
                       highlightColor: Colors.transparent,
                       onTap: () {
-                        Navigator.push(
-                            context,
-                            PageRouteBuilder(
-                              transitionDuration: const Duration(seconds: 1),
-                              pageBuilder: (context, animation,
-                                      secondaryAnimation) =>
-                                  DetailsScreen(
-                                      id: state.slider[index].data[index].id,
-                                      url: state
-                                          .slider[index].data[index].episodeUrl,
-                                      title: state.slider[index].data[index]
-                                          .episodeTitle,
-                                      description: state
-                                          .slider[index].data[index].subtitle,
-                                      type: state.slider[index].data[index]
-                                          .episodeType,
-                                      imgPath:
-                                          '$baseUrl/images/episodes/${state.slider[index].data[index].episodePoster}',
-                                      seriesId: state
-                                          .slider[index].data[index].seriesId,
-                                      seasonId: state
-                                          .slider[index].data[index].seasonId,
-                                      mType: 'series'),
-                              transitionsBuilder: (context, animation,
-                                  secondaryAnimation, child) {
-                                const begin = Offset(0.0, 1.0);
-                                const end = Offset.zero;
-                                const curve = Curves.ease;
-                                var tween = Tween(begin: begin, end: end)
-                                    .chain(CurveTween(curve: curve));
 
-                                return SlideTransition(
-                                  position: animation.drive(tween),
-                                  child: child,
-                                );
-                              },
-                            ));
+
+                          Navigator.push(
+                              context,
+                              PageRouteBuilder(
+                                transitionDuration: const Duration(seconds: 1),
+                                pageBuilder: (context, animation,
+                                    secondaryAnimation) =>
+                                    DetailsScreen(
+                                        id: state.slider[index].data[index].id,
+                                        url: state
+                                            .slider[index].data[index]
+                                            .episodeUrl,
+                                        title: state.slider[index].data[index]
+                                            .episodeTitle,
+                                        description: state
+                                            .slider[index].data[index].subtitle,
+                                        type: state.slider[index].data[index]
+                                            .episodeType,
+                                        imgPath:
+                                        '$baseUrl/images/episodes/${state
+                                            .slider[index].data[index]
+                                            .episodePoster}',
+                                        seriesId: state
+                                            .slider[index].data[index].seriesId,
+                                        seasonId: state
+                                            .slider[index].data[index].seasonId,
+                                        mType: 'series'),
+                                transitionsBuilder: (context, animation,
+                                    secondaryAnimation, child) {
+                                  const begin = Offset(0.0, 1.0);
+                                  const end = Offset.zero;
+                                  const curve = Curves.ease;
+                                  var tween = Tween(begin: begin, end: end)
+                                      .chain(CurveTween(curve: curve));
+
+                                  return SlideTransition(
+                                    position: animation.drive(tween),
+                                    child: child,
+                                  );
+                                },
+                              ));
                       },
                       child: Hero(
                         tag: state.slider[index].data[index].id,

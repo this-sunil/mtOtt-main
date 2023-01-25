@@ -8,7 +8,6 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:http/http.dart';
 import 'package:mtott/pages/SignUpPage.dart';
-import 'package:mtott/plan/PlanScreen.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import '../const.dart';
 import 'DashBoardScreen.dart';
@@ -82,7 +81,7 @@ class _SignInScreenState extends State<SignInScreen> {
       debugPrint("Social Sign In Google and Facebook ${resp.body}");
       if(result["status"]){
         pref.setString("uid", result["data"]["id"]);
-        pref.setString("fullName", result["data"]["name"]);
+
         Navigator.pushReplacement(context, MaterialPageRoute(builder: (context)=>const DashBoardScreen(title: appName)));
       }
       else{
@@ -294,6 +293,7 @@ class _SignInScreenState extends State<SignInScreen> {
                                       pref.setString("imageUrl",
                                           googleSignInAccount.photoUrl
                                               .toString());
+                                      pref.setString("fullName", value.user!.displayName.toString());
                                       debugPrint(
                                           value.additionalUserInfo!.profile
                                               .toString());
@@ -328,7 +328,7 @@ class _SignInScreenState extends State<SignInScreen> {
                             shape: RoundedRectangleBorder(
                                 borderRadius: BorderRadius.circular(10)),
                             onPressed: () async {
-
+                              SharedPreferences pref=await SharedPreferences.getInstance();
                               final result = await facebookAuth.login(
                                   permissions: ['public_profile', 'email']);
                               final OAuthCredential facebookAuthCredential =
@@ -343,8 +343,10 @@ class _SignInScreenState extends State<SignInScreen> {
                                       .additionalUserInfo!.profile!["email"]}");
                                   signUp(value.additionalUserInfo!
                                       .profile!["email"]);
+                                  pref.setString("fullName", value.user!.displayName.toString());
                                 });
                               }on FirebaseAuthException catch  (e){
+                                pref.remove("fullName");
                                 ScaffoldMessenger.of(context).showSnackBar(
 
                                     SnackBar(

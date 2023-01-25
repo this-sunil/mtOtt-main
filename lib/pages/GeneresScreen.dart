@@ -10,14 +10,14 @@ import '../Service/state/GenresState.dart';
 import 'GenresCategoryScreen.dart';
 import 'SearchScreen.dart';
 
-class GeneresScreen extends StatefulWidget {
-  const GeneresScreen({Key? key}) : super(key: key);
+class GenresScreen extends StatefulWidget {
+  const GenresScreen({Key? key}) : super(key: key);
 
   @override
-  State<GeneresScreen> createState() => _GeneresScreenState();
+  State<GenresScreen> createState() => _GenresScreenState();
 }
 
-class _GeneresScreenState extends State<GeneresScreen> {
+class _GenresScreenState extends State<GenresScreen> {
 
   @override
   void initState() {

@@ -6,6 +6,8 @@ import 'package:mtott/pages/DetailsScreen.dart';
 import 'package:shimmer/shimmer.dart';
 import '../Service/cubit/TopPicksCubit.dart';
 import '../Service/state/TopPicksState.dart';
+import '../main.dart';
+import '../plan/PlanScreen.dart';
 import 'SearchScreen.dart';
 class TopPicksScreen extends StatefulWidget {
   const TopPicksScreen({Key? key}) : super(key: key);
@@ -15,13 +17,7 @@ class TopPicksScreen extends StatefulWidget {
 }
 
 class _TopPicksScreenState extends State<TopPicksScreen> {
-  List<String> toppick=[
-    "asset/image/toppick.png",
-    "asset/image/toppick2.png",
-    "asset/image/toppick.png",
-    "asset/image/toppick3.png",
-    "asset/image/toppick2.png",
-  ];
+
   @override
   void initState() {
     context.read<TopPicksCubit>().fetchTopPicks();
@@ -70,7 +66,46 @@ class _TopPicksScreenState extends State<TopPicksScreen> {
                   highlightColor: Colors.transparent,
                   splashColor: Colors.transparent,
                   onTap: (){
-                    Navigator.push(context, MaterialPageRoute(builder: (context)=>DetailsScreen(id: state.slider[index].topPicksResponse[index].id,url: state.slider[index].topPicksResponse[index].movieUrl, title: state.slider[index].topPicksResponse[index].movieTitle, description: state.slider[index].topPicksResponse[index].movieDesc, type: state.slider[index].topPicksResponse[index].movieType, imgPath: "$baseUrl/images/movies/${state.slider[index].topPicksResponse[index].moviePoster}", seriesId: '', mType: 'movie',)));
+                    if (planBuy == false || state.slider[index].topPicksResponse[index].price!="0") {
+                      Navigator.push(context, PageRouteBuilder(
+                        transitionDuration: const Duration(
+                            seconds: 1),
+                        pageBuilder: (context, animation,
+                            secondaryAnimation) => const PlanScreen(),
+                        transitionsBuilder: (context, animation,
+                            secondaryAnimation, child) {
+                          const begin = Offset(0.0, 1.0);
+                          const end = Offset.zero;
+                          const curve = Curves.ease;
+                          var tween = Tween(
+                              begin: begin, end: end).chain(
+                              CurveTween(curve: curve));
+                          return SlideTransition(
+                            position: animation.drive(tween),
+                            child: child,
+                          );
+                        },
+                      ));
+                    }
+                    else {
+                      Navigator.push(context, MaterialPageRoute(builder: (
+                          context) =>
+                          DetailsScreen(
+                            id: state.slider[index].topPicksResponse[index].id,
+                            url: state.slider[index].topPicksResponse[index]
+                                .movieUrl,
+                            title: state.slider[index].topPicksResponse[index]
+                                .movieTitle,
+                            description: state.slider[index]
+                                .topPicksResponse[index].movieDesc,
+                            type: state.slider[index].topPicksResponse[index]
+                                .movieType,
+                            imgPath: "$baseUrl/images/movies/${state
+                                .slider[index].topPicksResponse[index]
+                                .moviePoster}",
+                            seriesId: '',
+                            mType: 'movie')));
+                    }
                   },
                   child: Card(
                       shape: RoundedRectangleBorder(

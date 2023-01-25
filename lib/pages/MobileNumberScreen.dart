@@ -1,3 +1,4 @@
+/*
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
@@ -8,7 +9,9 @@ import 'package:mtott/pages/VerificationScreen.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import '../const.dart';
-/*Call Login Api*/
+*/
+/*Call Login Api*//*
+
 class MobileNumberScreen extends StatefulWidget {
   const MobileNumberScreen({Key? key}) : super(key: key);
 
@@ -24,7 +27,9 @@ class _MobileNumberScreenState extends State<MobileNumberScreen> {
     print("Mobile Number ${mobileNumber.text}");
     SharedPreferences pref=await SharedPreferences.getInstance();
     final resp=await post(Uri.parse(login),body: {"phone":mobileNumber.text});
-    /* print("Login+ ${resp.data}");*/
+    */
+/* print("Login+ ${resp.data}");*//*
+
     final result= jsonDecode(resp.body);
 
     if(resp.statusCode==200){
@@ -159,3 +164,4 @@ class _MobileNumberScreenState extends State<MobileNumberScreen> {
     );
   }
 }
+*/

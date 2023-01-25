@@ -4,6 +4,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_facebook_auth/flutter_facebook_auth.dart';
 import 'package:flutter_font_icons/flutter_font_icons.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:google_sign_in/google_sign_in.dart';
 import 'package:mtott/pages/ChannelScreen.dart';
 import 'package:mtott/pages/DownloadScreen.dart';
 import 'package:mtott/pages/FavouriteMusicScreen.dart';
@@ -42,10 +43,12 @@ class _DashBoardScreenState extends State<DashBoardScreen> with WidgetsBindingOb
   List<Widget> pages=[];
   bool flag=true;
   String username="";
+  String uid="";
   String image="";
   fetchData() async{
     SharedPreferences pref=await SharedPreferences.getInstance();
     username=pref.getString("fullName").toString();
+    uid=pref.getString("uid").toString();
     setState(() {
 
     });
@@ -120,10 +123,10 @@ class _DashBoardScreenState extends State<DashBoardScreen> with WidgetsBindingOb
                       padding: const EdgeInsets.symmetric(vertical:8.0),
                       child: ListTile(
                         leading:auth.currentUser==null?SvgPicture.asset("asset/logo/user.svg"):CircleAvatar(backgroundImage: NetworkImage("${auth.currentUser!.photoURL}")),
-                        title: Text(username.isEmpty?"Log In":username),
+                        title: Text(uid.isEmpty?"Log In":username),
                         subtitle: const Text("For a better experience"),
                         trailing:  SvgPicture.asset("asset/logo/rightarrow.svg",color: Theme.of(context).brightness==Brightness.dark?Colors.white:Colors.black),
-                        onTap: username.isEmpty?(){
+                        onTap: uid.isEmpty?(){
                           Navigator.push(context,PageRouteBuilder(
                             transitionDuration: const Duration(seconds: 1),
                             pageBuilder: (context, animation, secondaryAnimation) => const SignInScreen(),
@@ -304,7 +307,7 @@ class _DashBoardScreenState extends State<DashBoardScreen> with WidgetsBindingOb
                       onTap: (){
                         Navigator.push(context,PageRouteBuilder(
                           transitionDuration: Duration(seconds: 1),
-                          pageBuilder: (context, animation, secondaryAnimation) => const GeneresScreen(),
+                          pageBuilder: (context, animation, secondaryAnimation) => const GenresScreen(),
                           transitionsBuilder: (context, animation, secondaryAnimation, child) {
                             const begin = Offset(0.0, 1.0);
                             const end = Offset.zero;
@@ -383,15 +386,13 @@ class _DashBoardScreenState extends State<DashBoardScreen> with WidgetsBindingOb
                       leading:SvgPicture.asset("asset/logo/help.svg",color: Theme.of(context).brightness == Brightness.dark?Colors.white:Colors.black),
                       title: const Text("Help"),
                     ),
-                    username.isNotEmpty?ListTile(
+                    uid.isNotEmpty?ListTile(
                       onTap: () async{
                         SharedPreferences pref=await SharedPreferences.getInstance();
                         pref.remove("fullName");
                         pref.remove("uid");
-                        await FacebookAuth.instance.logOut().then((value){
-                          auth.signOut();
-                          FacebookAuth.instance.logOut();
-                        });
+                        auth.signOut();
+                        await FacebookAuth.instance.logOut();
                         Navigator.pushReplacement(context,MaterialPageRoute(builder: (context)=>const SignInScreen()));
                         ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text("Log Out SuccessFully")));
                       },

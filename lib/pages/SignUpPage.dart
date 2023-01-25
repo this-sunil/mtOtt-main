@@ -1,20 +1,10 @@
-import 'dart:convert';
-
-import 'package:awesome_icons/awesome_icons.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:http/http.dart';
-import 'package:mtott/const.dart';
-import 'package:mtott/pages/DashBoardScreen.dart';
+
 import 'package:mtott/pages/SignInScreen.dart';
 import 'package:mtott/pages/VerificationOtpScreen.dart';
-import 'package:mtott/pages/VerificationScreen.dart';
-import 'package:quickalert/models/quickalert_animtype.dart';
-import 'package:quickalert/models/quickalert_type.dart';
-import 'package:quickalert/widgets/quickalert_dialog.dart';
-import 'package:shared_preferences/shared_preferences.dart';
+
 
 class SignUpPage extends StatefulWidget {
   const SignUpPage({Key? key}) : super(key: key);

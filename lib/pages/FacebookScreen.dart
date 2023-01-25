@@ -1,3 +1,4 @@
+/*
 
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -24,6 +25,7 @@ class _FacebookScreenState extends State<FacebookScreen> {
 
 
 
+*/
 /*Future<UserCredential> signIn(BuildContext context) async {
 
 
@@ -31,7 +33,8 @@ class _FacebookScreenState extends State<FacebookScreen> {
     final OAuthCredential facebookAuthCredential =FacebookAuthProvider.credential(result.accessToken!.token);
     return await FirebaseAuth.instance.signInWithCredential(facebookAuthCredential);
    
-  }*/
+  }*//*
+
   @override
   void initState() {
     // TODO: implement initState
@@ -139,3 +142,4 @@ class _FacebookScreenState extends State<FacebookScreen> {
     );
   }
 }
+*/

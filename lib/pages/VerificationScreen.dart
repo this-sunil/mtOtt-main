@@ -1,10 +1,13 @@
+/*
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:mtott/pages/DashBoardScreen.dart';
 import 'package:sms_autofill/sms_autofill.dart';
-/*Mobile Number Authentication With Firebase*/
+*/
+/*Mobile Number Authentication With Firebase*//*
+
 class VerificationScreen extends StatefulWidget {
   final String mobile;
   const VerificationScreen({Key? key,required this.mobile}) : super(key: key);
@@ -35,10 +38,14 @@ class _VerificationScreenState extends State<VerificationScreen> {
             "mobile_number":"+91${widget.mobile}",
             "app_signature_id": appSignatureId,
           };
-          /*SmsAutoFill().getAppSignature.then((signature) {
+          */
+/*SmsAutoFill().getAppSignature.then((signature) {
               print(signature);
-            });*/
-         /* data=credential.smsCode!.toString();*/
+            });*//*
+
+         */
+/* data=credential.smsCode!.toString();*//*
+
           setState(() {
             first.text = credential.smsCode!.substring(0, 1);
             second.text = credential.smsCode!.substring(1, 2);
@@ -46,8 +53,10 @@ class _VerificationScreenState extends State<VerificationScreen> {
             fourth.text = credential.smsCode!.substring(3, 4);
             fifth.text = credential.smsCode!.substring(4, 5);
             sixth.text = credential.smsCode!.substring(5, 6);
-            /*otpNo.text = firstDigit.text + secondDigit.text + thirdDigit.text +
-                fourthDigit.text + fifthDigit.text + sixthDigit.text;*/
+            */
+/*otpNo.text = firstDigit.text + secondDigit.text + thirdDigit.text +
+                fourthDigit.text + fifthDigit.text + sixthDigit.text;*//*
+
           });
 
 
@@ -62,8 +71,10 @@ class _VerificationScreenState extends State<VerificationScreen> {
         codeSent: (String verificationId, int? resendingToken) {
           verificationCode = verificationId;
           ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text("Verification Code sent on your phone number")));
-          /*wait=true;
-          startTimer();*/
+          */
+/*wait=true;
+          startTimer();*//*
+
         },
         codeAutoRetrievalTimeout: (String verificationId) async {
 
@@ -253,3 +264,4 @@ class _VerificationScreenState extends State<VerificationScreen> {
     );
   }
 }
+*/

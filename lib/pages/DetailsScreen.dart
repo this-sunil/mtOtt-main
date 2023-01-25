@@ -30,6 +30,7 @@ import '../Service/cubit/MoreLikeCubit.dart';
 import '../Service/cubit/SeriesCubit.dart';
 import '../const.dart';
 import '../main.dart';
+import '../plan/PlanScreen.dart';
 import '../utility/theme/Database.dart';
 import 'MoreLikeScreen.dart';
 
@@ -912,45 +913,55 @@ class _DetailsScreenState extends State<DetailsScreen>
                             return InkWell(
                               onTap: () {
                                 Navigator.push(
-                                    context,
-                                    PageRouteBuilder(
-                                      transitionDuration:
-                                          const Duration(seconds: 1),
-                                      pageBuilder: (context, animation,
-                                              secondaryAnimation) =>
-                                          DetailsScreen(
-                                        id: state.slider[index].data[index].id,
-                                        url: state.slider[index].data[index]
-                                            .episodeUrl,
-                                        title: state.slider[index].data[index]
-                                            .episodeTitle,
-                                        description: state
-                                            .slider[index].data[index].subtitle,
-                                        type: state.slider[index].data[index]
-                                            .episodeType,
-                                        imgPath:
-                                            '$baseUrl/images/episodes/${state.slider[index].data[index].episodePoster}',
-                                        seriesId: state
-                                            .slider[index].data[index].seriesId,
-                                        seasonId: state
-                                            .slider[index].data[index].seasonId,
-                                        mType: 'webseries',
-                                      ),
-                                      transitionsBuilder: (context, animation,
-                                          secondaryAnimation, child) {
-                                        const begin = Offset(0.0, 1.0);
-                                        const end = Offset.zero;
-                                        const curve = Curves.ease;
-                                        var tween = Tween(
-                                                begin: begin, end: end)
-                                            .chain(CurveTween(curve: curve));
+                                      context,
+                                      PageRouteBuilder(
+                                        transitionDuration:
+                                        const Duration(seconds: 1),
+                                        pageBuilder: (context, animation,
+                                            secondaryAnimation) =>
+                                            DetailsScreen(
+                                              id: state.slider[index]
+                                                  .data[index].id,
+                                              url: state.slider[index]
+                                                  .data[index]
+                                                  .episodeUrl,
+                                              title: state.slider[index]
+                                                  .data[index]
+                                                  .episodeTitle,
+                                              description: state
+                                                  .slider[index].data[index]
+                                                  .subtitle,
+                                              type: state.slider[index]
+                                                  .data[index]
+                                                  .episodeType,
+                                              imgPath:
+                                              '$baseUrl/images/episodes/${state
+                                                  .slider[index].data[index]
+                                                  .episodePoster}',
+                                              seriesId: state
+                                                  .slider[index].data[index]
+                                                  .seriesId,
+                                              seasonId: state
+                                                  .slider[index].data[index]
+                                                  .seasonId,
+                                              mType: 'webseries',
+                                            ),
+                                        transitionsBuilder: (context, animation,
+                                            secondaryAnimation, child) {
+                                          const begin = Offset(0.0, 1.0);
+                                          const end = Offset.zero;
+                                          const curve = Curves.ease;
+                                          var tween = Tween(
+                                              begin: begin, end: end)
+                                              .chain(CurveTween(curve: curve));
 
-                                        return SlideTransition(
-                                          position: animation.drive(tween),
-                                          child: child,
-                                        );
-                                      },
-                                    ));
+                                          return SlideTransition(
+                                            position: animation.drive(tween),
+                                            child: child,
+                                          );
+                                        },
+                                      ));
+
                               },
                               child: Card(
                                   color: Theme.of(context).brightness ==
@@ -1192,25 +1203,52 @@ class _DetailsScreenState extends State<DetailsScreen>
                                 splashColor: Colors.transparent,
                                 highlightColor: Colors.transparent,
                                 onTap: () {
-                                  Navigator.push(
-                                      context,
-                                      MaterialPageRoute(
-                                          builder: (context) => DetailsScreen(
-                                                id: state.slider[index]
-                                                    .data[index].id,
-                                                url: state.slider[index]
-                                                    .data[index].movieUrl,
-                                                title: state.slider[index]
-                                                    .data[index].movieTitle,
-                                                description: state.slider[index]
-                                                    .data[index].movieDesc,
-                                                type: state.slider[index]
-                                                    .data[index].movieType,
-                                                imgPath:
-                                                    "$baseUrl/images/movies/${state.slider[index].data[index].movieCover}",
-                                                seriesId: '',
-                                                mType: 'movie',
-                                              )));
+                                  if (planBuy == false || state.slider[index].data[index].price!="0") {
+                                    Navigator.push(context, PageRouteBuilder(
+                                      transitionDuration: const Duration(
+                                          seconds: 1),
+                                      pageBuilder: (context, animation,
+                                          secondaryAnimation) => const PlanScreen(),
+                                      transitionsBuilder: (context, animation,
+                                          secondaryAnimation, child) {
+                                        const begin = Offset(0.0, 1.0);
+                                        const end = Offset.zero;
+                                        const curve = Curves.ease;
+                                        var tween = Tween(
+                                            begin: begin, end: end).chain(
+                                            CurveTween(curve: curve));
+                                        return SlideTransition(
+                                          position: animation.drive(tween),
+                                          child: child,
+                                        );
+                                      },
+                                    ));
+                                  }
+                                  else {
+                                    Navigator.push(
+                                        context,
+                                        MaterialPageRoute(
+                                            builder: (context) =>
+                                                DetailsScreen(
+                                                  id: state.slider[index]
+                                                      .data[index].id,
+                                                  url: state.slider[index]
+                                                      .data[index].movieUrl,
+                                                  title: state.slider[index]
+                                                      .data[index].movieTitle,
+                                                  description: state
+                                                      .slider[index]
+                                                      .data[index].movieDesc,
+                                                  type: state.slider[index]
+                                                      .data[index].movieType,
+                                                  imgPath:
+                                                  "$baseUrl/images/movies/${state
+                                                      .slider[index].data[index]
+                                                      .movieCover}",
+                                                  seriesId: '',
+                                                  mType: 'movie',
+                                                )));
+                                  }
                                 },
                                 child: Padding(
                                   padding: const EdgeInsets.all(4.0),

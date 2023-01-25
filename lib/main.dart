@@ -11,7 +11,7 @@ late String data;
 
 List<String> recentSearch=[];
 bool flag=false;
-
+bool planBuy=false;
 HashSet<String> views=HashSet();
 enum InternetState{internetInitial,internetSuccess,internetFailure}
 HashSet<String> selectFav=HashSet<String>();

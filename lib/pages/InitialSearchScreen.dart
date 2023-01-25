@@ -11,6 +11,7 @@ import 'package:speech_to_text/speech_to_text.dart';
 import '../Service/cubit/PopularCubit.dart';
 import '../Service/cubit/SearchCubit.dart';
 import '../Service/state/PopularState.dart';
+import '../plan/PlanScreen.dart';
 import 'ChannelScreen.dart';
 import 'DetailsScreen.dart';
 import 'GeneresScreen.dart';
@@ -150,7 +151,7 @@ class _InitialSearchScreenState extends State<InitialSearchScreen> {
             onTap: (){
               Navigator.push(context,PageRouteBuilder(
                 transitionDuration: const Duration(seconds: 1),
-                pageBuilder: (context, animation, secondaryAnimation) =>  const GeneresScreen(),
+                pageBuilder: (context, animation, secondaryAnimation) =>  const GenresScreen(),
                 transitionsBuilder: (context, animation, secondaryAnimation, child) {
                   const begin = Offset(0.0, 1.0);
                   const end = Offset.zero;
@@ -185,22 +186,63 @@ class _InitialSearchScreenState extends State<InitialSearchScreen> {
                       itemBuilder: (context,index){
                         return InkWell(
                           onTap: (){
-                            Navigator.push(context,PageRouteBuilder(
-                              transitionDuration: const Duration(seconds: 1),
-                              pageBuilder: (context, animation, secondaryAnimation) =>  DetailsScreen(id:state.slider[index].data[index].id,url:state.slider[index].data[index].movieUrl,title: state.slider[index].data[index].movieTitle, description: state.slider[index].data[index].movieDesc,type: state.slider[index].data[index].movieType, imgPath: "$baseUrl/images/movies/${state.slider[index].data[index].moviePoster}", seriesId: '', mType: 'movie',),
-                              transitionsBuilder: (context, animation, secondaryAnimation, child) {
-                                const begin = Offset(0.0, 1.0);
-                                const end = Offset.zero;
-                                const curve = Curves.ease;
+                            if (planBuy == false || state.slider[index].data[index].price!="0") {
+                              Navigator.push(context, PageRouteBuilder(
+                                transitionDuration: const Duration(
+                                    seconds: 1),
+                                pageBuilder: (context, animation,
+                                    secondaryAnimation) => const PlanScreen(),
+                                transitionsBuilder: (context, animation,
+                                    secondaryAnimation, child) {
+                                  const begin = Offset(0.0, 1.0);
+                                  const end = Offset.zero;
+                                  const curve = Curves.ease;
+                                  var tween = Tween(
+                                      begin: begin, end: end).chain(
+                                      CurveTween(curve: curve));
+                                  return SlideTransition(
+                                    position: animation.drive(tween),
+                                    child: child,
+                                  );
+                                },
+                              ));
+                            }
+                            else {
+                              Navigator.push(context, PageRouteBuilder(
+                                transitionDuration: const Duration(seconds: 1),
+                                pageBuilder: (context, animation,
+                                    secondaryAnimation) =>
+                                    DetailsScreen(
+                                      id: state.slider[index].data[index].id,
+                                      url: state.slider[index].data[index]
+                                          .movieUrl,
+                                      title: state.slider[index].data[index]
+                                          .movieTitle,
+                                      description: state.slider[index]
+                                          .data[index].movieDesc,
+                                      type: state.slider[index].data[index]
+                                          .movieType,
+                                      imgPath: "$baseUrl/images/movies/${state
+                                          .slider[index].data[index]
+                                          .moviePoster}",
+                                      seriesId: '',
+                                      mType: 'movie',),
+                                transitionsBuilder: (context, animation,
+                                    secondaryAnimation, child) {
+                                  const begin = Offset(0.0, 1.0);
+                                  const end = Offset.zero;
+                                  const curve = Curves.ease;
 
-                                var tween = Tween(begin: begin, end: end).chain(CurveTween(curve: curve));
+                                  var tween = Tween(begin: begin, end: end)
+                                      .chain(CurveTween(curve: curve));
 
-                                return SlideTransition(
-                                  position: animation.drive(tween),
-                                  child: child,
-                                );
-                              },
-                            ));
+                                  return SlideTransition(
+                                    position: animation.drive(tween),
+                                    child: child,
+                                  );
+                                },
+                              ));
+                            }
                           },
                           child: Padding(
                             padding: const EdgeInsets.all(8.0),

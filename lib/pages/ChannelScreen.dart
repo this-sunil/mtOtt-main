@@ -6,6 +6,8 @@ import 'package:mtott/pages/SearchScreen.dart';
 
 import '../Service/cubit/LatestChannelCubit.dart';
 import '../Service/state/LatestChannelState.dart';
+import '../main.dart';
+import '../plan/PlanScreen.dart';
 import 'DetailsScreen.dart';
 class ChannelScreen extends StatefulWidget {
   const ChannelScreen({Key? key}) : super(key: key);
@@ -74,22 +76,40 @@ class _ChannelScreenState extends State<ChannelScreen> {
                   splashColor: Colors.transparent,
                   highlightColor: Colors.transparent,
                   onTap: (){
-                    Navigator.push(context,PageRouteBuilder(
-                      transitionDuration: const Duration(seconds: 1),
-                      pageBuilder: (context, animation, secondaryAnimation) =>  DetailsScreen(id: state.slider[index].data[index].id,url:state.slider[index].data[index].channelUrl, title: state.slider[index].data[index].channelTitle, description: state.slider[index].data[index].channelDesc,  type: state.slider[index].data[index].channelType, imgPath: "$baseUrl/images/${state.slider[index].data[index].channelThumbnail}", seriesId: '', mType: '',),
-                      transitionsBuilder: (context, animation, secondaryAnimation, child) {
-                        const begin = Offset(0.0, 1.0);
-                        const end = Offset.zero;
-                        const curve = Curves.ease;
 
-                        var tween = Tween(begin: begin, end: end).chain(CurveTween(curve: curve));
 
-                        return SlideTransition(
-                          position: animation.drive(tween),
-                          child: child,
-                        );
-                      },
-                    ));
+
+                      Navigator.push(context, PageRouteBuilder(
+                        transitionDuration: const Duration(seconds: 1),
+                        pageBuilder: (context, animation, secondaryAnimation) =>
+                            DetailsScreen(
+                              id: state.slider[index].data[index].id,
+                              url: state.slider[index].data[index].channelUrl,
+                              title: state.slider[index].data[index]
+                                  .channelTitle,
+                              description: state.slider[index].data[index]
+                                  .channelDesc,
+                              type: state.slider[index].data[index].channelType,
+                              imgPath: "$baseUrl/images/${state.slider[index]
+                                  .data[index].channelThumbnail}",
+                              seriesId: '',
+                              mType: '',),
+                        transitionsBuilder: (context, animation,
+                            secondaryAnimation, child) {
+                          const begin = Offset(0.0, 1.0);
+                          const end = Offset.zero;
+                          const curve = Curves.ease;
+
+                          var tween = Tween(begin: begin, end: end).chain(
+                              CurveTween(curve: curve));
+
+                          return SlideTransition(
+                            position: animation.drive(tween),
+                            child: child,
+                          );
+                        },
+                      ));
+
                   },
                   child: Card(
                     shape: RoundedRectangleBorder(
