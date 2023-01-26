@@ -3,6 +3,7 @@ import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_downloader/flutter_downloader.dart';
+import 'package:flutter_staggered_animations/flutter_staggered_animations.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:html/parser.dart';
@@ -190,210 +191,224 @@ class _TvSeriesScreenState extends State<TvSeriesScreen>
             child: BlocBuilder<SeasonCubit, SeasonState>(
                 builder: (context, state) {
               if (state is SeasonLoadedState) {
-                return GridView.builder(
-                  padding: EdgeInsets.zero,
-                  itemCount: state.slider.length,
-                  physics: const BouncingScrollPhysics(),
-                  shrinkWrap: true,
-                  itemBuilder: (context, index) {
-                    return InkWell(
-                      splashColor: Colors.transparent,
-                      highlightColor: Colors.transparent,
-                      onTap: () {
+                return AnimationLimiter(
+                  child: GridView.builder(
+                    padding: EdgeInsets.zero,
+                    itemCount: state.slider.length,
+                    physics: const BouncingScrollPhysics(),
+                    shrinkWrap: true,
+                    itemBuilder: (context, index) {
+                      return AnimationConfiguration.staggeredGrid(
+                        position: index,
+                        columnCount: 2,
+                        child: InkWell(
+                          splashColor: Colors.transparent,
+                          highlightColor: Colors.transparent,
+                          onTap: () {
 
 
-                          Navigator.push(
-                              context,
-                              PageRouteBuilder(
-                                transitionDuration: const Duration(seconds: 1),
-                                pageBuilder: (context, animation,
-                                    secondaryAnimation) =>
-                                    DetailsScreen(
-                                        id: state.slider[index].data[index].id,
-                                        url: state
-                                            .slider[index].data[index]
-                                            .episodeUrl,
-                                        title: state.slider[index].data[index]
-                                            .episodeTitle,
-                                        description: state
-                                            .slider[index].data[index].subtitle,
-                                        type: state.slider[index].data[index]
-                                            .episodeType,
-                                        imgPath:
-                                        '$baseUrl/images/episodes/${state
-                                            .slider[index].data[index]
-                                            .episodePoster}',
-                                        seriesId: state
-                                            .slider[index].data[index].seriesId,
-                                        seasonId: state
-                                            .slider[index].data[index].seasonId,
-                                        mType: 'series'),
-                                transitionsBuilder: (context, animation,
-                                    secondaryAnimation, child) {
-                                  const begin = Offset(0.0, 1.0);
-                                  const end = Offset.zero;
-                                  const curve = Curves.ease;
-                                  var tween = Tween(begin: begin, end: end)
-                                      .chain(CurveTween(curve: curve));
+                              Navigator.push(
+                                  context,
+                                  PageRouteBuilder(
+                                    transitionDuration: const Duration(seconds: 1),
+                                    pageBuilder: (context, animation,
+                                        secondaryAnimation) =>
+                                        DetailsScreen(
+                                            id: state.slider[index].data[index].id,
+                                            url: state
+                                                .slider[index].data[index]
+                                                .episodeUrl,
+                                            title: state.slider[index].data[index]
+                                                .episodeTitle,
+                                            description: state
+                                                .slider[index].data[index].subtitle,
+                                            type: state.slider[index].data[index]
+                                                .episodeType,
+                                            imgPath:
+                                            '$baseUrl/images/episodes/${state
+                                                .slider[index].data[index]
+                                                .episodePoster}',
+                                            seriesId: state
+                                                .slider[index].data[index].seriesId,
+                                            seasonId: state
+                                                .slider[index].data[index].seasonId,
+                                            mType: 'series'),
+                                    transitionsBuilder: (context, animation,
+                                        secondaryAnimation, child) {
+                                      const begin = Offset(0.0, 1.0);
+                                      const end = Offset.zero;
+                                      const curve = Curves.ease;
+                                      var tween = Tween(begin: begin, end: end)
+                                          .chain(CurveTween(curve: curve));
 
-                                  return SlideTransition(
-                                    position: animation.drive(tween),
-                                    child: child,
-                                  );
-                                },
-                              ));
-                      },
-                      child: Hero(
-                        tag: state.slider[index].data[index].id,
-                        child: Card(
-                            elevation: 5,
-                            child: Column(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              children: [
-                                Flexible(
-                                  flex: 4,
-                                  child: Container(
-                                    width: 220,
-                                    decoration: BoxDecoration(
-                                      borderRadius: const BorderRadius.only(
-                                          topRight: Radius.circular(5),
-                                          topLeft: Radius.circular(5)),
-                                      image: DecorationImage(
-                                        fit: BoxFit.cover,
-                                        image: NetworkImage(
-                                            "$baseUrl/images/episodes/${state.slider[index].data[index].episodePoster}"),
-                                      ),
-                                    ),
+                                      return SlideTransition(
+                                        position: animation.drive(tween),
+                                        child: child,
+                                      );
+                                    },
+                                  ));
+                          },
+                          child: Hero(
+                            tag: state.slider[index].data[index].id,
+                            child: SlideAnimation(
+                              verticalOffset: 1000,
+                              duration: const Duration(seconds: 2),
+                              curve: Curves.easeInOutSine,
+                              delay: const Duration(seconds: 1),
+                              child: FadeInAnimation(
+                                child: Card(
+                                    elevation: 5,
                                     child: Column(
-                                      mainAxisAlignment: MainAxisAlignment.end,
+                                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                       children: [
-                                        Align(
-                                          alignment: Alignment.bottomCenter,
-                                          child: Padding(
-                                            padding: const EdgeInsets.symmetric(
-                                                horizontal: 10.0, vertical: 10),
-                                            child: Row(
+                                        Flexible(
+                                          flex: 4,
+                                          child: Container(
+                                            width: 220,
+                                            decoration: BoxDecoration(
+                                              borderRadius: const BorderRadius.only(
+                                                  topRight: Radius.circular(5),
+                                                  topLeft: Radius.circular(5)),
+                                              image: DecorationImage(
+                                                fit: BoxFit.cover,
+                                                image: NetworkImage(
+                                                    "$baseUrl/images/episodes/${state.slider[index].data[index].episodePoster}"),
+                                              ),
+                                            ),
+                                            child: Column(
+                                              mainAxisAlignment: MainAxisAlignment.end,
                                               children: [
-                                                SvgPicture.asset(
-                                                    "asset/logo/play.svg",
-                                                    width: 20,
-                                                    height: 20),
-                                                Flexible(
+                                                Align(
+                                                  alignment: Alignment.bottomCenter,
                                                   child: Padding(
-                                                    padding: const EdgeInsets
-                                                            .symmetric(
-                                                        horizontal: 10),
-                                                    child: Text(
-                                                        state
-                                                            .slider[index]
-                                                            .data[index]
-                                                            .episodeTitle,
-                                                        maxLines: 1,
-                                                        overflow: TextOverflow
-                                                            .ellipsis,
-                                                        softWrap: true,
-                                                        style:
-                                                            GoogleFonts.inter(
-                                                                color: Colors
-                                                                    .white)),
+                                                    padding: const EdgeInsets.symmetric(
+                                                        horizontal: 10.0, vertical: 10),
+                                                    child: Row(
+                                                      children: [
+                                                        SvgPicture.asset(
+                                                            "asset/logo/play.svg",
+                                                            width: 20,
+                                                            height: 20),
+                                                        Flexible(
+                                                          child: Padding(
+                                                            padding: const EdgeInsets
+                                                                    .symmetric(
+                                                                horizontal: 10),
+                                                            child: Text(
+                                                                state
+                                                                    .slider[index]
+                                                                    .data[index]
+                                                                    .episodeTitle,
+                                                                maxLines: 1,
+                                                                overflow: TextOverflow
+                                                                    .ellipsis,
+                                                                softWrap: true,
+                                                                style:
+                                                                    GoogleFonts.inter(
+                                                                        color: Colors
+                                                                            .white)),
+                                                          ),
+                                                        ),
+                                                      ],
+                                                    ),
                                                   ),
                                                 ),
                                               ],
                                             ),
                                           ),
                                         ),
-                                      ],
-                                    ),
-                                  ),
-                                ),
-                                SizedBox(
-                                  width: 220,
-                                  child: Center(
-                                    child: Padding(
-                                      padding: const EdgeInsets.all(4.0),
-                                      child: Text(
-                                          state.slider[index].data[index]
-                                              .episodeTitle,
-                                          overflow: TextOverflow.ellipsis,
-                                          style: GoogleFonts.inter(
-                                              color: Theme.of(context)
-                                                          .brightness ==
-                                                      Brightness.dark
-                                                  ? Colors.white
-                                                  : Colors.black)),
-                                    ),
-                                  ),
-                                ),
-                                Padding(
-                                  padding: const EdgeInsets.symmetric(
-                                      horizontal: 30, vertical: 8),
-                                  child: ElevatedButton(
-                                    style: ElevatedButton.styleFrom(
-                                      elevation: 5,
-                                      shape: RoundedRectangleBorder(
-                                          borderRadius:
-                                              BorderRadius.circular(5)),
-                                      backgroundColor:
-                                      const Color(0xFF333945),
-                                    ),
-                                    child: Row(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.center,
-                                      children: [
-                                        Padding(
-                                          padding: const EdgeInsets.all(8.0),
-                                          child: SvgPicture.asset(
-                                              "asset/logo/download.svg",
-                                              color: Colors.white),
+                                        SizedBox(
+                                          width: 220,
+                                          child: Center(
+                                            child: Padding(
+                                              padding: const EdgeInsets.all(4.0),
+                                              child: Text(
+                                                  state.slider[index].data[index]
+                                                      .episodeTitle,
+                                                  overflow: TextOverflow.ellipsis,
+                                                  style: GoogleFonts.inter(
+                                                      color: Theme.of(context)
+                                                                  .brightness ==
+                                                              Brightness.dark
+                                                          ? Colors.white
+                                                          : Colors.black)),
+                                            ),
+                                          ),
                                         ),
-                                        const Text("Download",
-                                            style: TextStyle(
-                                                color: Colors.white)),
+                                        Padding(
+                                          padding: const EdgeInsets.symmetric(
+                                              horizontal: 30, vertical: 8),
+                                          child: ElevatedButton(
+                                            style: ElevatedButton.styleFrom(
+                                              elevation: 5,
+                                              shape: RoundedRectangleBorder(
+                                                  borderRadius:
+                                                      BorderRadius.circular(5)),
+                                              backgroundColor:
+                                              const Color(0xFF333945),
+                                            ),
+                                            child: Row(
+                                              mainAxisAlignment:
+                                                  MainAxisAlignment.center,
+                                              children: [
+                                                Padding(
+                                                  padding: const EdgeInsets.all(8.0),
+                                                  child: SvgPicture.asset(
+                                                      "asset/logo/download.svg",
+                                                      color: Colors.white),
+                                                ),
+                                                const Text("Download",
+                                                    style: TextStyle(
+                                                        color: Colors.white)),
+                                              ],
+                                            ),
+                                            onPressed: () async {
+
+                                              helper.addDownload(
+                                                  state
+                                                      .slider[index].data[index].id,
+                                                  state.slider[index].data[index]
+                                                      .episodeTitle,
+                                                  state.slider[index].data[index]
+                                                      .episodeUrl,
+                                                  '',
+                                                  state.slider[index].data[index]
+                                                      .seasonId,
+                                                  "$baseUrl/images/episodes/${state.slider[index].data[index].episodePoster}",
+                                                  state.slider[index].data[index]
+                                                      .seriesId,
+                                                  state.slider[index].data[index]
+                                                      .episodeType);
+                                              Navigator.push(context, PageRouteBuilder(
+                                                transitionDuration: const Duration(seconds: 1),
+                                                pageBuilder: (context, animation, secondaryAnimation) =>  MyDownload(platform: Theme.of(context).platform),
+                                                transitionsBuilder: (context, animation, secondaryAnimation, child) {
+                                                  const begin = Offset(0.0, 1.0);
+                                                  const end = Offset.zero;
+                                                  const curve = Curves.ease;
+
+                                                  var tween = Tween(begin: begin, end: end).chain(CurveTween(curve: curve));
+
+                                                  return SlideTransition(
+                                                    position: animation.drive(tween),
+                                                    child: child,
+                                                  );
+                                                },
+                                              ));
+                                            },
+                                          ),
+                                        ),
                                       ],
-                                    ),
-                                    onPressed: () async {
-
-                                      helper.addDownload(
-                                          state
-                                              .slider[index].data[index].id,
-                                          state.slider[index].data[index]
-                                              .episodeTitle,
-                                          state.slider[index].data[index]
-                                              .episodeUrl,
-                                          '',
-                                          state.slider[index].data[index]
-                                              .seasonId,
-                                          "$baseUrl/images/episodes/${state.slider[index].data[index].episodePoster}",
-                                          state.slider[index].data[index]
-                                              .seriesId,
-                                          state.slider[index].data[index]
-                                              .episodeType);
-                                      Navigator.push(context, PageRouteBuilder(
-                                        transitionDuration: const Duration(seconds: 1),
-                                        pageBuilder: (context, animation, secondaryAnimation) =>  MyDownload(platform: Theme.of(context).platform),
-                                        transitionsBuilder: (context, animation, secondaryAnimation, child) {
-                                          const begin = Offset(0.0, 1.0);
-                                          const end = Offset.zero;
-                                          const curve = Curves.ease;
-
-                                          var tween = Tween(begin: begin, end: end).chain(CurveTween(curve: curve));
-
-                                          return SlideTransition(
-                                            position: animation.drive(tween),
-                                            child: child,
-                                          );
-                                        },
-                                      ));
-                                    },
-                                  ),
-                                ),
-                              ],
-                            )),
-                      ),
-                    );
-                  },
-                  gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                      crossAxisCount: 2, childAspectRatio: 1),
+                                    )),
+                              ),
+                            ),
+                          ),
+                        ),
+                      );
+                    },
+                    gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                        crossAxisCount: 2, childAspectRatio: 1),
+                  ),
                 );
               }
               return const SizedBox(

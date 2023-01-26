@@ -1,6 +1,7 @@
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_staggered_animations/flutter_staggered_animations.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:mtott/Service/cubit/RunningMovieCubit.dart';
@@ -226,75 +227,87 @@ class _MoviesScreenState extends State<MoviesScreen> {
               if(state is TopPicksLoadedState){
                 return SizedBox(
                   height: 250,
-                  child: ListView.builder(
-                      scrollDirection: Axis.horizontal,
+                  child: AnimationLimiter(
+                    child: ListView.builder(
+                        scrollDirection: Axis.horizontal,
 
-                      itemCount: state.slider.length,
-                      physics: const BouncingScrollPhysics(),
-                      shrinkWrap: true,
-                      itemBuilder: (context, index) {
-                        return InkWell(
-                          splashColor: Colors.transparent,
-                          highlightColor: Colors.transparent,
-                          onTap: (){
-                            if (planBuy == false || state.slider[index].topPicksResponse[index].price!="0") {
-                              Navigator.push(context, PageRouteBuilder(
-                                transitionDuration: const Duration(
-                                    seconds: 1),
-                                pageBuilder: (context, animation,
-                                    secondaryAnimation) => const PlanScreen(),
-                                transitionsBuilder: (context, animation,
-                                    secondaryAnimation, child) {
-                                  const begin = Offset(0.0, 1.0);
-                                  const end = Offset.zero;
-                                  const curve = Curves.ease;
-                                  var tween = Tween(
-                                      begin: begin, end: end).chain(
-                                      CurveTween(curve: curve));
-                                  return SlideTransition(
-                                    position: animation.drive(tween),
-                                    child: child,
-                                  );
-                                },
-                              ));
-                            }
-                            else {
-                              Navigator.push(context, MaterialPageRoute(
-                                  builder: (context) =>
-                                      DetailsScreen(id: state.slider[index]
-                                          .topPicksResponse[index].id,
-                                        url: state.slider[index]
-                                            .topPicksResponse[index].movieUrl,
-                                        title: state.slider[index]
-                                            .topPicksResponse[index].movieTitle,
-                                        description: state.slider[index]
-                                            .topPicksResponse[index].movieDesc,
-                                        type: state.slider[index]
-                                            .topPicksResponse[index].movieType,
-                                        imgPath: "$baseUrl/images/movies/${state
-                                            .slider[index]
-                                            .topPicksResponse[index]
-                                            .moviePoster}",
-                                        seriesId: '',
-                                        mType: 'movie',)));
-                            }
-                          },
-                          child: Padding(
-                            padding: const EdgeInsets.all(8.0),
-                            child: Container(
-
-                              width: 180,
-                              decoration: BoxDecoration(
-                                borderRadius: BorderRadius.circular(12),
-                                image: DecorationImage(
-                                  fit: BoxFit.cover,
-                                  image: NetworkImage("$baseUrl/images/movies/${state.slider[index].topPicksResponse[index].moviePoster}"),
+                        itemCount: state.slider.length,
+                        physics: const BouncingScrollPhysics(),
+                        shrinkWrap: true,
+                        itemBuilder: (context, index) {
+                          return AnimationConfiguration.staggeredList(
+                            position: index,
+                            child: InkWell(
+                              splashColor: Colors.transparent,
+                              highlightColor: Colors.transparent,
+                              onTap: (){
+                                if (planBuy == false || state.slider[index].topPicksResponse[index].price!="0") {
+                                  Navigator.push(context, PageRouteBuilder(
+                                    transitionDuration: const Duration(
+                                        seconds: 1),
+                                    pageBuilder: (context, animation,
+                                        secondaryAnimation) => const PlanScreen(),
+                                    transitionsBuilder: (context, animation,
+                                        secondaryAnimation, child) {
+                                      const begin = Offset(0.0, 1.0);
+                                      const end = Offset.zero;
+                                      const curve = Curves.ease;
+                                      var tween = Tween(
+                                          begin: begin, end: end).chain(
+                                          CurveTween(curve: curve));
+                                      return SlideTransition(
+                                        position: animation.drive(tween),
+                                        child: child,
+                                      );
+                                    },
+                                  ));
+                                }
+                                else {
+                                  Navigator.push(context, MaterialPageRoute(
+                                      builder: (context) =>
+                                          DetailsScreen(id: state.slider[index]
+                                              .topPicksResponse[index].id,
+                                            url: state.slider[index]
+                                                .topPicksResponse[index].movieUrl,
+                                            title: state.slider[index]
+                                                .topPicksResponse[index].movieTitle,
+                                            description: state.slider[index]
+                                                .topPicksResponse[index].movieDesc,
+                                            type: state.slider[index]
+                                                .topPicksResponse[index].movieType,
+                                            imgPath: "$baseUrl/images/movies/${state
+                                                .slider[index]
+                                                .topPicksResponse[index]
+                                                .moviePoster}",
+                                            seriesId: '',
+                                            mType: 'movie',)));
+                                }
+                              },
+                              child: SlideAnimation(
+                                horizontalOffset: 100,
+                                duration: const Duration(seconds: 2),
+                                curve: Curves.easeInOutSine,
+                                delay: const Duration(seconds: 1),
+                                child: FadeInAnimation(
+                                  child: Padding(
+                                    padding: const EdgeInsets.all(8.0),
+                                    child: Container(
+                                      width: 180,
+                                      decoration: BoxDecoration(
+                                        borderRadius: BorderRadius.circular(12),
+                                        image: DecorationImage(
+                                          fit: BoxFit.cover,
+                                          image: NetworkImage("$baseUrl/images/movies/${state.slider[index].topPicksResponse[index].moviePoster}"),
+                                        ),
+                                      ),
+                                    ),
+                                  ),
                                 ),
                               ),
                             ),
-                          ),
-                        );
-                      }),
+                          );
+                        }),
+                  ),
                 );
               }
               return SizedBox(

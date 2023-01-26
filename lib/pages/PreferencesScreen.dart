@@ -5,7 +5,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:mtott/main.dart';
-import 'package:storage_info/storage_info.dart';
+
 
 import '../utility/theme/ThemeCubit.dart';
 
@@ -36,7 +36,7 @@ class _PreferencesScreenState extends State<PreferencesScreen> {
 
     });
   }
-  fetchStorageInfo() async{
+/*  fetchStorageInfo() async{
 
     selectItem.add("$qualityTitle");
 // get internal storage total space in bytes, MB and GB
@@ -49,19 +49,19 @@ class _PreferencesScreenState extends State<PreferencesScreen> {
 
    });
 
-  }
+  }*/
   @override
   void initState() {
-    fetchStorageInfo();
+    //fetchStorageInfo();
     super.initState();
   }
-  @override
+ /* @override
   void didUpdateWidget(covariant PreferencesScreen oldWidget) {
     setState(() {
       fetchStorageInfo();
     });
     super.didUpdateWidget(oldWidget);
-  }
+  }*/
   @override
   void dispose() {
     // TODO: implement dispose

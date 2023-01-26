@@ -60,35 +60,37 @@ class _ShowsScreenState extends State<ShowsScreen> {
                   return AnimationConfiguration.staggeredList(
                     position: index,
                     duration: const Duration(seconds: 2),
-                    child: SlideAnimation(
-                      curve: Curves.easeInOutSine,
-                      child: FadeInAnimation(
-                        child: InkWell(
-                          highlightColor: Colors.transparent,
-                          splashColor: Colors.transparent,
-                          onTap: (){
-                            Navigator.push(context,PageRouteBuilder(
-                              transitionDuration: const Duration(seconds: 1),
-                              pageBuilder: (context, animation, secondaryAnimation) =>  TvSeriesScreen(id: state.slider[index].data[index].id,title: state.slider[index].data[index].seriesName,description: state.slider[index].data[index].seriesDesc,imgPath: '$baseUrl/images/series/${state.slider[index].data[index].seriesCover}', seasonId: state.slider[index].data[index].seasonData[0].id),
-                              transitionsBuilder: (context, animation, secondaryAnimation, child) {
-                                const begin = Offset(0.0, 1.0);
-                                const end = Offset.zero;
-                                const curve = Curves.ease;
+                    child: InkWell(
+                      highlightColor: Colors.transparent,
+                      splashColor: Colors.transparent,
+                      onTap: (){
+                        Navigator.push(context,PageRouteBuilder(
+                          transitionDuration: const Duration(seconds: 1),
+                          pageBuilder: (context, animation, secondaryAnimation) =>  TvSeriesScreen(id: state.slider[index].data[index].id,title: state.slider[index].data[index].seriesName,description: state.slider[index].data[index].seriesDesc,imgPath: '$baseUrl/images/series/${state.slider[index].data[index].seriesCover}', seasonId: state.slider[index].data[index].seasonData[0].id),
+                          transitionsBuilder: (context, animation, secondaryAnimation, child) {
+                            const begin = Offset(0.0, 1.0);
+                            const end = Offset.zero;
+                            const curve = Curves.ease;
 
-                                var tween = Tween(begin: begin, end: end).chain(CurveTween(curve: curve));
+                            var tween = Tween(begin: begin, end: end).chain(CurveTween(curve: curve));
 
-                                return SlideTransition(
-                                  position: animation.drive(tween),
-                                  child: child,
-                                );
-                              },
-                            ));
+                            return SlideTransition(
+                              position: animation.drive(tween),
+                              child: child,
+                            );
                           },
+                        ));
+                      },
+                      child: SlideAnimation(
+                        verticalOffset: 1000,
+                        duration: const Duration(seconds: 2),
+                        curve: Curves.easeInOutSine,
+                        delay: const Duration(seconds: 1),
+                        child: FadeInAnimation(
                           child: Padding(
                             padding: const EdgeInsets.all(4.0),
                             child: Container(
-                            /*  height: 400,
-                              width: 200,*/
+                              width: 150,
                               decoration: BoxDecoration(
                                 borderRadius: BorderRadius.circular(5),
                                 image: DecorationImage(
@@ -102,7 +104,7 @@ class _ShowsScreenState extends State<ShowsScreen> {
                       ),
                     ),
                   );
-                }, gridDelegate:SliverGridDelegateWithFixedCrossAxisCount(crossAxisCount: 2,childAspectRatio: 1.0)),
+                }, gridDelegate:SliverGridDelegateWithFixedCrossAxisCount(crossAxisCount: 3,childAspectRatio: 0.8)),
           );
         }
         return SizedBox(

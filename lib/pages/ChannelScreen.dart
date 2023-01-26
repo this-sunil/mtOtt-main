@@ -1,13 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_staggered_animations/flutter_staggered_animations.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:mtott/const.dart';
 import 'package:mtott/pages/SearchScreen.dart';
 
 import '../Service/cubit/LatestChannelCubit.dart';
 import '../Service/state/LatestChannelState.dart';
-import '../main.dart';
-import '../plan/PlanScreen.dart';
+import 'package:entry/entry.dart';
 import 'DetailsScreen.dart';
 class ChannelScreen extends StatefulWidget {
   const ChannelScreen({Key? key}) : super(key: key);
@@ -72,55 +72,70 @@ class _ChannelScreenState extends State<ChannelScreen> {
               itemCount: state.slider.length,
               gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(crossAxisCount: 2,childAspectRatio: 3/2),
               itemBuilder: (context,index){
-                return InkWell(
-                  splashColor: Colors.transparent,
-                  highlightColor: Colors.transparent,
-                  onTap: (){
+                return AnimationLimiter(
+                  child: AnimationConfiguration.staggeredGrid(
+                    columnCount: 2,
+                    position: index,
+                    child: InkWell(
+                      splashColor: Colors.transparent,
+                      highlightColor: Colors.transparent,
+                      onTap: (){
 
 
 
-                      Navigator.push(context, PageRouteBuilder(
-                        transitionDuration: const Duration(seconds: 1),
-                        pageBuilder: (context, animation, secondaryAnimation) =>
-                            DetailsScreen(
-                              id: state.slider[index].data[index].id,
-                              url: state.slider[index].data[index].channelUrl,
-                              title: state.slider[index].data[index]
-                                  .channelTitle,
-                              description: state.slider[index].data[index]
-                                  .channelDesc,
-                              type: state.slider[index].data[index].channelType,
-                              imgPath: "$baseUrl/images/${state.slider[index]
-                                  .data[index].channelThumbnail}",
-                              seriesId: '',
-                              mType: '',),
-                        transitionsBuilder: (context, animation,
-                            secondaryAnimation, child) {
-                          const begin = Offset(0.0, 1.0);
-                          const end = Offset.zero;
-                          const curve = Curves.ease;
+                          Navigator.push(context, PageRouteBuilder(
+                            transitionDuration: const Duration(seconds: 1),
+                            pageBuilder: (context, animation, secondaryAnimation) =>
+                                DetailsScreen(
+                                  id: state.slider[index].data[index].id,
+                                  url: state.slider[index].data[index].channelUrl,
+                                  title: state.slider[index].data[index]
+                                      .channelTitle,
+                                  description: state.slider[index].data[index]
+                                      .channelDesc,
+                                  type: state.slider[index].data[index].channelType,
+                                  imgPath: "$baseUrl/images/${state.slider[index]
+                                      .data[index].channelThumbnail}",
+                                  seriesId: '',
+                                  mType: '',),
+                            transitionsBuilder: (context, animation,
+                                secondaryAnimation, child) {
+                              const begin = Offset(0.0, 1.0);
+                              const end = Offset.zero;
+                              const curve = Curves.ease;
 
-                          var tween = Tween(begin: begin, end: end).chain(
-                              CurveTween(curve: curve));
+                              var tween = Tween(begin: begin, end: end).chain(
+                                  CurveTween(curve: curve));
 
-                          return SlideTransition(
-                            position: animation.drive(tween),
-                            child: child,
-                          );
-                        },
-                      ));
+                              return SlideTransition(
+                                position: animation.drive(tween),
+                                child: child,
+                              );
+                            },
+                          ));
 
-                  },
-                  child: Card(
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(10),
-                    ),
-                    child: Container(
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(10),
-                        image: DecorationImage(
-                            fit: BoxFit.cover,
-                            image: NetworkImage("$baseUrl/images/${state.slider[index].data[index].channelThumbnail}")),
+                      },
+                      child: ScaleAnimation(
+
+                        duration: const Duration(seconds: 2),
+                        curve: Curves.easeInOutSine,
+                        delay: const Duration(seconds: 1),
+                        child: FadeInAnimation(
+
+                          child: Card(
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(10),
+                            ),
+                            child: Container(
+                              decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(10),
+                                image: DecorationImage(
+                                    fit: BoxFit.cover,
+                                    image: NetworkImage("$baseUrl/images/${state.slider[index].data[index].channelThumbnail}")),
+                              ),
+                            ),
+                          ),
+                        ),
                       ),
                     ),
                   ),

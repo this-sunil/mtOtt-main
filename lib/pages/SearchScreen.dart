@@ -1,6 +1,7 @@
 import 'package:avatar_glow/avatar_glow.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_staggered_animations/flutter_staggered_animations.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:html/parser.dart' as html;
@@ -190,115 +191,128 @@ class _SearchScreenState extends State<SearchScreen> {
                             ],
                           ),
                         ):Container(),
-                        state.slider[0].searchResponse.movies.isNotEmpty?ListView.builder(
+                        state.slider[0].searchResponse.movies.isNotEmpty?AnimationLimiter(
+                          child: ListView.builder(
 
-                        physics: const BouncingScrollPhysics(),
-                        shrinkWrap: true,
-                          itemBuilder: (context,index){
-                          print("Search State Length ${state.slider.length}");
-                        return InkWell(
-                          onTap: (){
-                            if (planBuy == false || state.slider[0].searchResponse.movies[index].price!="0") {
-                              Navigator.push(context, PageRouteBuilder(
-                                transitionDuration: const Duration(
-                                    seconds: 1),
-                                pageBuilder: (context, animation,
-                                    secondaryAnimation) => const PlanScreen(),
-                                transitionsBuilder: (context, animation,
-                                    secondaryAnimation, child) {
-                                  const begin = Offset(0.0, 1.0);
-                                  const end = Offset.zero;
-                                  const curve = Curves.ease;
-                                  var tween = Tween(
-                                      begin: begin, end: end).chain(
-                                      CurveTween(curve: curve));
-                                  return SlideTransition(
-                                    position: animation.drive(tween),
-                                    child: child,
-                                  );
-                                },
-                              ));
-                            }
-                            else {
-                              Navigator.push(context, PageRouteBuilder(
-                                transitionDuration: const Duration(seconds: 1),
-                                pageBuilder: (context, animation,
-                                    secondaryAnimation) =>
-                                    DetailsScreen(
-                                        title: state.slider[0].searchResponse
-                                            .movies[index].movieTitle,
-                                        url: state.slider[0].searchResponse
-                                            .movies[index].movieUrl,
-                                        id: state.slider[0].searchResponse
-                                            .movies[index].id,
-                                        description: state.slider[0]
-                                            .searchResponse.movies[index]
-                                            .movieDesc,
-                                        type: state.slider[0].searchResponse
-                                            .movies[index].movieType,
-                                        mType: 'movie',
-                                        imgPath: "$baseUrl/images/movies/${state
-                                            .slider[0].searchResponse
-                                            .movies[index].moviePoster}",
-                                        seriesId: ''),
-                                transitionsBuilder: (context, animation,
-                                    secondaryAnimation, child) {
-                                  const begin = Offset(0.0, 1.0);
-                                  const end = Offset.zero;
-                                  const curve = Curves.ease;
+                          physics: const BouncingScrollPhysics(),
+                          shrinkWrap: true,
+                            itemBuilder: (context,index){
+                            print("Search State Length ${state.slider.length}");
+                          return InkWell(
+                            onTap: (){
+                              if (planBuy == false || state.slider[0].searchResponse.movies[index].price!="0") {
+                                Navigator.push(context, PageRouteBuilder(
+                                  transitionDuration: const Duration(
+                                      seconds: 1),
+                                  pageBuilder: (context, animation,
+                                      secondaryAnimation) => const PlanScreen(),
+                                  transitionsBuilder: (context, animation,
+                                      secondaryAnimation, child) {
+                                    const begin = Offset(0.0, 1.0);
+                                    const end = Offset.zero;
+                                    const curve = Curves.ease;
+                                    var tween = Tween(
+                                        begin: begin, end: end).chain(
+                                        CurveTween(curve: curve));
+                                    return SlideTransition(
+                                      position: animation.drive(tween),
+                                      child: child,
+                                    );
+                                  },
+                                ));
+                              }
+                              else {
+                                Navigator.push(context, PageRouteBuilder(
+                                  transitionDuration: const Duration(seconds: 1),
+                                  pageBuilder: (context, animation,
+                                      secondaryAnimation) =>
+                                      DetailsScreen(
+                                          title: state.slider[0].searchResponse
+                                              .movies[index].movieTitle,
+                                          url: state.slider[0].searchResponse
+                                              .movies[index].movieUrl,
+                                          id: state.slider[0].searchResponse
+                                              .movies[index].id,
+                                          description: state.slider[0]
+                                              .searchResponse.movies[index]
+                                              .movieDesc,
+                                          type: state.slider[0].searchResponse
+                                              .movies[index].movieType,
+                                          mType: 'movie',
+                                          imgPath: "$baseUrl/images/movies/${state
+                                              .slider[0].searchResponse
+                                              .movies[index].moviePoster}",
+                                          seriesId: ''),
+                                  transitionsBuilder: (context, animation,
+                                      secondaryAnimation, child) {
+                                    const begin = Offset(0.0, 1.0);
+                                    const end = Offset.zero;
+                                    const curve = Curves.ease;
 
-                                  var tween = Tween(begin: begin, end: end)
-                                      .chain(CurveTween(curve: curve));
+                                    var tween = Tween(begin: begin, end: end)
+                                        .chain(CurveTween(curve: curve));
 
-                                  return SlideTransition(
-                                    position: animation.drive(tween),
-                                    child: child,
-                                  );
-                                },
-                              ));
-                            }
-                          },
-                          child: Card(
-                            elevation: 5,
+                                    return SlideTransition(
+                                      position: animation.drive(tween),
+                                      child: child,
+                                    );
+                                  },
+                                ));
+                              }
+                            },
+                            child: AnimationConfiguration.staggeredList(
+                              position: index,
+                              child: ScaleAnimation(
+                                scale: .4,
+                                duration: const Duration(seconds: 2),
+                                curve: Curves.easeInOutSine,
+                                delay: const Duration(seconds: 1),
+                                child: FadeInAnimation(
+                                  child: Card(
+                                    elevation: 5,
 
-                            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+                                    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
 
-                            child:Row(
-                              children: [
-                                Container(
-                                  width: 125,
-                                  height: 120,
-                                  decoration: BoxDecoration(
-                                    borderRadius: const BorderRadius.only(
-                                      topLeft: Radius.circular(10),
-                                      bottomLeft: Radius.circular(10)
-                                    ),
-                                    image: DecorationImage(
-
-                                        fit: BoxFit.cover,
-
-                                        image:NetworkImage("$baseUrl/images/movies/${state.slider[0].searchResponse.movies[index].moviePoster}")
-                                    ),
-                                  ),
-                                ),
-                                Flexible(
-                                  child: Padding(
-                                    padding: const EdgeInsets.symmetric(horizontal: 20),
-                                    child: Column(
-                                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                    child:Row(
                                       children: [
-                                        Text(state.slider[0].searchResponse.movies[index].movieTitle),
+                                        Container(
+                                          width: 125,
+                                          height: 120,
+                                          decoration: BoxDecoration(
+                                            borderRadius: const BorderRadius.only(
+                                              topLeft: Radius.circular(10),
+                                              bottomLeft: Radius.circular(10)
+                                            ),
+                                            image: DecorationImage(
 
-                                        Text(html.parse(state.slider[0].searchResponse.movies[index].movieDesc).body!.text),
+                                                fit: BoxFit.cover,
+
+                                                image:NetworkImage("$baseUrl/images/movies/${state.slider[0].searchResponse.movies[index].moviePoster}")
+                                            ),
+                                          ),
+                                        ),
+                                        Flexible(
+                                          child: Padding(
+                                            padding: const EdgeInsets.symmetric(horizontal: 20),
+                                            child: Column(
+                                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                              children: [
+                                                Text(state.slider[0].searchResponse.movies[index].movieTitle),
+
+                                                Text(html.parse(state.slider[0].searchResponse.movies[index].movieDesc).body!.text),
+                                              ],
+                                            ),
+                                          ),
+                                        )
+
                                       ],
-                                    ),
-                                  ),
-                                )
-
-                              ],
-                            )),
-                        );
-                  }, itemCount: state.slider[0].searchResponse.movies.length):Container(),
+                                    )),
+                                ),
+                              ),
+                            ),
+                          );
+                  }, itemCount: state.slider[0].searchResponse.movies.length),
+                        ):Container(),
                        state.slider[0].searchResponse.series.isNotEmpty? Padding(
                           padding: const EdgeInsets.all(20.0),
                           child: Row(
@@ -307,54 +321,69 @@ class _SearchScreenState extends State<SearchScreen> {
                             ],
                           ),
                         ):Container(),
-                        state.slider[0].searchResponse.series.isNotEmpty?GridView.builder(
-                            physics: const BouncingScrollPhysics(),
-                            shrinkWrap: true,
-                            itemBuilder: (context,index){
-                              print("Search State Length ${state.slider.length}");
-                              return InkWell(
-                                highlightColor: Colors.transparent,
-                                splashColor: Colors.transparent,
-                                onTap: (){
-                                  Navigator.push(context,PageRouteBuilder(
-                                    transitionDuration: const Duration(seconds: 1),
-                                    pageBuilder: (context, animation, secondaryAnimation) =>  TvSeriesScreen(id: state.slider[0].searchResponse.series[index].id,title: state.slider[0].searchResponse.series[index].seriesName,description: state.slider[0].searchResponse.series[index].seriesDesc,imgPath: '$baseUrl/images/series/${state.slider[0].searchResponse.series[index].seriesCover}', seasonId: state.slider[0].searchResponse.series[index].seasonData[0].id),
-                                    transitionsBuilder: (context, animation, secondaryAnimation, child) {
-                                      const begin = Offset(0.0, 1.0);
-                                      const end = Offset.zero;
-                                      const curve = Curves.ease;
+                        state.slider[0].searchResponse.series.isNotEmpty?AnimationLimiter(
+                          child: GridView.builder(
+                              physics: const BouncingScrollPhysics(),
+                              shrinkWrap: true,
+                              itemBuilder: (context,index){
+                                print("Search State Length ${state.slider.length}");
+                                return InkWell(
+                                  highlightColor: Colors.transparent,
+                                  splashColor: Colors.transparent,
+                                  onTap: (){
+                                    Navigator.push(context,PageRouteBuilder(
+                                      transitionDuration: const Duration(seconds: 1),
+                                      pageBuilder: (context, animation, secondaryAnimation) =>  TvSeriesScreen(id: state.slider[0].searchResponse.series[index].id,title: state.slider[0].searchResponse.series[index].seriesName,description: state.slider[0].searchResponse.series[index].seriesDesc,imgPath: '$baseUrl/images/series/${state.slider[0].searchResponse.series[index].seriesCover}', seasonId: state.slider[0].searchResponse.series[index].seasonData[0].id),
+                                      transitionsBuilder: (context, animation, secondaryAnimation, child) {
+                                        const begin = Offset(0.0, 1.0);
+                                        const end = Offset.zero;
+                                        const curve = Curves.ease;
 
-                                      var tween = Tween(begin: begin, end: end).chain(CurveTween(curve: curve));
+                                        var tween = Tween(begin: begin, end: end).chain(CurveTween(curve: curve));
 
-                                      return SlideTransition(
-                                        position: animation.drive(tween),
-                                        child: child,
-                                      );
-                                    },
-                                  ));
-                                },
-                                child: Padding(
-                                  padding: const EdgeInsets.symmetric(horizontal: 8.0),
-                                  child: Card(
-                                    elevation: 10,
-                                    margin: EdgeInsets.zero,
-                                    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
-                                    color:  const Color(0xFF1B1F20),
-                                    child:Container(
-                                      height: 200,
-                                      width: 200,
-                                      decoration: BoxDecoration(
-                                        borderRadius: BorderRadius.circular(12),
-                                        image: DecorationImage(
-                                          image: NetworkImage("$baseUrl/images/series/${state.slider[0].searchResponse.series[index].seriesPoster}"),
-                                          fit: BoxFit.cover,
+                                        return SlideTransition(
+                                          position: animation.drive(tween),
+                                          child: child,
+                                        );
+                                      },
+                                    ));
+                                  },
+                                  child: AnimationConfiguration.staggeredGrid(
+                                    position: index,
+                                    columnCount: 3,
+                                    
+                                    child: SlideAnimation(
+                                      horizontalOffset: 500,
+                                      duration: const Duration(seconds: 2),
+                                      curve: Curves.easeInOutSine,
+                                      delay: const Duration(seconds: 1),
+                                      child: FadeInAnimation(
+                                        child: Padding(
+                                          padding: const EdgeInsets.symmetric(horizontal: 8.0),
+                                          child: Card(
+                                            elevation: 10,
+                                            margin: EdgeInsets.zero,
+                                            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+                                            color:  const Color(0xFF1B1F20),
+                                            child:Container(
+                                              height: 200,
+                                              width: 200,
+                                              decoration: BoxDecoration(
+                                                borderRadius: BorderRadius.circular(12),
+                                                image: DecorationImage(
+                                                  image: NetworkImage("$baseUrl/images/series/${state.slider[0].searchResponse.series[index].seriesPoster}"),
+                                                  fit: BoxFit.cover,
+                                                ),
+                                              ),
+                                            ),
+                                          ),
                                         ),
                                       ),
                                     ),
                                   ),
-                                ),
-                              );
-                            }, itemCount: state.slider[0].searchResponse.series.length, gridDelegate:const SliverGridDelegateWithFixedCrossAxisCount(crossAxisCount: 3,childAspectRatio: 1)):Container(),
+                                );
+                              }, itemCount: state.slider[0].searchResponse.series.length, gridDelegate:const SliverGridDelegateWithFixedCrossAxisCount(crossAxisCount: 3,childAspectRatio: 1)),
+                        ):Container(),
                         state.slider[0].searchResponse.channels.isNotEmpty?Padding(
                           padding: const EdgeInsets.all(20.0),
                           child: Row(
@@ -365,85 +394,98 @@ class _SearchScreenState extends State<SearchScreen> {
                         ):Container(),
                         state.slider[0].searchResponse.channels.isNotEmpty?SizedBox(
                           height: 160,
-                          child: ListView.builder(
-                              scrollDirection: Axis.horizontal,
-                              physics: const BouncingScrollPhysics(),
-                              shrinkWrap: true,
-                              itemBuilder: (context,index){
+                          child: AnimationLimiter(
+                            child: ListView.builder(
+                                scrollDirection: Axis.horizontal,
+                                physics: const BouncingScrollPhysics(),
+                                shrinkWrap: true,
+                                itemBuilder: (context,index){
 
-                                return InkWell(
-                                  splashColor: Colors.transparent,
-                                  highlightColor: Colors.transparent,
-                                  onTap: (){
+                                  return InkWell(
+                                    splashColor: Colors.transparent,
+                                    highlightColor: Colors.transparent,
+                                    onTap: (){
 
-                                      Navigator.push(context, PageRouteBuilder(
-                                        transitionDuration: const Duration(
-                                            seconds: 1),
-                                        pageBuilder: (context, animation,
-                                            secondaryAnimation) =>
-                                            DetailsScreen(
-                                              title: state.slider[0]
-                                                  .searchResponse
-                                                  .channels[index].channelTitle,
-                                              url: "$baseUrl/${state.slider[0]
-                                                  .searchResponse
-                                                  .channels[index]
-                                                  .channelPoster}",
-                                              id: state.slider[0].searchResponse
-                                                  .channels[index].id,
-                                              description: state.slider[0]
-                                                  .searchResponse
-                                                  .channels[index].channelDesc,
-                                              type: state.slider[0]
-                                                  .searchResponse
-                                                  .channels[index].channelType,
-                                              imgPath: "$baseUrl/images/${state
-                                                  .slider[0].searchResponse
-                                                  .channels[index]
-                                                  .channelPoster}",
-                                              seriesId: '',
-                                              mType: '',),
-                                        transitionsBuilder: (context, animation,
-                                            secondaryAnimation, child) {
-                                          const begin = Offset(0.0, 1.0);
-                                          const end = Offset.zero;
-                                          const curve = Curves.ease;
+                                        Navigator.push(context, PageRouteBuilder(
+                                          transitionDuration: const Duration(
+                                              seconds: 1),
+                                          pageBuilder: (context, animation,
+                                              secondaryAnimation) =>
+                                              DetailsScreen(
+                                                title: state.slider[0]
+                                                    .searchResponse
+                                                    .channels[index].channelTitle,
+                                                url: "$baseUrl/${state.slider[0]
+                                                    .searchResponse
+                                                    .channels[index]
+                                                    .channelPoster}",
+                                                id: state.slider[0].searchResponse
+                                                    .channels[index].id,
+                                                description: state.slider[0]
+                                                    .searchResponse
+                                                    .channels[index].channelDesc,
+                                                type: state.slider[0]
+                                                    .searchResponse
+                                                    .channels[index].channelType,
+                                                imgPath: "$baseUrl/images/${state
+                                                    .slider[0].searchResponse
+                                                    .channels[index]
+                                                    .channelPoster}",
+                                                seriesId: '',
+                                                mType: '',),
+                                          transitionsBuilder: (context, animation,
+                                              secondaryAnimation, child) {
+                                            const begin = Offset(0.0, 1.0);
+                                            const end = Offset.zero;
+                                            const curve = Curves.ease;
 
-                                          var tween = Tween(
-                                              begin: begin, end: end).chain(
-                                              CurveTween(curve: curve));
+                                            var tween = Tween(
+                                                begin: begin, end: end).chain(
+                                                CurveTween(curve: curve));
 
-                                          return SlideTransition(
-                                            position: animation.drive(tween),
-                                            child: child,
-                                          );
-                                        },
-                                      ));
+                                            return SlideTransition(
+                                              position: animation.drive(tween),
+                                              child: child,
+                                            );
+                                          },
+                                        ));
 
-                                  },
-                                  child: Padding(
-                                    padding: const EdgeInsets.symmetric(horizontal: 8.0),
-                                    child: Column(
-                                      children: [
-                                        PhysicalModel(
-                                          color: Colors.black,
-                                          elevation: 10.0,
-                                          shape: BoxShape.circle,
-                                          child: CircleAvatar(
-                                            radius: 50,
-                                            backgroundColor: Colors.white,
-                                            backgroundImage: NetworkImage("$baseUrl/images/${state.slider[0].searchResponse.channels[index].channelPoster}"),
+                                    },
+                                    child: AnimationConfiguration.staggeredList(
+                                      position: index,
+                                      child: ScaleAnimation(
+                                        scale: .4,
+                                        duration: const Duration(seconds: 2),
+                                        curve: Curves.easeInOutSine,
+                                        delay: const Duration(seconds: 1),
+                                        child: FadeInAnimation(
+                                          child: Padding(
+                                            padding: const EdgeInsets.symmetric(horizontal: 8.0),
+                                            child: Column(
+                                              children: [
+                                                PhysicalModel(
+                                                  color: Colors.black,
+                                                  elevation: 10.0,
+                                                  shape: BoxShape.circle,
+                                                  child: CircleAvatar(
+                                                    radius: 50,
+                                                    backgroundColor: Colors.white,
+                                                    backgroundImage: NetworkImage("$baseUrl/images/${state.slider[0].searchResponse.channels[index].channelPoster}"),
+                                                  ),
+                                                ),
+                                                Padding(
+                                                  padding: const EdgeInsets.symmetric(vertical: 20),
+                                                  child: Text(state.slider[0].searchResponse.channels[index].channelTitle),
+                                                ),
+                                              ],
+                                            ),
                                           ),
                                         ),
-                                        Padding(
-                                          padding: const EdgeInsets.symmetric(vertical: 20),
-                                          child: Text(state.slider[0].searchResponse.channels[index].channelTitle),
-                                        ),
-                                      ],
+                                      ),
                                     ),
-                                  ),
-                                );
-                              }, itemCount: state.slider[0].searchResponse.channels.length),
+                                  );
+                                }, itemCount: state.slider[0].searchResponse.channels.length),
+                          ),
                         ):Container(),
                         state.slider[0].searchResponse.songs.isNotEmpty?Padding(
                           padding: const EdgeInsets.all(16.0),
@@ -453,54 +495,67 @@ class _SearchScreenState extends State<SearchScreen> {
                             ],
                           ),
                         ):Container(),
-                        state.slider[0].searchResponse.songs.isNotEmpty?ListView.builder(
-                            physics: const BouncingScrollPhysics(),
-                            shrinkWrap: true,
-                            itemBuilder: (context,index){
-                              print("Search State Length ${state.slider.length}");
-                              return InkWell(
-                                onTap: (){
-                                  debugPrint("Type of Music ${state.slider[0].searchResponse.songs[index].musicType}");
-                                  if(state.slider[0].searchResponse.songs.isNotEmpty){
-                                   setState(() {
-                                     context.read<MusicCategoryTypeCubit>().fetchMusicCategoryType(state.slider[0].searchResponse.songs[index].musicType);
-                                     Navigator.push(context,PageRouteBuilder(
-                                       transitionDuration: const Duration(seconds: 1),
-                                       pageBuilder: (context, animation, secondaryAnimation) =>
-                                           SearchMusicScreen(id: state.slider[0].searchResponse.songs[index].id,title: state.slider[0].searchResponse.songs[index].title,
-                                               url: "$baseUrl/${state.slider[0].searchResponse.songs[index].music}",
-                                               type:  state.slider[0].searchResponse.songs[index].musicType, imgPath: '$baseUrl/${state.slider[0].searchResponse.songs[index].musicCover}', singer: state.slider[0].searchResponse.songs[index].singer),
-                                       transitionsBuilder: (context, animation, secondaryAnimation, child) {
-                                         const begin = Offset(0.0, 1.0);
-                                         const end = Offset.zero;
-                                         const curve = Curves.ease;
-                                         var tween = Tween(begin: begin, end: end).chain(CurveTween(curve: curve));
-                                         return SlideTransition(
-                                           position: animation.drive(tween),
-                                           child: child,
-                                         );
-                                       },
-                                     ));
-                                   });
+                        state.slider[0].searchResponse.songs.isNotEmpty?AnimationLimiter(
+                          child: ListView.builder(
+                              physics: const BouncingScrollPhysics(),
+                              shrinkWrap: true,
+                              itemBuilder: (context,index){
+                                print("Search State Length ${state.slider.length}");
+                                return InkWell(
+                                  onTap: (){
+                                    debugPrint("Type of Music ${state.slider[0].searchResponse.songs[index].musicType}");
+                                    if(state.slider[0].searchResponse.songs.isNotEmpty){
+                                     setState(() {
+                                       context.read<MusicCategoryTypeCubit>().fetchMusicCategoryType(state.slider[0].searchResponse.songs[index].musicType);
+                                       Navigator.push(context,PageRouteBuilder(
+                                         transitionDuration: const Duration(seconds: 1),
+                                         pageBuilder: (context, animation, secondaryAnimation) =>
+                                             SearchMusicScreen(id: state.slider[0].searchResponse.songs[index].id,title: state.slider[0].searchResponse.songs[index].title,
+                                                 url: "$baseUrl/${state.slider[0].searchResponse.songs[index].music}",
+                                                 type:  state.slider[0].searchResponse.songs[index].musicType, imgPath: state.slider[0].searchResponse.songs[index].musicCover, singer: state.slider[0].searchResponse.songs[index].singer),
+                                         transitionsBuilder: (context, animation, secondaryAnimation, child) {
+                                           const begin = Offset(0.0, 1.0);
+                                           const end = Offset.zero;
+                                           const curve = Curves.ease;
+                                           var tween = Tween(begin: begin, end: end).chain(CurveTween(curve: curve));
+                                           return SlideTransition(
+                                             position: animation.drive(tween),
+                                             child: child,
+                                           );
+                                         },
+                                       ));
+                                     });
 
-                                  }
-                                },
-                                child: Padding(
-                                  padding: const EdgeInsets.symmetric(horizontal: 8.0),
-                                  child: Card(
+                                    }
+                                  },
+                                  child: AnimationConfiguration.staggeredList(
+                                    position: index,
+                                    child:ScaleAnimation(
+                                      scale: .4,
+                                      duration: const Duration(seconds: 2),
+                                      curve: Curves.easeInOutSine,
+                                      delay: const Duration(seconds: 1),
+                                      child: FadeInAnimation(
+                                        child: Padding(
+                                          padding: const EdgeInsets.symmetric(horizontal: 8.0),
+                                          child: Card(
 
-                                    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
-                                    child:ListTile(leading: CircleAvatar(
-                                      maxRadius: 25,
-                                      backgroundImage: NetworkImage("$baseUrl/${state.slider[0].searchResponse.songs[index].musicCover}"),
-                                    ),
-                                      title: Text(state.slider[0].searchResponse.songs[index].title),
-                                      subtitle: Text(state.slider[0].searchResponse.songs[index].singer),
+                                            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+                                            child:ListTile(leading: CircleAvatar(
+                                              maxRadius: 25,
+                                              backgroundImage: NetworkImage("$baseUrl/${state.slider[0].searchResponse.songs[index].musicCover}"),
+                                            ),
+                                              title: Text(state.slider[0].searchResponse.songs[index].title),
+                                              subtitle: Text(state.slider[0].searchResponse.songs[index].singer),
+                                            ),
+                                          ),
+                                        ),
+                                      ),
                                     ),
                                   ),
-                                ),
-                              );
-                            }, itemCount: state.slider[0].searchResponse.songs.length):Container(),
+                                );
+                              }, itemCount: state.slider[0].searchResponse.songs.length),
+                        ):Container(),
 
 
                       ],

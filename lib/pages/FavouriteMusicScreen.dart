@@ -3,6 +3,7 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_staggered_animations/flutter_staggered_animations.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:mtott/const.dart';
 import 'package:mtott/utility/theme/Database.dart';
@@ -85,41 +86,54 @@ class _FavouriteMusicScreenState extends State<FavouriteMusicScreen> {
           future: helper.fetchFav(),
           builder: (context,snapshot){
             if(snapshot.hasData){
-              return ListView.builder(
-                padding: EdgeInsets.zero,
-                physics: BouncingScrollPhysics(parent: AlwaysScrollableScrollPhysics()),
-                  itemCount: snapshot.data!.length,
-                  itemBuilder: (context,index){
-                    return Card(
+              return AnimationLimiter(
+                child: ListView.builder(
+                  padding: EdgeInsets.zero,
+                  physics: const BouncingScrollPhysics(parent: AlwaysScrollableScrollPhysics()),
+                    itemCount: snapshot.data!.length,
+                    itemBuilder: (context,index){
+                      return AnimationConfiguration.staggeredList(
+                        position: index,
+                        child: SlideAnimation(
+                          horizontalOffset: 1000,
+                          duration: const Duration(seconds: 2),
+                          curve: Curves.easeInOutSine,
+                          delay: const Duration(seconds: 1),
+                          child: FadeInAnimation(
+                            child: Card(
 
-                      child: ListTile(
-                        leading: CircleAvatar(
-                            maxRadius: 25,
-                            backgroundImage: NetworkImage("$baseUrl/${snapshot.data![index].image}")),
-                        title: Text(snapshot.data![index].title),
-                        subtitle: Text(snapshot.data![index].subtitle),
-                        trailing: IconButton(onPressed: selectItem.contains(snapshot.data![index].title)?(){
-                          helper.removeFav(snapshot.data![index].title);
-                          selectFav.remove(snapshot.data![index].title);
-                          setState(() {
-                            helper.init();
-                          });
-                        }:(){},icon:selectItem.contains(snapshot.data![index].title)?const Icon(Icons.delete):Container()),
-                        onLongPress: (){
-                          multipleSelection(snapshot.data![index].title);
-                        },
-                        onTap: (){
-                          setState(() {
-                            context.read<MusicCategoryTypeCubit>().fetchMusicCategoryType(snapshot.data![index].subtitle);
-                            Navigator.push(context, MaterialPageRoute(builder: (context)=>MusicPlayerScreen(index:int.parse(snapshot.data![index].index),title: snapshot.data![index].subtitle,url: "$baseUrl/${snapshot.data![index].url}", subtitle: snapshot.data![index].title, imgPath: snapshot.data![index].image)));
-                          });
+                              child: ListTile(
+                                leading: CircleAvatar(
+                                    maxRadius: 25,
+                                    backgroundImage: NetworkImage("$baseUrl/${snapshot.data![index].image}")),
+                                title: Text(snapshot.data![index].title),
+                                subtitle: Text(snapshot.data![index].subtitle),
+                                trailing: IconButton(onPressed: selectItem.contains(snapshot.data![index].title)?(){
+                                  helper.removeFav(snapshot.data![index].title);
+                                  selectFav.remove(snapshot.data![index].title);
+                                  setState(() {
+                                    helper.init();
+                                  });
+                                }:(){},icon:selectItem.contains(snapshot.data![index].title)?const Icon(Icons.delete):Container()),
+                                onLongPress: (){
+                                  multipleSelection(snapshot.data![index].title);
+                                },
+                                onTap: (){
+                                  setState(() {
+                                    context.read<MusicCategoryTypeCubit>().fetchMusicCategoryType(snapshot.data![index].subtitle);
+                                    Navigator.push(context, MaterialPageRoute(builder: (context)=>MusicPlayerScreen(index:int.parse(snapshot.data![index].index),title: snapshot.data![index].subtitle,url: "$baseUrl/${snapshot.data![index].url}", subtitle: snapshot.data![index].title, imgPath: snapshot.data![index].image)));
+                                  });
 
 
-                        },
-                      ),
-                    );
+                                },
+                              ),
+                            ),
+                          ),
+                        ),
+                      );
 
-              });
+                }),
+              );
             }
             return Center(child: CircularProgressIndicator());
           },

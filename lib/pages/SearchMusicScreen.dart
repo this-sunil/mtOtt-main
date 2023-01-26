@@ -475,7 +475,7 @@ class _SearchMusicScreenState extends State<SearchMusicScreen>
                                                     (context,
                                                     index) {
                                                   return ListTile(
-                                                    leading: CircleAvatar(child: FirebaseAuth.instance.currentUser==null?SvgPicture.asset("asset/logo/user.svg"):CircleAvatar(backgroundImage: NetworkImage("${ FirebaseAuth.instance.currentUser!.photoURL}"))),
+                                                    leading: CircleAvatar(child: FirebaseAuth.instance.currentUser==null?SvgPicture.asset("asset/logo/user.svg"):CircleAvatar(backgroundImage: NetworkImage("${FirebaseAuth.instance.currentUser!.photoURL}"))),
                                                     title: Text(username),
                                                     subtitle: Text(
                                                         comment[index].data[index].commentText,

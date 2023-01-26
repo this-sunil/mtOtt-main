@@ -38,7 +38,7 @@ dependencies:
   google_fonts: ^3.0.1
   carousel_slider: ^4.1.1
   #video_player: ^2.4.7
-  storage_info: ^0.0.1
+  #storage_info: ^0.0.1
   flutter_animation_progress_bar: ^2.3.1
   sms_autofill: ^2.2.0
   shared_preferences: ^2.0.15
@@ -58,7 +58,6 @@ dependencies:
   firebase_core: ^2.3.0
   perfect_volume_control: ^1.0.5
   shimmer: ^2.0.0
-  #comment_box: ^0.0.18
   smooth_page_indicator: ^1.0.0+2
   google_mobile_ads: 2.3.0
   pod_player: ^0.1.0
@@ -71,17 +70,18 @@ dependencies:
   provider: ^6.0.5
   awesome_icons: ^1.1.0
   sqflite: ^2.2.2
-  quickalert: ^1.0.1
+  #quickalert: ^1.0.1
   google_sign_in: ^5.4.2
   flutter_downloader: ^1.10.1
   gallery_saver: ^2.3.2
-  youtube_downloader: ^0.0.6
+  #youtube_downloader: ^0.0.6
   awesome_snackbar_content: ^0.1.0
   cached_network_image: ^3.2.3
   audio_video_progress_bar: ^0.11.0
   just_audio_background: ^0.0.1-beta.9
   tab_indicator_styler: ^2.0.0
   razorpay_flutter: ^1.3.4
+  entry: ^0.0.8
   permission_handler:
 
 

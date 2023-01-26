@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_staggered_animations/flutter_staggered_animations.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:mtott/const.dart';
@@ -73,45 +74,60 @@ class _GenresScreenState extends State<GenresScreen> {
               itemCount: state.slider.length,
               gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(crossAxisCount: 2,childAspectRatio: 1.5),
               itemBuilder: (context,index){
-                return InkWell(
-                  highlightColor: Colors.transparent,
-                  splashColor: Colors.transparent,
-                  onTap: (){
-                    Navigator.push(context,PageRouteBuilder(
-                      transitionDuration: const Duration(seconds: 1),
-                      pageBuilder: (context, animation, secondaryAnimation) => GenresCategoryScreen(id: state.slider[index].data[index].gid,title: state.slider[index].data[index].genreName),
-                      transitionsBuilder: (context, animation, secondaryAnimation, child) {
-                        const begin = Offset(0.0, 1.0);
-                        const end = Offset.zero;
-                        const curve = Curves.ease;
+                return AnimationLimiter(
+                  
+                  child: AnimationConfiguration.staggeredGrid(
+                    
+                    position: index,
+                    columnCount: 2,
+                    child: InkWell(
+                      highlightColor: Colors.transparent,
+                      splashColor: Colors.transparent,
+                      onTap: (){
+                        Navigator.push(context,PageRouteBuilder(
+                          transitionDuration: const Duration(seconds: 1),
+                          pageBuilder: (context, animation, secondaryAnimation) => GenresCategoryScreen(id: state.slider[index].data[index].gid,title: state.slider[index].data[index].genreName),
+                          transitionsBuilder: (context, animation, secondaryAnimation, child) {
+                            const begin = Offset(0.0, 1.0);
+                            const end = Offset.zero;
+                            const curve = Curves.ease;
 
-                        var tween = Tween(begin: begin, end: end).chain(CurveTween(curve: curve));
+                            var tween = Tween(begin: begin, end: end).chain(CurveTween(curve: curve));
 
-                        return SlideTransition(
-                          position: animation.drive(tween),
-                          child: child,
-                        );
+                            return SlideTransition(
+                              position: animation.drive(tween),
+                              child: child,
+                            );
+                          },
+                        ));
                       },
-                    ));
-                  },
-                  child: Card(
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(5),
-                    ),
-                    child: Container(
-                      height: 200,
-                      decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(5),
-                          image: DecorationImage(
-                            fit: BoxFit.cover,
-                            image: NetworkImage("$baseUrl/images/${state.slider[index].data[index].genreImage}"),
-                          )
-                      ),
-                      child: Align(
-                        alignment: Alignment.bottomCenter,
-                        child: Padding(
-                          padding: const EdgeInsets.all(8.0),
-                          child: Text(state.slider[index].data[index].genreName,style: GoogleFonts.inter(color: Colors.white,fontSize: 16,fontWeight: FontWeight.w400)),
+                      child: ScaleAnimation(
+                        duration: const Duration(seconds: 2),
+                        curve: Curves.easeInOutSine,
+                        delay: const Duration(seconds: 1),
+                        child: FadeInAnimation(
+                          child: Card(
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(5),
+                            ),
+                            child: Container(
+                              height: 200,
+                              decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.circular(5),
+                                  image: DecorationImage(
+                                    fit: BoxFit.cover,
+                                    image: NetworkImage("$baseUrl/images/${state.slider[index].data[index].genreImage}"),
+                                  )
+                              ),
+                              child: Align(
+                                alignment: Alignment.bottomCenter,
+                                child: Padding(
+                                  padding: const EdgeInsets.all(8.0),
+                                  child: Text(state.slider[index].data[index].genreName,style: GoogleFonts.inter(color: Colors.white,fontSize: 16,fontWeight: FontWeight.w400)),
+                                ),
+                              ),
+                            ),
+                          ),
                         ),
                       ),
                     ),

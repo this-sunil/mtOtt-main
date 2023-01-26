@@ -248,27 +248,38 @@ class _MusicScreenState extends State<MusicScreen> {
                                         itemCount: state.slider[currentIndex].musicResponse[currentIndex].musicData.length,
                                         shrinkWrap: true,
                                         itemBuilder: (context, index) {
-                                          return InkWell(
-                                            highlightColor:Colors.transparent,
-                                            splashColor: Colors.transparent,
-                                            onTap: (){
-                                             setState(() {
-                                               context.read<MusicCategoryTypeCubit>().fetchMusicCategoryType(state.slider[currentIndex].musicResponse[currentIndex].musicData[index].musicType);
+                                          return AnimationConfiguration.staggeredList(
+                                            position: index,
+                                            child: InkWell(
+                                              highlightColor:Colors.transparent,
+                                              splashColor: Colors.transparent,
+                                              onTap: (){
+                                               setState(() {
+                                                 context.read<MusicCategoryTypeCubit>().fetchMusicCategoryType(state.slider[currentIndex].musicResponse[currentIndex].musicData[index].musicType);
 
-                                               Navigator.push(context, MaterialPageRoute(builder: (context)=>MusicPlayerScreen(index: index,title: state.slider[index].musicResponse[currentIndex].musicData[index].musicType,url: "$baseUrl/${state.slider[index].musicResponse[currentIndex].musicData[index].music}", subtitle: state.slider[index].musicResponse[currentIndex].musicData[index].title, imgPath: '$baseUrl/${state.slider[index].musicResponse[currentIndex].musicData[index].musicCover}')));
-                                               debugPrint('$baseUrl/${state.slider[index].musicResponse[currentIndex].musicData[index].musicCover} ${state.slider[currentIndex].musicResponse[currentIndex].musicData[index].title} ${state.slider[currentIndex].musicResponse[currentIndex].musicData[index].musicType} ${index}');
-                                             });
-                                            },
-                                            child: Padding(
-                                              padding: const EdgeInsets.all(3.0),
-                                              child: Container(
-                                                height: 100,
-                                                width: 140,
-                                                decoration: BoxDecoration(
-                                                  borderRadius: BorderRadius.circular(10),
-                                                  image: DecorationImage(
-                                                    fit: BoxFit.cover,
-                                                    image:NetworkImage("$baseUrl/${state.slider[index].musicResponse[currentIndex].musicData[index].musicCover}"),
+                                                 Navigator.push(context, MaterialPageRoute(builder: (context)=>MusicPlayerScreen(index: index,title: state.slider[index].musicResponse[currentIndex].musicData[index].musicType,url: "$baseUrl/${state.slider[index].musicResponse[currentIndex].musicData[index].music}", subtitle: state.slider[index].musicResponse[currentIndex].musicData[index].title, imgPath: '$baseUrl/${state.slider[index].musicResponse[currentIndex].musicData[index].musicCover}')));
+                                                 debugPrint('$baseUrl/${state.slider[index].musicResponse[currentIndex].musicData[index].musicCover} ${state.slider[currentIndex].musicResponse[currentIndex].musicData[index].title} ${state.slider[currentIndex].musicResponse[currentIndex].musicData[index].musicType} ${index}');
+                                               });
+                                              },
+                                              child: SlideAnimation(
+                                                horizontalOffset: 500,
+                                                duration: const Duration(seconds: 2),
+                                                curve: Curves.easeInOutSine,
+                                                delay: const Duration(seconds: 1),
+                                                child: FadeInAnimation(
+                                                  child: Padding(
+                                                    padding: const EdgeInsets.all(3.0),
+                                                    child: Container(
+                                                      height: 100,
+                                                      width: 140,
+                                                      decoration: BoxDecoration(
+                                                        borderRadius: BorderRadius.circular(10),
+                                                        image: DecorationImage(
+                                                          fit: BoxFit.cover,
+                                                          image:NetworkImage("$baseUrl/${state.slider[index].musicResponse[currentIndex].musicData[index].musicCover}"),
+                                                        ),
+                                                      ),
+                                                    ),
                                                   ),
                                                 ),
                                               ),

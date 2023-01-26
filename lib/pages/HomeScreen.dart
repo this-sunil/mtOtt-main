@@ -22,6 +22,7 @@ import 'package:mtott/pages/ChannelScreen.dart';
 import 'package:mtott/pages/DetailsScreen.dart';
 
 import 'package:mtott/pages/GenresCategoryScreen.dart';
+import 'package:mtott/pages/LatestTrendingScreen.dart';
 import 'package:mtott/pages/ShowScreen.dart';
 import 'package:mtott/pages/TVSeriesScreen.dart';
 import 'package:mtott/pages/TopPicksScreen.dart';
@@ -263,7 +264,7 @@ class _HomeScreenState extends State<HomeScreen> {
               onTap: (){
                 Navigator.push(context,PageRouteBuilder(
                   transitionDuration: const Duration(seconds: 1),
-                  pageBuilder: (context, animation, secondaryAnimation) =>  const TopPicksScreen(),
+                  pageBuilder: (context, animation, secondaryAnimation) =>  const LatestTrendingScreen(),
 
                   transitionsBuilder: (context, animation, secondaryAnimation, child) {
                     const begin = Offset(0.0, 1.0);
@@ -309,8 +310,12 @@ class _HomeScreenState extends State<HomeScreen> {
                                 position: index,
                                 duration: const Duration(seconds: 1),
                                 child: SlideAnimation(
+                                  horizontalOffset: 200,
+                                  duration: const Duration(seconds: 2),
+                                  curve: Curves.easeInSine,
+                                  delay: const Duration(seconds: 1),
                                   child: FadeInAnimation(
-                                    curve: Curves.easeInOutSine,
+
                                     child: InkWell(
                                       highlightColor: Colors.transparent,
                                       splashColor: Colors.transparent,
@@ -454,31 +459,35 @@ class _HomeScreenState extends State<HomeScreen> {
                         itemBuilder: (context,index){
                           return AnimationConfiguration.staggeredList(
                             position: index,
-                            duration: const Duration(seconds: 2),
-                            child: SlideAnimation(
-                              curve: Curves.easeInOutSine,
-                              child: FadeInAnimation(
-                                child: InkWell(
-                                  highlightColor: Colors.transparent,
-                                  splashColor: Colors.transparent,
-                                  onTap: (){
-                                    Navigator.push(context,PageRouteBuilder(
-                                      transitionDuration: const Duration(seconds: 1),
-                                      pageBuilder: (context, animation, secondaryAnimation) =>  TvSeriesScreen(id: state.slider[index].data[index].id,title: state.slider[index].data[index].seriesName,description: state.slider[index].data[index].seriesDesc,imgPath: '$baseUrl/images/series/${state.slider[index].data[index].seriesCover}', seasonId: state.slider[index].data[index].seasonData[0].id),
-                                      transitionsBuilder: (context, animation, secondaryAnimation, child) {
-                                        const begin = Offset(0.0, 1.0);
-                                        const end = Offset.zero;
-                                        const curve = Curves.ease;
 
-                                        var tween = Tween(begin: begin, end: end).chain(CurveTween(curve: curve));
+                            child: InkWell(
+                              highlightColor: Colors.transparent,
+                              splashColor: Colors.transparent,
+                              onTap: (){
+                                Navigator.push(context,PageRouteBuilder(
+                                  transitionDuration: const Duration(seconds: 1),
+                                  pageBuilder: (context, animation, secondaryAnimation) =>  TvSeriesScreen(id: state.slider[index].data[index].id,title: state.slider[index].data[index].seriesName,description: state.slider[index].data[index].seriesDesc,imgPath: '$baseUrl/images/series/${state.slider[index].data[index].seriesCover}', seasonId: state.slider[index].data[index].seasonData[0].id),
+                                  transitionsBuilder: (context, animation, secondaryAnimation, child) {
+                                    const begin = Offset(0.0, 1.0);
+                                    const end = Offset.zero;
+                                    const curve = Curves.ease;
 
-                                        return SlideTransition(
-                                          position: animation.drive(tween),
-                                          child: child,
-                                        );
-                                      },
-                                    ));
+                                    var tween = Tween(begin: begin, end: end).chain(CurveTween(curve: curve));
+
+                                    return SlideTransition(
+                                      position: animation.drive(tween),
+                                      child: child,
+                                    );
                                   },
+                                ));
+                              },
+                              child: ScaleAnimation(
+                                scale: 0.5,
+
+                                duration: const Duration(seconds: 5),
+                                curve: Curves.easeInOutSine,
+                                delay: const Duration(seconds: 1),
+                                child: FadeInAnimation(
                                   child: Padding(
                                     padding: const EdgeInsets.all(4.0),
                                     child: Container(
@@ -585,56 +594,58 @@ class _HomeScreenState extends State<HomeScreen> {
                           return AnimationConfiguration.staggeredList(
                             position: index,
 
-                            duration: const Duration(seconds: 3),
-                            child: SlideAnimation(
-                              curve: Curves.easeInOutSine,
-
-                              child: FadeInAnimation(
-                                child: InkWell(
-                                  highlightColor: Colors.transparent,
-                                  splashColor: Colors.transparent,
-                                  onTap: () {
+                            duration: const Duration(seconds: 5),
+                            child: InkWell(
+                              highlightColor: Colors.transparent,
+                              splashColor: Colors.transparent,
+                              onTap: () {
 
 
-                                      Navigator.push(context, PageRouteBuilder(
-                                        transitionDuration: const Duration(
-                                            seconds: 1),
-                                        pageBuilder: (context, animation,
-                                            secondaryAnimation) =>
-                                            DetailsScreen(
-                                              id: state.slider[index]
-                                                  .data[index].cid,
-                                              url: state.slider[index]
-                                                  .data[index].channelUrl,
-                                              title: state.slider[index]
-                                                  .data[index].channelTitle,
-                                              description: state.slider[index]
-                                                  .data[index].channelDesc,
-                                              type: state.slider[index]
-                                                  .data[index].channelType,
-                                              imgPath: "$baseUrl/images/${state
-                                                  .slider[index].data[index]
-                                                  .channelThumbnail}",
-                                              seriesId: '',
-                                              mType: '',),
-                                        transitionsBuilder: (context, animation,
-                                            secondaryAnimation, child) {
-                                          const begin = Offset(0.0, 1.0);
-                                          const end = Offset.zero;
-                                          const curve = Curves.ease;
+                                  Navigator.push(context, PageRouteBuilder(
+                                    transitionDuration: const Duration(
+                                        seconds: 1),
+                                    pageBuilder: (context, animation,
+                                        secondaryAnimation) =>
+                                        DetailsScreen(
+                                          id: state.slider[index]
+                                              .data[index].cid,
+                                          url: state.slider[index]
+                                              .data[index].channelUrl,
+                                          title: state.slider[index]
+                                              .data[index].channelTitle,
+                                          description: state.slider[index]
+                                              .data[index].channelDesc,
+                                          type: state.slider[index]
+                                              .data[index].channelType,
+                                          imgPath: "$baseUrl/images/${state
+                                              .slider[index].data[index]
+                                              .channelThumbnail}",
+                                          seriesId: '',
+                                          mType: '',),
+                                    transitionsBuilder: (context, animation,
+                                        secondaryAnimation, child) {
+                                      const begin = Offset(0.0, 1.0);
+                                      const end = Offset.zero;
+                                      const curve = Curves.ease;
 
-                                          var tween = Tween(
-                                              begin: begin, end: end).chain(
-                                              CurveTween(curve: curve));
+                                      var tween = Tween(
+                                          begin: begin, end: end).chain(
+                                          CurveTween(curve: curve));
 
-                                          return SlideTransition(
-                                            position: animation.drive(tween),
-                                            child: child,
-                                          );
-                                        },
-                                      ));
+                                      return SlideTransition(
+                                        position: animation.drive(tween),
+                                        child: child,
+                                      );
+                                    },
+                                  ));
 
-                                  },
+                              },
+                              child: ScaleAnimation(
+                                scale: .6,
+                                duration: const Duration(seconds: 2),
+                                curve: Curves.easeInOutSine,
+                                delay: const Duration(seconds: 1),
+                                child: FadeInAnimation(
                                   child: Card(
                                     margin: const EdgeInsets.all(2),
                                     shape: RoundedRectangleBorder(
@@ -743,31 +754,33 @@ class _HomeScreenState extends State<HomeScreen> {
                             return AnimationConfiguration.staggeredList(
                               position: index,
                               duration: Duration(seconds: 5),
-                              child: SlideAnimation(
+                              child: InkWell(
+                                highlightColor: Colors.transparent,
+                                splashColor: Colors.transparent,
+                                onTap: (){
+                                  Navigator.push(context,PageRouteBuilder(
+                                    transitionDuration: const Duration(seconds: 1),
+                                    pageBuilder: (context, animation, secondaryAnimation) => GenresCategoryScreen(id: state.slider[index].data[index].gid,title: state.slider[index].data[index].genreName),
+                                    transitionsBuilder: (context, animation, secondaryAnimation, child) {
+                                      const begin = Offset(0.0, 1.0);
+                                      const end = Offset.zero;
+                                      const curve = Curves.ease;
 
-                                curve: Curves.easeInOutSine,
-                                child: FadeInAnimation(
-                                  child: InkWell(
-                                    highlightColor: Colors.transparent,
-                                    splashColor: Colors.transparent,
-                                    onTap: (){
-                                      Navigator.push(context,PageRouteBuilder(
-                                        transitionDuration: const Duration(seconds: 1),
-                                        pageBuilder: (context, animation, secondaryAnimation) => GenresCategoryScreen(id: state.slider[index].data[index].gid,title: state.slider[index].data[index].genreName),
-                                        transitionsBuilder: (context, animation, secondaryAnimation, child) {
-                                          const begin = Offset(0.0, 1.0);
-                                          const end = Offset.zero;
-                                          const curve = Curves.ease;
+                                      var tween = Tween(begin: begin, end: end).chain(CurveTween(curve: curve));
 
-                                          var tween = Tween(begin: begin, end: end).chain(CurveTween(curve: curve));
-
-                                          return SlideTransition(
-                                            position: animation.drive(tween),
-                                            child: child,
-                                          );
-                                        },
-                                      ));
+                                      return SlideTransition(
+                                        position: animation.drive(tween),
+                                        child: child,
+                                      );
                                     },
+                                  ));
+                                },
+                                child: SlideAnimation(
+                                  horizontalOffset: 500,
+                                  duration: const Duration(seconds: 2),
+                                  curve: Curves.easeInOutSine,
+                                  delay: const Duration(seconds: 1),
+                                  child: FadeInAnimation(
                                     child: Card(
                                       margin: EdgeInsets.all(2),
                                       shape: RoundedRectangleBorder(

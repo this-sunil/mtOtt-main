@@ -4,6 +4,7 @@ import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:flutter_animation_progress_bar/flutter_animation_progress_bar.dart';
 import 'package:flutter_downloader/flutter_downloader.dart';
+import 'package:flutter_staggered_animations/flutter_staggered_animations.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:mtott/utility/theme/Database.dart';
 import 'package:path_provider/path_provider.dart';
@@ -181,56 +182,64 @@ class _MyDownloadState extends State<MyDownload> {
           _isLoading
               ?  const Center(child:  CircularProgressIndicator(),)
               : _permissionReady ?
-          ListView(
-              physics: const BouncingScrollPhysics(parent: AlwaysScrollableScrollPhysics()),
-              children: itemsList.map((it) =>
-                  DownloadItem(
-                      myItem: it,
-                      openItem: (myItem)
-                      {
-                        _openDownloadedFile(myItem).then((success) {
-                          if (!success) {
-                            ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
-                                content: Text('Cannot open this file')));
-                          }
-                        });
-                      },
-                      onActionClick: (myItem) async{
-                        if (myItem.status == DownloadTaskStatus.undefined) {
-                          myItem.itemID = await FlutterDownloader.enqueue(
-                            url: myItem.url,
-                            savedDir: _localPath,
-                            showNotification: true,
-                            fileName: myItem.name,
-                            openFileFromNotification: true,
-                            saveInPublicStorage: true,
-                          );
-                          //_requestDownload(myItem);
-                        }
-                        else if (myItem.status == DownloadTaskStatus.running) {
-                          await FlutterDownloader.pause(taskId: myItem.itemID!);
-                          pauseDownload(myItem);
-                        }
-                        else if (myItem.status == DownloadTaskStatus.paused) {
-                          String? newTaskId = await FlutterDownloader.resume(taskId: myItem.itemID!);
-                          myItem.itemID = newTaskId;
-                          resumeDownload(myItem);
-                        }
-                        else if (myItem.status == DownloadTaskStatus.complete) {
-                          await FlutterDownloader.remove(
-                              taskId: myItem.itemID!, shouldDeleteContent: true);
-                          await _prepare();
-                          setState(() {});
-                          delete(myItem);
-                        }
-                        else if (myItem.status == DownloadTaskStatus.failed) {
-                          String? newTaskId = await FlutterDownloader.retry(taskId: myItem.itemID!);
-                          myItem.itemID = newTaskId;
+          AnimationLimiter(
+            child: ListView.builder(
+              itemCount: itemsList.length,
+                physics: const BouncingScrollPhysics(parent: AlwaysScrollableScrollPhysics()),
+                itemBuilder: (context,index){
+                  return AnimationConfiguration.staggeredList(
+                    position: index,
 
-                          //retryDownload(myItem);
+                    child: DownloadItem(
+                        myItem: itemsList[index],
+                        openItem: (myItem)
+                        {
+                          _openDownloadedFile(myItem).then((success) {
+                            if (!success) {
+                              ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+                                  content: Text('Cannot open this file')));
+                            }
+                          });
+                        },
+                        onActionClick: (myItem) async{
+                          if (myItem.status == DownloadTaskStatus.undefined) {
+                            myItem.itemID = await FlutterDownloader.enqueue(
+                              url: myItem.url,
+                              savedDir: _localPath,
+                              showNotification: true,
+                              fileName: myItem.name,
+                              openFileFromNotification: true,
+                              saveInPublicStorage: true,
+                            );
+                            //_requestDownload(myItem);
+                          }
+                          else if (myItem.status == DownloadTaskStatus.running) {
+                            await FlutterDownloader.pause(taskId: myItem.itemID!);
+                            pauseDownload(myItem);
+                          }
+                          else if (myItem.status == DownloadTaskStatus.paused) {
+                            String? newTaskId = await FlutterDownloader.resume(taskId: myItem.itemID!);
+                            myItem.itemID = newTaskId;
+                            resumeDownload(myItem);
+                          }
+                          else if (myItem.status == DownloadTaskStatus.complete) {
+                            await FlutterDownloader.remove(
+                                taskId: myItem.itemID!, shouldDeleteContent: true);
+                            await _prepare();
+                            setState(() {});
+                            delete(myItem);
+                          }
+                          else if (myItem.status == DownloadTaskStatus.failed) {
+                            String? newTaskId = await FlutterDownloader.retry(taskId: myItem.itemID!);
+                            myItem.itemID = newTaskId;
+
+                            //retryDownload(myItem);
+                          }
                         }
-                      }
-                  ),).toList())
+                    ),
+                  );
+                },
+          ))
               :
           Container(),
         ));
@@ -298,32 +307,40 @@ class DownloadItem extends StatelessWidget {
         openItem(myItem);
       }
           : null,
-      child: Card(
+      child: SlideAnimation(
+        horizontalOffset: 1000,
+        duration: const Duration(seconds: 2),
+        curve: Curves.easeInOutSine,
+        delay: const Duration(seconds: 1),
+        child: FadeInAnimation(
+          child: Card(
 
-        child: ListTile(
-          leading:  CircleAvatar(
-              maxRadius:25,
-              backgroundImage: NetworkImage(myItem.image)),
-          title:  Text(myItem.name),
-          subtitle: FAProgressBar(
-            direction: Axis.horizontal,
-            size: 4,
-            progressColor: Colors.amber,
-            maxValue:100.0,
+            child: ListTile(
+              leading:  CircleAvatar(
+                  maxRadius:25,
+                  backgroundImage: NetworkImage(myItem.image)),
+              title:  Text(myItem.name),
+              subtitle: FAProgressBar(
+                direction: Axis.horizontal,
+                size: 4,
+                progressColor: Colors.amber,
+                maxValue:100.0,
 
-            changeProgressColor: Colors.amberAccent,
-            borderRadius: BorderRadius.circular(5),
+                changeProgressColor: Colors.amberAccent,
+                borderRadius: BorderRadius.circular(5),
 
-            backgroundColor: Colors.white,
-            currentValue: myItem.progress==100?100:myItem.progress%100,
-          ),
-          trailing:  Padding(
-            padding: const EdgeInsets.only(left: 8.0),
-            child: _buildActionForTask(myItem),
+                backgroundColor: Colors.white,
+                currentValue: myItem.progress==100?100:myItem.progress%100,
+              ),
+              trailing:  Padding(
+                padding: const EdgeInsets.only(left: 8.0),
+                child: _buildActionForTask(myItem),
+              ),
+            ),
+
+
           ),
         ),
-
-
       ),
     );
   }

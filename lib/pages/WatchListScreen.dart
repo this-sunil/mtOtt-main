@@ -2,6 +2,7 @@ import 'dart:collection';
 import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_staggered_animations/flutter_staggered_animations.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:http/http.dart';
 import 'package:mtott/Service/cubit/WatchListCubit.dart';
@@ -101,34 +102,49 @@ class _WatchListScreenState extends State<WatchListScreen> {
 
           builder: (context,state){
             if(state is LoadedState){
-              return ListView.builder(
-                  itemCount:state.slider.length,
-                  physics: const BouncingScrollPhysics(parent: AlwaysScrollableScrollPhysics()),
-                  itemBuilder: (context,index){
-                    return Card(
-                     
-                      shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(5),
-                        ),
-                      child: ListTile(
-                       contentPadding: const EdgeInsets.symmetric(vertical: 5),
+              return AnimationLimiter(
+                
+                child: ListView.builder(
+                    itemCount:state.slider.length,
+                    physics: const BouncingScrollPhysics(parent: AlwaysScrollableScrollPhysics()),
+                    itemBuilder: (context,index){
+                      return AnimationConfiguration.staggeredList(
+                        position: index,
+                        
+                        child: SlideAnimation(
+                          horizontalOffset: 1000,
+                          duration: const Duration(seconds: 2),
+                          curve: Curves.easeInOutSine,
+                          delay: const Duration(seconds: 1),
+                          child: FadeInAnimation(
+                            child: Card(
+                             
+                              shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(5),
+                                ),
+                              child: ListTile(
+                               contentPadding: const EdgeInsets.symmetric(vertical: 5),
 
-                      leading: CircleAvatar(
-                          maxRadius: 35,
-                          backgroundImage: NetworkImage(state.slider[index].data[index].movieCover.isEmpty?"$baseUrl/images/series/${state.slider[index].data[index].seriesCover}":"$baseUrl/images/movies/${state.slider[index].data[index].movieCover}")),
-                      title: Text(state.slider[index].data[index].movieTitle.isEmpty?state.slider[index].data[index].seriesName:state.slider[index].data[index].movieTitle),
+                              leading: CircleAvatar(
+                                  maxRadius: 35,
+                                  backgroundImage: NetworkImage(state.slider[index].data[index].movieCover.isEmpty?"$baseUrl/images/series/${state.slider[index].data[index].seriesCover}":"$baseUrl/images/movies/${state.slider[index].data[index].movieCover}")),
+                              title: Text(state.slider[index].data[index].movieTitle.isEmpty?state.slider[index].data[index].seriesName:state.slider[index].data[index].movieTitle),
 
-                      onLongPress: (){
-                        multipleSelection(state.slider[index].data[index].watchid);
-                      },
-                     trailing: selectItem.contains(state.slider[index].data[index].watchid)?IconButton(onPressed: (){
-                       removeWatchlist(state.slider[index].data[index].watchid);
-                       selectItem.remove(state.slider[index].data[index].watchid);
+                              onLongPress: (){
+                                multipleSelection(state.slider[index].data[index].watchid);
+                              },
+                             trailing: selectItem.contains(state.slider[index].data[index].watchid)?IconButton(onPressed: (){
+                               removeWatchlist(state.slider[index].data[index].watchid);
+                               selectItem.remove(state.slider[index].data[index].watchid);
 
-                     },icon: const Icon(Icons.delete,color: Colors.white)):null,
+                             },icon: const Icon(Icons.delete,color: Colors.white)):null,
+                            ),
                     ),
-                  );
-                  });
+                          ),
+                        ),
+                      );
+                    }),
+              );
             }
             return const Center(child: CircularProgressIndicator());
           },
