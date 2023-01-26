@@ -39,7 +39,9 @@ class TvSeriesScreen extends StatefulWidget {
 }
 
 class _TvSeriesScreenState extends State<TvSeriesScreen>
-    with SingleTickerProviderStateMixin {
+    with TickerProviderStateMixin {
+  late AnimationController animationController;
+  late Animation<double> animation;
   DatabaseHelper helper = DatabaseHelper();
   static void downloadCallback(
       String id, DownloadTaskStatus status, int progress) {
@@ -49,6 +51,11 @@ class _TvSeriesScreenState extends State<TvSeriesScreen>
   }
   @override
   void initState() {
+    animationController=AnimationController(vsync: this,duration: const Duration(seconds: 1));
+    animation=Tween<double>(begin: .2,end: 1).animate(CurvedAnimation(parent: animationController, curve: Curves.bounceOut))..addListener(() {
+      setState(() {});
+    });
+    animationController.forward();
     FlutterDownloader.registerCallback(downloadCallback);
     helper.init();
     context.read<SeriesCubit>().fetchTVSeries(widget.id);
@@ -66,6 +73,7 @@ class _TvSeriesScreenState extends State<TvSeriesScreen>
   @override
   void dispose() {
     IsolateNameServer.removePortNameMapping('downloader_send_port');
+    animationController.dispose();
     super.dispose();
   }
 
@@ -141,14 +149,21 @@ class _TvSeriesScreenState extends State<TvSeriesScreen>
         slivers: [
           SliverToBoxAdapter(
             child: Padding(
-                padding: EdgeInsets.all(15),
-                child: Text(parse(widget.description).body!.text,
-                    style: GoogleFonts.inter(
-                        fontSize: 14,
-                        color: Theme.of(context).brightness == Brightness.dark
-                            ? Colors.white
-                            : Color(0xFF333945)),
-                    textAlign: TextAlign.justify)),
+                padding: const EdgeInsets.all(15),
+                child:
+                AnimatedBuilder(animation: animation, builder: (context,child){
+                  return AnimatedOpacity(
+                    opacity: animation.value*1.0,
+                    duration: const Duration(seconds: 2),
+                    child: Text(parse(widget.description).body!.text,
+                        style: GoogleFonts.inter(
+                            fontSize: 14,
+                            color: Theme.of(context).brightness == Brightness.dark
+                                ? Colors.white
+                                : const Color(0xFF333945)),
+                        textAlign: TextAlign.justify),
+                  );
+                })),
           ),
           SliverToBoxAdapter(
             child: BlocBuilder<SeriesCubit, SeriesState>(
