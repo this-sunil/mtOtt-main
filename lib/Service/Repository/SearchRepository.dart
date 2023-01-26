@@ -1,14 +1,9 @@
-import 'dart:convert';
-import 'dart:io';
-
 import 'package:flutter/material.dart';
 import 'package:http/http.dart';
-import 'package:mtott/Service/model/LatestMoviesModel.dart';
 import 'package:mtott/Service/model/SearchModel.dart';
 import 'package:mtott/Service/repository.dart';
 import 'package:pretty_dio_logger/pretty_dio_logger.dart';
 import '../../const.dart';
-import 'package:dio/dio.dart';
 /*To Call The Api*/
 class SearchRepository{
   Repository repository=Repository();

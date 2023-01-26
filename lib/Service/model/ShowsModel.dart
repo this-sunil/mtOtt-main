@@ -2,7 +2,6 @@
 //
 //     final showsModel = showsModelFromJson(jsonString);
 
-import 'package:meta/meta.dart';
 import 'dart:convert';
 
 ShowsModel showsModelFromJson(String str) => ShowsModel.fromJson(json.decode(str));

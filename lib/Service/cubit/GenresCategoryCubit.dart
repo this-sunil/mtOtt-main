@@ -2,8 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:mtott/Service/model/GenresCategoryModel.dart';
 import '../Repository/GenresCategoryRepository.dart';
-import '../Repository/GenresRepository.dart';
-import '../model/GenresModel.dart';
 import '../state/GenresCategoryState.dart';
 
 /*Latest Movies Api with Bloc State Management*/

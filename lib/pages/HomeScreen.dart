@@ -1,5 +1,3 @@
-import 'dart:convert';
-
 import 'package:flutter/material.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -25,7 +23,6 @@ import 'package:mtott/pages/GenresCategoryScreen.dart';
 import 'package:mtott/pages/LatestTrendingScreen.dart';
 import 'package:mtott/pages/ShowScreen.dart';
 import 'package:mtott/pages/TVSeriesScreen.dart';
-import 'package:mtott/pages/TopPicksScreen.dart';
 import 'package:mtott/plan/PlanScreen.dart';
 
 import 'package:shimmer/shimmer.dart';
@@ -76,7 +73,7 @@ class _HomeScreenState extends State<HomeScreen> {
 
   @override
   void initState() {
-    print("HomeScreen Upcoming Banner");
+    debugPrint("HomeScreen Upcoming Banner");
     context.read<UpComingHomeSliderCubit>().fetchSlider();
     context.read<RunningHomeSliderCubit>().fetchBannerSlider();
     context.read<LatestMovieCubit>().fetchLatestMovie();
@@ -96,7 +93,7 @@ class _HomeScreenState extends State<HomeScreen> {
           });
         },
         onAdFailedToLoad: (ad, err) {
-          print('Failed to load a banner ad: ${err.message}');
+          debugPrint('Failed to load a banner ad: ${err.message}');
           ad.dispose();
         },
       ),
@@ -199,7 +196,7 @@ class _HomeScreenState extends State<HomeScreen> {
                     itemBuilder: (context,index,_){
                       int currentIndex=index+1;
                       return Card(
-                        margin: EdgeInsets.all(2),
+                        margin: const EdgeInsets.all(2),
                         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
                         child: Container(
                           decoration: BoxDecoration(
@@ -283,7 +280,7 @@ class _HomeScreenState extends State<HomeScreen> {
                 child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      Text("Latest & Trending"),
+                      const Text("Latest & Trending"),
                       SvgPicture.asset("asset/logo/rightarrow.svg",color: Theme.of(context).brightness == Brightness.dark?Colors.white:Colors.black),
                 ]),
               ),
@@ -417,8 +414,8 @@ class _HomeScreenState extends State<HomeScreen> {
               highlightColor: Colors.transparent,
               onTap: (){
                 Navigator.push(context,PageRouteBuilder(
-                  transitionDuration: Duration(seconds: 1),
-                  pageBuilder: (context, animation, secondaryAnimation) =>  ShowsScreen(),
+                  transitionDuration: const Duration(seconds: 1),
+                  pageBuilder: (context, animation, secondaryAnimation) =>  const ShowsScreen(),
                   transitionsBuilder: (context, animation, secondaryAnimation, child) {
                     const begin = Offset(0.0, 1.0);
                     const end = Offset.zero;
@@ -517,7 +514,7 @@ class _HomeScreenState extends State<HomeScreen> {
                     scrollDirection: Axis.horizontal,
                     itemCount: 5,
                     shrinkWrap: true,
-                    physics: BouncingScrollPhysics(),
+                    physics: const BouncingScrollPhysics(),
 
                     itemBuilder: (context,index){
                       return Shimmer.fromColors(
@@ -554,7 +551,7 @@ class _HomeScreenState extends State<HomeScreen> {
               splashColor: Colors.transparent,
               onTap: (){
                 Navigator.push(context,PageRouteBuilder(
-                  transitionDuration: Duration(seconds: 1),
+                  transitionDuration: const Duration(seconds: 1),
                   pageBuilder: (context, animation, secondaryAnimation) =>  const ChannelScreen(),
                   transitionsBuilder: (context, animation, secondaryAnimation, child) {
                     const begin = Offset(0.0, 1.0);
@@ -575,7 +572,7 @@ class _HomeScreenState extends State<HomeScreen> {
                 child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      Text("Channels"),
+                      const Text("Channels"),
                       SvgPicture.asset("asset/logo/rightarrow.svg",color: Theme.of(context).brightness == Brightness.dark?Colors.white:Colors.black),
                     ]),
               ),
@@ -675,7 +672,7 @@ class _HomeScreenState extends State<HomeScreen> {
                     scrollDirection: Axis.horizontal,
                     itemCount: 5,
                     shrinkWrap: true,
-                    physics: BouncingScrollPhysics(),
+                    physics: const BouncingScrollPhysics(),
 
                     itemBuilder: (context,index){
                       return Shimmer.fromColors(
@@ -733,7 +730,7 @@ class _HomeScreenState extends State<HomeScreen> {
                 child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      Text("Genres"),
+                      const Text("Genres"),
                       SvgPicture.asset("asset/logo/rightarrow.svg",color: Theme.of(context).brightness == Brightness.dark?Colors.white:Colors.black),
 
                     ]),
@@ -747,13 +744,13 @@ class _HomeScreenState extends State<HomeScreen> {
 
                       child: ListView.builder(
                           shrinkWrap: true,
-                          physics: BouncingScrollPhysics(),
+                          physics: const BouncingScrollPhysics(),
                           scrollDirection: Axis.horizontal,
                           itemCount: state.slider.length,
                           itemBuilder: (context,index){
                             return AnimationConfiguration.staggeredList(
                               position: index,
-                              duration: Duration(seconds: 5),
+                              duration: const Duration(seconds: 5),
                               child: InkWell(
                                 highlightColor: Colors.transparent,
                                 splashColor: Colors.transparent,
@@ -782,7 +779,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                   delay: const Duration(seconds: 1),
                                   child: FadeInAnimation(
                                     child: Card(
-                                      margin: EdgeInsets.all(2),
+                                      margin: const EdgeInsets.all(2),
                                       shape: RoundedRectangleBorder(
                                         borderRadius: BorderRadius.circular(5),
                                       ),
@@ -821,7 +818,7 @@ class _HomeScreenState extends State<HomeScreen> {
                     scrollDirection: Axis.horizontal,
                     itemCount: 5,
                     shrinkWrap: true,
-                    physics: BouncingScrollPhysics(),
+                    physics: const BouncingScrollPhysics(),
 
                     itemBuilder: (context,index){
                       return Shimmer.fromColors(

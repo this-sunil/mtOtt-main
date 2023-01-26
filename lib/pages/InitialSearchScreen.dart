@@ -1,5 +1,3 @@
-import 'package:avatar_glow/avatar_glow.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_staggered_animations/flutter_staggered_animations.dart';
@@ -17,7 +15,6 @@ import '../plan/PlanScreen.dart';
 import 'ChannelScreen.dart';
 import 'DetailsScreen.dart';
 import 'GeneresScreen.dart';
-import 'LanguageScreen.dart';
 
 class InitialSearchScreen extends StatefulWidget {
   final String search;
@@ -28,13 +25,7 @@ class InitialSearchScreen extends StatefulWidget {
 }
 
 class _InitialSearchScreenState extends State<InitialSearchScreen> {
-  List<String> popularList=[
-    "Anupama",
-    "Koffee With Karan",
-    "Aai Kuthe Kaay Karte",
-    "Ghum Hai Kisikey",
-    "Modern Family",
-  ];
+
   TextEditingController search=TextEditingController();
   late SpeechToText speechToText;
   bool isListening=false;
@@ -43,8 +34,8 @@ class _InitialSearchScreenState extends State<InitialSearchScreen> {
   speechtoText() async{
     if(!isListening){
       bool available=await speechToText.initialize(
-          onError: (val)=>print("Error speech to text $val"),
-          onStatus: (val)=>print("Status Speech to Text $val")
+          onError: (val)=>debugPrint("Error speech to text $val"),
+          onStatus: (val)=>debugPrint("Status Speech to Text $val")
       );
       if(available){
         setState(() {
@@ -212,7 +203,7 @@ class _InitialSearchScreenState extends State<InitialSearchScreen> {
             padding: const EdgeInsets.symmetric(vertical:20.0,horizontal: 15),
             child: Row(
               children: [
-                Text("Popular",style: GoogleFonts.inter(color: Color(0xFF707070),fontWeight: FontWeight.w600))
+                Text("Popular",style: GoogleFonts.inter(color: const Color(0xFF707070),fontWeight: FontWeight.w600))
               ],
             ),
           ),
@@ -348,8 +339,8 @@ class _InitialSearchScreenState extends State<InitialSearchScreen> {
                                       ClipRRect(
                                           borderRadius:BorderRadius.circular(5),
                                           child: Container()),
-                                      Padding(
-                                        padding: const EdgeInsets.symmetric(horizontal:10.0),
+                                      const Padding(
+                                        padding: EdgeInsets.symmetric(horizontal:10.0),
                                         child: Text(""),
                                       ),
                                     ],

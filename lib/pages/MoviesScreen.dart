@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_staggered_animations/flutter_staggered_animations.dart';
 import 'package:flutter_svg/svg.dart';
-import 'package:google_fonts/google_fonts.dart';
 import 'package:mtott/Service/cubit/RunningMovieCubit.dart';
 import 'package:mtott/Service/cubit/TopPicksCubit.dart';
 import 'package:mtott/Service/state/RuningMovieState.dart';
@@ -26,6 +25,8 @@ import 'DetailsScreen.dart';
 /*Top picks Api Using with Bloc State Management*/
 
 class MoviesScreen extends StatefulWidget {
+  const MoviesScreen({super.key});
+
   @override
   State<MoviesScreen> createState() => _MoviesScreenState();
 }

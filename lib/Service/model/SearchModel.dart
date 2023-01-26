@@ -2,7 +2,6 @@
 //
 //     final searchModel = searchModelFromJson(jsonString);
 
-import 'package:meta/meta.dart';
 import 'dart:convert';
 
 SearchModel searchModelFromJson(String str) => SearchModel.fromJson(json.decode(str));
