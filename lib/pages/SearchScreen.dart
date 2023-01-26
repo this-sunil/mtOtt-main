@@ -17,7 +17,6 @@ import 'package:speech_to_text/speech_to_text.dart';
 
 import '../Service/cubit/MusicCategoryTypeCubit.dart';
 import '../plan/PlanScreen.dart';
-import 'MusicPlayerScreen.dart';
 import 'TVSeriesScreen.dart';
 class SearchScreen extends StatefulWidget {
   const SearchScreen({Key? key}) : super(key: key);
@@ -152,8 +151,9 @@ class _SearchScreenState extends State<SearchScreen> {
                                       onPressed: (){
                                         setState((){
                                           if(isListening==false){
-                                            speechtoText();
                                             isListening=true;
+                                            speechtoText();
+
                                           }
                                           else{
                                             isListening=false;
