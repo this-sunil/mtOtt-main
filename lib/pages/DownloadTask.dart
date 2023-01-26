@@ -4,12 +4,14 @@ import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:flutter_animation_progress_bar/flutter_animation_progress_bar.dart';
 import 'package:flutter_downloader/flutter_downloader.dart';
+import 'package:flutter_svg/svg.dart';
 import 'package:mtott/utility/theme/Database.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:path_provider_android/path_provider_android.dart';
 import 'package:permission_handler/permission_handler.dart';
 import '../main.dart';
 import 'MyItems.dart';
+import 'SearchScreen.dart';
 class MyDownload extends StatefulWidget {
   final TargetPlatform? platform;
 
@@ -147,7 +149,32 @@ class _MyDownloadState extends State<MyDownload> {
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: AppBar(
-          title: const Text('Download'),
+          leading:IconButton(onPressed: (){
+            Navigator.pop(context);
+          }, icon: SvgPicture.asset("asset/logo/leftarrow.svg",color: Theme.of(context).brightness==Brightness.dark?Colors.white:Colors.black)),
+
+
+          title: const Text("Downloads"),
+          actions: [
+            IconButton(onPressed: (){
+              Navigator.push(context, PageRouteBuilder(
+                transitionDuration: Duration(seconds: 1),
+                pageBuilder: (context, animation, secondaryAnimation) => const SearchScreen(),
+                transitionsBuilder: (context, animation, secondaryAnimation, child) {
+                  const begin = Offset(0.0, 1.0);
+                  const end = Offset.zero;
+                  const curve = Curves.ease;
+
+                  var tween = Tween(begin: begin, end: end).chain(CurveTween(curve: curve));
+
+                  return SlideTransition(
+                    position: animation.drive(tween),
+                    child: child,
+                  );
+                },
+              ));
+            }, icon: SvgPicture.asset("asset/logo/search.svg"))
+          ],
         ),
         body: Builder(
           builder: (context) =>

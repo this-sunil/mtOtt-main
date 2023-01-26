@@ -51,7 +51,7 @@ class _FavouriteMusicScreenState extends State<FavouriteMusicScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        elevation: 0,
+
         leading:IconButton(onPressed: (){
           Navigator.pop(context);
         }, icon: SvgPicture.asset("asset/logo/leftarrow.svg",color: Theme.of(context).brightness == Brightness.dark?Colors.white:Colors.black)),

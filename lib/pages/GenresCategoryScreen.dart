@@ -37,7 +37,8 @@ class _GenresCategoryScreenState extends State<GenresCategoryScreen> {
       appBar: AppBar(
         leading:IconButton(onPressed: (){
           Navigator.pop(context);
-        }, icon: SvgPicture.asset("asset/logo/leftarrow.svg",color: Theme.of(context).brightness==Brightness.dark?Colors.white:Colors.black)),
+        }, icon: SvgPicture.asset("asset/logo/leftarrow.svg",
+            color: Theme.of(context).brightness==Brightness.dark?Colors.white:Colors.black)),
 
 
         title: Text(widget.title),
@@ -59,7 +60,7 @@ class _GenresCategoryScreenState extends State<GenresCategoryScreen> {
                 );
               },
             ));
-          }, icon: SvgPicture.asset("asset/logo/search.svg"))
+          }, icon: SvgPicture.asset("asset/logo/search.svg",color: Theme.of(context).brightness==Brightness.dark?Colors.white:Colors.black))
         ],
       ),
       body: RefreshIndicator(

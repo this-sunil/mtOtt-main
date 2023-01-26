@@ -210,7 +210,7 @@ class _PreferencesScreenState extends State<PreferencesScreen> {
     return Scaffold(
       
       appBar:  AppBar(
-        elevation: 0,
+
         leading: IconButton(
 
             onPressed: () {

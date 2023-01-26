@@ -269,7 +269,7 @@ class _DetailsScreenState extends State<DetailsScreen>
 
     super.initState();
 
-    Future.delayed(Duration(seconds: 5), () {
+    Future.delayed(const Duration(seconds: 5), () {
       _loadInterstitialAd();
     });
   }
@@ -577,7 +577,7 @@ class _DetailsScreenState extends State<DetailsScreen>
           slivers: [
             SliverAppBar(
               systemOverlayStyle:const SystemUiOverlayStyle(),
-                expandedHeight: 250,
+                expandedHeight: 260,
                 floating: true,
                 elevation: 10,
                 pinned: true,
@@ -1139,55 +1139,59 @@ class _DetailsScreenState extends State<DetailsScreen>
                   return Column(
                     children: [
                       state.slider.isNotEmpty
-                          ? Padding(
-                              padding: const EdgeInsets.symmetric(
-                                  vertical: 5.0, horizontal: 10),
-                              child: Row(
-                                  mainAxisAlignment:
-                                      MainAxisAlignment.spaceBetween,
-                                  children: [
-                                    const Text("More Like this"),
-                                    IconButton(
-                                        onPressed: () {
-                                          Navigator.push(
-                                              context,
-                                              PageRouteBuilder(
-                                                transitionDuration:
-                                                    const Duration(seconds: 1),
-                                                pageBuilder: (context,
-                                                        animation,
-                                                        secondaryAnimation) =>
-                                                    const MoreLikeScreen(),
-                                                transitionsBuilder: (context,
-                                                    animation,
-                                                    secondaryAnimation,
-                                                    child) {
-                                                  const begin =
-                                                      Offset(0.0, 1.0);
-                                                  const end = Offset.zero;
-                                                  const curve = Curves.ease;
-                                                  var tween = Tween(
-                                                          begin: begin,
-                                                          end: end)
-                                                      .chain(CurveTween(
-                                                          curve: curve));
-                                                  return SlideTransition(
-                                                    position:
-                                                        animation.drive(tween),
-                                                    child: child,
-                                                  );
-                                                },
-                                              ));
-                                        },
-                                        icon: SvgPicture.asset(
-                                            "asset/logo/rightarrow.svg",
-                                            color:
-                                                Theme.of(context).brightness ==
-                                                        Brightness.dark
-                                                    ? Colors.white
-                                                    : Colors.black))
-                                  ]),
-                            )
+                          ? InkWell(
+                        highlightColor:Colors.transparent,
+                        splashColor: Colors.transparent,
+                        onTap:(){
+                          Navigator.push(
+                              context,
+                              PageRouteBuilder(
+                                transitionDuration:
+                                const Duration(seconds: 1),
+                                pageBuilder: (context,
+                                    animation,
+                                    secondaryAnimation) =>
+                                const MoreLikeScreen(),
+                                transitionsBuilder: (context,
+                                    animation,
+                                    secondaryAnimation,
+                                    child) {
+                                  const begin =
+                                  Offset(0.0, 1.0);
+                                  const end = Offset.zero;
+                                  const curve = Curves.ease;
+                                  var tween = Tween(
+                                      begin: begin,
+                                      end: end)
+                                      .chain(CurveTween(
+                                      curve: curve));
+                                  return SlideTransition(
+                                    position:
+                                    animation.drive(tween),
+                                    child: child,
+                                  );
+                                },
+                              ));
+                        },
+                            child: Padding(
+                                padding: const EdgeInsets.symmetric(
+                                    vertical: 5.0, horizontal: 15),
+                                child: Row(
+                                    mainAxisAlignment:
+                                        MainAxisAlignment.spaceBetween,
+                                    children: [
+                                      const Text("More Like this"),
+
+                                   SvgPicture.asset(
+                                              "asset/logo/rightarrow.svg",
+                                              color:
+                                                  Theme.of(context).brightness ==
+                                                          Brightness.dark
+                                                      ? Colors.white
+                                                      : Colors.black),
+                                    ]),
+                              ),
+                          )
                           : Container(),
                       SizedBox(
                         height: 200,

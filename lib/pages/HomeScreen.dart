@@ -479,21 +479,17 @@ class _HomeScreenState extends State<HomeScreen> {
                                       },
                                     ));
                                   },
-                                  child: Hero(
-                                    transitionOnUserGestures: true,
-                                    tag:"Series",
-                                    child: Padding(
-                                      padding: const EdgeInsets.all(4.0),
-                                      child: Container(
+                                  child: Padding(
+                                    padding: const EdgeInsets.all(4.0),
+                                    child: Container(
 
-                                        height: 400,
-                                        width: 200,
-                                        decoration: BoxDecoration(
-                                          borderRadius:  BorderRadius.circular(12),
-                                          image: DecorationImage(
-                                            fit: BoxFit.cover,
-                                            image: NetworkImage("$baseUrl/images/series/${state.slider[index].data[index].seriesCover}"),
-                                          ),
+                                      height: 400,
+                                      width: 200,
+                                      decoration: BoxDecoration(
+                                        borderRadius:  BorderRadius.circular(12),
+                                        image: DecorationImage(
+                                          fit: BoxFit.cover,
+                                          image: NetworkImage("$baseUrl/images/series/${state.slider[index].data[index].seriesCover}"),
                                         ),
                                       ),
                                     ),

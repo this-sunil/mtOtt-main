@@ -34,7 +34,7 @@ class _GenresScreenState extends State<GenresScreen> {
     return Scaffold(
      
       appBar:  AppBar(
-        elevation: 0,
+
        
         leading: IconButton(
 

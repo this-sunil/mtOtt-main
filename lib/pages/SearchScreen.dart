@@ -11,6 +11,7 @@ import 'package:mtott/const.dart';
 import 'package:mtott/main.dart';
 import 'package:mtott/pages/DetailsScreen.dart';
 import 'package:mtott/pages/InitialSearchScreen.dart';
+import 'package:mtott/pages/SearchMusicScreen.dart';
 import 'package:speech_to_text/speech_to_text.dart';
 
 import '../Service/cubit/MusicCategoryTypeCubit.dart';
@@ -97,7 +98,7 @@ class _SearchScreenState extends State<SearchScreen> {
           child: Column(
             children: [
               Padding(
-                padding: const EdgeInsets.symmetric(horizontal:8.0),
+                padding: const EdgeInsets.symmetric(horizontal:8.0,vertical: 10),
                 child: Container(
                   width: MediaQuery.of(context).size.width,
                   height: 50,
@@ -121,9 +122,9 @@ class _SearchScreenState extends State<SearchScreen> {
                           }
                         });
                       },
-                      style: GoogleFonts.inter(color: Colors.white),
+                      style: GoogleFonts.inter(color: Theme.of(context).brightness==Brightness.dark?Colors.white:Colors.black),
                       textInputAction: TextInputAction.search,
-                      cursorColor: Colors.white,
+                      cursorColor:  Theme.of(context).brightness==Brightness.dark?Colors.white:Colors.black,
                       decoration: InputDecoration(
                         border: InputBorder.none,
                         prefixIcon: IconButton(onPressed: (){
@@ -459,25 +460,28 @@ class _SearchScreenState extends State<SearchScreen> {
                               print("Search State Length ${state.slider.length}");
                               return InkWell(
                                 onTap: (){
+                                  debugPrint("Type of Music ${state.slider[0].searchResponse.songs[index].musicType}");
                                   if(state.slider[0].searchResponse.songs.isNotEmpty){
-                                    context.read<MusicCategoryTypeCubit>().fetchMusicCategoryType(state.slider[0].searchResponse.songs[index].musicType);
-                                    Navigator.push(context,PageRouteBuilder(
-                                      transitionDuration: const Duration(seconds: 1),
-                                      pageBuilder: (context, animation, secondaryAnimation) =>
-                                          MusicPlayerScreen(index: index,title: state.slider[0].searchResponse.songs[index].musicType,
-                                              url: "$baseUrl/${ state.slider[0].searchResponse.songs[index].music}",
-                                              subtitle:  state.slider[0].searchResponse.songs[index].title, imgPath: '$baseUrl/${state.slider[0].searchResponse.songs[index].musicCover}'),
-                                      transitionsBuilder: (context, animation, secondaryAnimation, child) {
-                                        const begin = Offset(0.0, 1.0);
-                                        const end = Offset.zero;
-                                        const curve = Curves.ease;
-                                        var tween = Tween(begin: begin, end: end).chain(CurveTween(curve: curve));
-                                        return SlideTransition(
-                                          position: animation.drive(tween),
-                                          child: child,
-                                        );
-                                      },
-                                    ));
+                                   setState(() {
+                                     context.read<MusicCategoryTypeCubit>().fetchMusicCategoryType(state.slider[0].searchResponse.songs[index].musicType);
+                                     Navigator.push(context,PageRouteBuilder(
+                                       transitionDuration: const Duration(seconds: 1),
+                                       pageBuilder: (context, animation, secondaryAnimation) =>
+                                           SearchMusicScreen(id: state.slider[0].searchResponse.songs[index].id,title: state.slider[0].searchResponse.songs[index].title,
+                                               url: "$baseUrl/${state.slider[0].searchResponse.songs[index].music}",
+                                               type:  state.slider[0].searchResponse.songs[index].musicType, imgPath: '$baseUrl/${state.slider[0].searchResponse.songs[index].musicCover}', singer: state.slider[0].searchResponse.songs[index].singer),
+                                       transitionsBuilder: (context, animation, secondaryAnimation, child) {
+                                         const begin = Offset(0.0, 1.0);
+                                         const end = Offset.zero;
+                                         const curve = Curves.ease;
+                                         var tween = Tween(begin: begin, end: end).chain(CurveTween(curve: curve));
+                                         return SlideTransition(
+                                           position: animation.drive(tween),
+                                           child: child,
+                                         );
+                                       },
+                                     ));
+                                   });
 
                                   }
                                 },

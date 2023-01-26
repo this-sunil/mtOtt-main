@@ -10,6 +10,7 @@ import 'package:tab_indicator_styler/tab_indicator_styler.dart';
 import 'package:razorpay_flutter/razorpay_flutter.dart';
 
 import '../Service/model/subscriptionPlan.dart';
+import '../main.dart';
 
 class SuperPlanScreen extends StatefulWidget {
   const SuperPlanScreen({Key? key}) : super(key: key);
@@ -54,20 +55,34 @@ class _SuperPlanScreenState extends State<SuperPlanScreen> with TickerProviderSt
     if(resp.statusCode==200){
       debugPrint("Response Buy Plan ${resp.body}");
       if(result["status"]==true || result["message"]=="Plan is Not Expire, so still continue to watch"){
-        Navigator.push(context,PageRouteBuilder(
-          transitionDuration: const Duration(seconds: 1),
-          pageBuilder: (context, animation, secondaryAnimation) => const DashBoardScreen(title: appName),
-          transitionsBuilder: (context, animation, secondaryAnimation, child) {
-            const begin = Offset(0.0, 1.0);
-            const end = Offset.zero;
-            const curve = Curves.ease;
-            var tween = Tween(begin: begin, end: end).chain(CurveTween(curve: curve));
-            return SlideTransition(
-              position: animation.drive(tween),
-              child: child,
-            );
-          },
-        ));
+        final resp=await post(Uri.parse(checkPlanBuyApi),body: {
+          "user_id":uid,
+        });
+        final result=jsonDecode(resp.body);
+        if(resp.statusCode==200){
+          setState(() {
+            planBuy=result["status"];
+            Navigator.push(context,PageRouteBuilder(
+              transitionDuration: const Duration(seconds: 1),
+              pageBuilder: (context, animation, secondaryAnimation) => const DashBoardScreen(title: appName),
+              transitionsBuilder: (context, animation, secondaryAnimation, child) {
+                const begin = Offset(0.0, 1.0);
+                const end = Offset.zero;
+                const curve = Curves.ease;
+                var tween = Tween(begin: begin, end: end).chain(CurveTween(curve: curve));
+                return SlideTransition(
+                  position: animation.drive(tween),
+                  child: child,
+                );
+              },
+            ));
+          });
+          debugPrint("Response in Plan Check Or not Buy Api ${resp.request!.url} and \n ${resp.body}");
+        }
+        else{
+          debugPrint("Error in Api ${resp.request!.url} and ${resp.statusCode}");
+        }
+
       }
     }
     else{
@@ -221,7 +236,12 @@ class _SuperPlanScreenState extends State<SuperPlanScreen> with TickerProviderSt
                   shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(5)),
 
                   onPressed: (){
-                    payment(amount,title);
+                    if(amount!=0 && title.isNotEmpty){
+                      payment(amount,title);
+                    }
+                    else{
+                      ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text("Please choose your plan")));
+                    }
 
                   }),
             )

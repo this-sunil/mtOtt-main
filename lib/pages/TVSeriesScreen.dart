@@ -119,19 +119,15 @@ class _TvSeriesScreenState extends State<TvSeriesScreen>
             title: Text(widget.title,
                 style: TextStyle(
                     color: scroll == true ? Colors.grey : Colors.white)),
-            flexibleSpace: Hero(
-              transitionOnUserGestures: true,
-              tag: "Series",
-              child: FlexibleSpaceBar(
-                stretchModes: const [
-                  StretchMode.zoomBackground,
-                ],
-                background: Container(
-                  decoration: BoxDecoration(
-                    image: DecorationImage(
-                      fit: BoxFit.cover,
-                      image: NetworkImage(widget.imgPath),
-                    ),
+            flexibleSpace: FlexibleSpaceBar(
+              stretchModes: const [
+                StretchMode.zoomBackground,
+              ],
+              background: Container(
+                decoration: BoxDecoration(
+                  image: DecorationImage(
+                    fit: BoxFit.cover,
+                    image: NetworkImage(widget.imgPath),
                   ),
                 ),
               ),
@@ -348,19 +344,11 @@ class _TvSeriesScreenState extends State<TvSeriesScreen>
                                           padding: const EdgeInsets.all(8.0),
                                           child: SvgPicture.asset(
                                               "asset/logo/download.svg",
-                                              color: Theme.of(context)
-                                                          .brightness ==
-                                                      Brightness.dark
-                                                  ? Colors.white
-                                                  : Colors.black),
+                                              color: Colors.white),
                                         ),
-                                        Text("Download",
+                                        const Text("Download",
                                             style: TextStyle(
-                                                color: Theme.of(context)
-                                                            .brightness ==
-                                                        Brightness.dark
-                                                    ? Colors.white
-                                                    : Colors.black)),
+                                                color: Colors.white)),
                                       ],
                                     ),
                                     onPressed: () async {

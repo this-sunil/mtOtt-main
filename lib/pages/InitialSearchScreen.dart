@@ -147,7 +147,7 @@ class _InitialSearchScreenState extends State<InitialSearchScreen> {
           ),
           ListTile(
             leading: IconButton(onPressed: (){}, icon: SvgPicture.asset("asset/logo/generes.svg",color: Theme.of(context).brightness == Brightness.dark?Colors.white:Colors.black)),
-            title: Text("Genres"),
+            title: const Text("Genres"),
             onTap: (){
               Navigator.push(context,PageRouteBuilder(
                 transitionDuration: const Duration(seconds: 1),
