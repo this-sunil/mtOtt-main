@@ -212,20 +212,19 @@ class _MyDownloadState extends State<MyDownload> {
                               url: myItem.url,
                               savedDir: _localPath,
                               showNotification: true,
-                              fileName: myItem.name,
+                              fileName: myItem.name+DateTime.now().toString(),
                               openFileFromNotification: true,
                               saveInPublicStorage: true,
                             );
 
                           }
                           else if (myItem.status == DownloadTaskStatus.running) {
-                            await FlutterDownloader.pause(taskId: myItem.itemID.toString());
+                           // await FlutterDownloader.pause(taskId: myItem.itemID.toString());
                           }
                           else if (myItem.status == DownloadTaskStatus.paused) {
                             debugPrint("Item ID ${myItem.itemID}");
                             String? newTaskId = await FlutterDownloader.resume(
-                                requiresStorageNotLow: true,
-                                timeout: 20000,
+
                                 taskId: myItem.itemID.toString());
                             myItem.itemID = newTaskId;
 

@@ -1,8 +1,11 @@
 import 'dart:convert';
 
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_downloader/flutter_downloader.dart';
 import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'package:http/http.dart';
+import 'package:just_audio_background/just_audio_background.dart';
 import 'package:mtott/pages/SplashScreen.dart';
 import 'package:mtott/utility/theme/ThemeCubit.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -18,7 +21,18 @@ class MainScreen extends StatefulWidget {
 }
 
 class _MainScreenState extends State<MainScreen>{
+init() async{
+  await FlutterDownloader.initialize(
 
+    debug: debug, // optional: set to false to disable printing logs to console (default: true)
+    ignoreSsl: true,
+  );
+  await JustAudioBackground.init(
+    androidNotificationChannelId: 'com.ryanheise.audioservice',
+    androidNotificationChannelName: 'mediaPlayback',
+    androidNotificationOngoing: true,
+  );
+}
   Future<InitializationStatus> _initGoogleMobileAds() {
     return MobileAds.instance.initialize();
   }
@@ -41,7 +55,7 @@ class _MainScreenState extends State<MainScreen>{
   }
   @override
   void initState() {
-
+    init();
     _initGoogleMobileAds();
     checkPlanBy();
     super.initState();

@@ -2,7 +2,6 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:mtott/Service/cubit/RunningHomeSliderCubit.dart';
 import 'package:mtott/utility/theme/ThemeCubit.dart';
-
 import 'MainScreen.dart';
 import 'Service/cubit/GenresCategoryCubit.dart';
 import 'Service/cubit/GenresCubit.dart';
