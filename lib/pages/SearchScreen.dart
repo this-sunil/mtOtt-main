@@ -262,8 +262,8 @@ class _SearchScreenState extends State<SearchScreen> {
                             },
                             child: AnimationConfiguration.staggeredList(
                               position: index,
-                              child: ScaleAnimation(
-                                scale: .4,
+                              child: SlideAnimation(
+                                horizontalOffset: 1000,
                                 duration: const Duration(seconds: 2),
                                 curve: Curves.easeInOutSine,
                                 delay: const Duration(seconds: 1),
@@ -530,8 +530,8 @@ class _SearchScreenState extends State<SearchScreen> {
                                   },
                                   child: AnimationConfiguration.staggeredList(
                                     position: index,
-                                    child:ScaleAnimation(
-                                      scale: .4,
+                                    child:SlideAnimation(
+                                      horizontalOffset: 1000,
                                       duration: const Duration(seconds: 2),
                                       curve: Curves.easeInOutSine,
                                       delay: const Duration(seconds: 1),

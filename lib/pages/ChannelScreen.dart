@@ -4,10 +4,8 @@ import 'package:flutter_staggered_animations/flutter_staggered_animations.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:mtott/const.dart';
 import 'package:mtott/pages/SearchScreen.dart';
-
 import '../Service/cubit/LatestChannelCubit.dart';
 import '../Service/state/LatestChannelState.dart';
-import 'package:entry/entry.dart';
 import 'DetailsScreen.dart';
 class ChannelScreen extends StatefulWidget {
   const ChannelScreen({Key? key}) : super(key: key);
@@ -17,14 +15,7 @@ class ChannelScreen extends StatefulWidget {
 }
 
 class _ChannelScreenState extends State<ChannelScreen> {
-  List<String> channel=[
-    "asset/channel/HBO.png",
-    "asset/channel/star utsav.png",
-    "asset/channel/stargold.png",
-    "asset/channel/star plus.png",
-    "asset/channel/star world.png",
-    "asset/channel/hotstar specials.png",
-  ];
+
   @override
   void initState() {
     context.read<LatestChannelCubit>().fetchLatestChannel();
@@ -32,7 +23,6 @@ class _ChannelScreenState extends State<ChannelScreen> {
   }
   @override
   void dispose() {
-    // TODO: implement dispose
     super.dispose();
   }
   @override
@@ -43,7 +33,7 @@ class _ChannelScreenState extends State<ChannelScreen> {
           Navigator.pop(context);
         }, icon: SvgPicture.asset("asset/logo/leftarrow.svg",color: Theme.of(context).brightness == Brightness.dark?Colors.white:Colors.black)),
 
-        title: Text("Channels"),
+        title: const Text("Channels"),
         actions: [
           IconButton(onPressed: (){
             Navigator.push(context, PageRouteBuilder(

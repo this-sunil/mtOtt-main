@@ -267,13 +267,6 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "1.5.4"
-  entry:
-    dependency: "direct main"
-    description:
-      name: entry
-      url: "https://pub.dartlang.org"
-    source: hosted
-    version: "0.0.8"
   equatable:
     dependency: "direct main"
     description:
@@ -397,7 +390,7 @@ packages:
       name: flutter_downloader
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "1.10.1"
+    version: "1.10.1+2"
   flutter_facebook_auth:
     dependency: "direct main"
     description:
@@ -1108,13 +1101,6 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "2.0.0"
-  simple_animations:
-    dependency: transitive
-    description:
-      name: simple_animations
-      url: "https://pub.dartlang.org"
-    source: hosted
-    version: "5.0.0+3"
   sky_engine:
     dependency: transitive
     description: flutter

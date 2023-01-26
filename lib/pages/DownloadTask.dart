@@ -57,7 +57,12 @@ class _MyDownloadState extends State<MyDownload> {
       String? id = data[0];
       DownloadTaskStatus? status = data[1];
       int progress = data[2];
-
+      if (status.toString() == "DownloadTaskStatus(3)" && progress == 100 && id != null) {
+        String query = "SELECT * FROM task WHERE task_id='$id'";
+        var tasks = FlutterDownloader.loadTasksWithRawQuery(query: query);
+        //if the task exists, open it
+        if (tasks != null) FlutterDownloader.open(taskId: id);
+      }
       if (itemsList.isNotEmpty) {
         final item = itemsList.firstWhere((it) => it.itemID == id);
         setState(() {
@@ -71,7 +76,7 @@ class _MyDownloadState extends State<MyDownload> {
   void _unbindBackgroundIsolate() {
     IsolateNameServer.removePortNameMapping('downloader_send_port');
   }
-
+  @pragma('vm:entry-point')
   static void downloadCallback(String id, DownloadTaskStatus status,
       int progress) {
     if (debug) {
@@ -211,29 +216,32 @@ class _MyDownloadState extends State<MyDownload> {
                               openFileFromNotification: true,
                               saveInPublicStorage: true,
                             );
-                            //_requestDownload(myItem);
+
                           }
                           else if (myItem.status == DownloadTaskStatus.running) {
-                            await FlutterDownloader.pause(taskId: myItem.itemID!);
-                            pauseDownload(myItem);
+                            await FlutterDownloader.pause(taskId: myItem.itemID.toString());
                           }
                           else if (myItem.status == DownloadTaskStatus.paused) {
-                            String? newTaskId = await FlutterDownloader.resume(taskId: myItem.itemID!);
+                            debugPrint("Item ID ${myItem.itemID}");
+                            String? newTaskId = await FlutterDownloader.resume(
+                                requiresStorageNotLow: true,
+                                timeout: 20000,
+                                taskId: myItem.itemID.toString());
                             myItem.itemID = newTaskId;
-                            resumeDownload(myItem);
+
                           }
                           else if (myItem.status == DownloadTaskStatus.complete) {
                             await FlutterDownloader.remove(
                                 taskId: myItem.itemID!, shouldDeleteContent: true);
                             await _prepare();
                             setState(() {});
-                            delete(myItem);
+
                           }
                           else if (myItem.status == DownloadTaskStatus.failed) {
-                            String? newTaskId = await FlutterDownloader.retry(taskId: myItem.itemID!);
+                            String? newTaskId = await FlutterDownloader.retry(taskId: myItem.itemID.toString());
                             myItem.itemID = newTaskId;
 
-                            //retryDownload(myItem);
+
                           }
                         }
                     ),
@@ -269,17 +277,18 @@ class _MyDownloadState extends State<MyDownload> {
   }
 
   void retryDownload(MyItem item) async {
-    String? newTaskId = await FlutterDownloader.retry(taskId: item.itemID!);
+    String? newTaskId = await FlutterDownloader.retry(taskId: item.itemID.toString());
     item.itemID = newTaskId;
   }
 
   void resumeDownload(MyItem item) async {
-    String? newTaskId = await FlutterDownloader.resume(taskId: item.itemID!);
+    debugPrint("Items ${item.itemID}");
+    String? newTaskId = await FlutterDownloader.resume(taskId: item.itemID.toString());
     item.itemID = newTaskId;
   }
   void delete(MyItem item) async {
     await FlutterDownloader.remove(
-        taskId: item.itemID!, shouldDeleteContent: true);
+        taskId: item.itemID.toString(), shouldDeleteContent: true);
     await _prepare();
     setState(() {});
   }

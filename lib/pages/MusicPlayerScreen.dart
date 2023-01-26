@@ -23,6 +23,7 @@ import '../Service/cubit/MusicCategoryTypeCubit.dart';
 import '../Service/model/CommentModel.dart';
 import '../Service/state/MusicCategoryTypeState.dart';
 import '../main.dart';
+import 'DownloadTask.dart';
 import 'SearchScreen.dart';
 
 class MusicPlayerScreen extends StatefulWidget {
@@ -49,6 +50,7 @@ class _MusicPlayerScreenState extends State<MusicPlayerScreen>
       "https://ghantalele.com/uploads/files/data-24/11566/Dosti_192(Ghantalele.com).mp3";
   GlobalKey<FormState> formKey =
       GlobalKey();
+  @pragma('vm:entry-point')
   static void downloadCallback(
       String id, DownloadTaskStatus status, int progress) {
     final SendPort send =
@@ -59,7 +61,25 @@ class _MusicPlayerScreenState extends State<MusicPlayerScreen>
   TextEditingController commentController = TextEditingController();
   Future download(String id, String url, String title, String imgPath,
       String musicType) async {
-    var status = await Permission.storage.request();
+
+    helper.addDownload(id, title, url, "", "", imgPath, "", musicType);
+    Navigator.push(context, PageRouteBuilder(
+      transitionDuration: const Duration(seconds: 1),
+      pageBuilder: (context, animation, secondaryAnimation) =>  MyDownload(platform: Theme.of(context).platform),
+      transitionsBuilder: (context, animation, secondaryAnimation, child) {
+        const begin = Offset(0.0, 1.0);
+        const end = Offset.zero;
+        const curve = Curves.ease;
+
+        var tween = Tween(begin: begin, end: end).chain(CurveTween(curve: curve));
+
+        return SlideTransition(
+          position: animation.drive(tween),
+          child: child,
+        );
+      },
+    ));
+   /* var status = await Permission.storage.request();
     if (status.isGranted) {
       final baseStorage = await getExternalStorageDirectory();
 
@@ -85,7 +105,7 @@ class _MusicPlayerScreenState extends State<MusicPlayerScreen>
 
         //helper.addDownload(widget.id, widget.title,widget.url,widget.description,"${widget.seasonId}", widget.imgPath,widget.type,widget.seriesId);
       });
-    }
+    }*/
   }
 
   multipleFav(String title, String id, String url, String image,

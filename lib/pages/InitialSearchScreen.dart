@@ -347,7 +347,7 @@ class _InitialSearchScreenState extends State<InitialSearchScreen> {
                                     children: [
                                       ClipRRect(
                                           borderRadius:BorderRadius.circular(5),
-                                          child: Image.network("",width: 60,height: 60,fit: BoxFit.cover)),
+                                          child: Container()),
                                       Padding(
                                         padding: const EdgeInsets.symmetric(horizontal:10.0),
                                         child: Text(""),

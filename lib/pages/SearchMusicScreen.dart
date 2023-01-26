@@ -20,6 +20,7 @@ import 'package:permission_handler/permission_handler.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import '../Service/model/CommentModel.dart';
 import '../main.dart';
+import 'DownloadTask.dart';
 import 'SearchScreen.dart';
 
 class SearchMusicScreen extends StatefulWidget {
@@ -47,6 +48,7 @@ class _SearchMusicScreenState extends State<SearchMusicScreen>
       "https://ghantalele.com/uploads/files/data-24/11566/Dosti_192(Ghantalele.com).mp3";
   GlobalKey<FormState> formKey =
   GlobalKey();
+  @pragma('vm:entry-point')
   static void downloadCallback(
       String id, DownloadTaskStatus status, int progress) {
     final SendPort send =
@@ -57,33 +59,29 @@ class _SearchMusicScreenState extends State<SearchMusicScreen>
   TextEditingController commentController = TextEditingController();
   Future download(String id, String url, String title, String imgPath,
       String musicType) async {
-    var status = await Permission.storage.request();
-    if (status.isGranted) {
-      final baseStorage = await getExternalStorageDirectory();
 
-      await FlutterDownloader.enqueue(
-          url: url,
-          savedDir: baseStorage!.path,
-          openFileFromNotification: true,
-          allowCellular: true,
-          saveInPublicStorage: false,
-          fileName: title,
-          showNotification: true)
-          .then((value) {
+
         helper.addDownload(id, title, url, "", "", imgPath, "", musicType);
-        final banner = AwesomeSnackbarContent(
-            title: 'Success',
-            message: "Download Successfully",
-            contentType: ContentType.success,
-            inMaterialBanner: true);
-        ScaffoldMessenger.of(context)
-          ..hideCurrentMaterialBanner()
-          ..showSnackBar(
-              SnackBar(content: banner, backgroundColor: Colors.transparent));
+        Navigator.push(context, PageRouteBuilder(
+          transitionDuration: const Duration(seconds: 1),
+          pageBuilder: (context, animation, secondaryAnimation) =>  MyDownload(platform: Theme.of(context).platform),
+          transitionsBuilder: (context, animation, secondaryAnimation, child) {
+            const begin = Offset(0.0, 1.0);
+            const end = Offset.zero;
+            const curve = Curves.ease;
 
-        //helper.addDownload(widget.id, widget.title,widget.url,widget.description,"${widget.seasonId}", widget.imgPath,widget.type,widget.seriesId);
-      });
-    }
+            var tween = Tween(begin: begin, end: end).chain(CurveTween(curve: curve));
+
+            return SlideTransition(
+              position: animation.drive(tween),
+              child: child,
+            );
+          },
+        ));
+
+
+
+
   }
 
   multipleFav(String title, String id, String url, String image,
@@ -113,7 +111,7 @@ class _SearchMusicScreenState extends State<SearchMusicScreen>
           id:"${widget.id}",
           album: widget.singer,
           title: widget.title,
-          artUri: Uri.parse(widget.imgPath),
+          artUri: Uri.parse("$baseUrl/${widget.imgPath}"),
 
         ),
       ),

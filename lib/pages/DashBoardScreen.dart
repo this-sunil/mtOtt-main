@@ -4,9 +4,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_facebook_auth/flutter_facebook_auth.dart';
 import 'package:flutter_font_icons/flutter_font_icons.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:google_sign_in/google_sign_in.dart';
 import 'package:mtott/pages/ChannelScreen.dart';
-import 'package:mtott/pages/DownloadScreen.dart';
 import 'package:mtott/pages/FavouriteMusicScreen.dart';
 import 'package:mtott/pages/GeneresScreen.dart';
 import 'package:mtott/pages/HelpScreen.dart';
@@ -145,7 +143,7 @@ class _DashBoardScreenState extends State<DashBoardScreen> with WidgetsBindingOb
                       ),
                     ),
                     ListTile(
-                      leading:Image.asset("asset/logo/download.png",width: 20,height: 20,color: Theme.of(context).brightness == Brightness.dark?Colors.white:Colors.black),
+                      leading:SvgPicture.asset("asset/logo/downloads.svg",width: 20,height: 20,color: Theme.of(context).brightness == Brightness.dark?Colors.white:Colors.black),
                       title: const Text("Download"),
                       onTap: (){
                         Navigator.push(context, PageRouteBuilder(
@@ -325,7 +323,7 @@ class _DashBoardScreenState extends State<DashBoardScreen> with WidgetsBindingOb
                       title: Text("Genres"),
                     ),
                     ListTile(
-                      leading:SvgPicture.asset("asset/logo/setting.svg",color: Theme.of(context).brightness == Brightness.dark?Colors.white:Colors.black),
+                      leading:SvgPicture.asset("asset/logo/settings.svg",color: Theme.of(context).brightness == Brightness.dark?Colors.white:Colors.black),
                       onTap: (){
                         Navigator.push(context,PageRouteBuilder(
                           transitionDuration: Duration(seconds: 1),
@@ -363,7 +361,10 @@ class _DashBoardScreenState extends State<DashBoardScreen> with WidgetsBindingOb
                           },
                         ));
                       },
-                      leading:Icon(Icons.favorite_border,color: Theme.of(context).brightness == Brightness.dark?Colors.white:Colors.black),
+                      leading:SvgPicture.asset("asset/logo/unlike.svg",
+                          width: 22,
+                          height: 22,
+                          color: Theme.of(context).brightness == Brightness.dark?Colors.white:Colors.black),
                       title: Text("Favourite"),
                     ),
                     ListTile(
