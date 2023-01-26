@@ -193,24 +193,25 @@ class _SuperPlanScreenState extends State<SuperPlanScreen> with TickerProviderSt
                     indicator: RectangularIndicator(
 
                       color: Colors.amber,
+
                       paintingStyle: PaintingStyle.fill,
                       bottomLeftRadius: 5,
 
                       strokeWidth: 5,
                       bottomRightRadius: 5,
                     ),
-                    tabs: const [
+                    tabs:  [
                       Tab(
-                        child: Text("Mobile"),
+                        child: Text("Mobile",style: GoogleFonts.inter(color: Theme.of(context).brightness==Brightness.dark?Colors.white:Colors.black)),
                       ),
                       Tab(
-                        child: Text("Basic"),
+                        child: Text("Basic",style:GoogleFonts.inter(color: Theme.of(context).brightness==Brightness.dark?Colors.white:Colors.black)),
                       ),
                       Tab(
-                        child: Text("Standard"),
+                        child: Text("Standard",style: GoogleFonts.inter(color: Theme.of(context).brightness==Brightness.dark?Colors.white:Colors.black)),
                       ),
                       Tab(
-                        child: Text("Premium"),
+                        child: Text("Premium",style: GoogleFonts.inter(color: Theme.of(context).brightness==Brightness.dark?Colors.white:Colors.black)),
                       ),
 
                     ]),

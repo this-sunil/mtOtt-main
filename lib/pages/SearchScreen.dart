@@ -187,7 +187,7 @@ class _SearchScreenState extends State<SearchScreen> {
                           padding: const EdgeInsets.all(8.0),
                           child: Row(
                             children: [
-                              Text("Top Results",style: GoogleFonts.inter(color: Colors.white,fontSize: 16)),
+                              Text("Top Results",style: GoogleFonts.inter(color: Theme.of(context).brightness==Brightness.dark?Colors.white:Colors.black,fontSize: 16)),
                             ],
                           ),
                         ):Container(),
@@ -317,7 +317,7 @@ class _SearchScreenState extends State<SearchScreen> {
                           padding: const EdgeInsets.all(20.0),
                           child: Row(
                             children: [
-                              Text("Series",style: GoogleFonts.inter(color: Colors.white,fontSize: 16)),
+                              Text("Series",style: GoogleFonts.inter(color: Theme.of(context).brightness==Brightness.dark?Colors.white:Colors.black,fontSize: 16)),
                             ],
                           ),
                         ):Container(),
@@ -388,7 +388,7 @@ class _SearchScreenState extends State<SearchScreen> {
                           padding: const EdgeInsets.all(20.0),
                           child: Row(
                             children: [
-                              Text("Channels",style: GoogleFonts.inter(color: Colors.white,fontSize: 16)),
+                              Text("Channels",style: GoogleFonts.inter(color: Theme.of(context).brightness==Brightness.dark?Colors.white:Colors.black,fontSize: 16)),
                             ],
                           ),
                         ):Container(),
@@ -491,7 +491,7 @@ class _SearchScreenState extends State<SearchScreen> {
                           padding: const EdgeInsets.all(16.0),
                           child: Row(
                             children: [
-                              Text("Songs",style: GoogleFonts.inter(color: Colors.white,fontSize: 16)),
+                              Text("Songs",style: GoogleFonts.inter(color:Theme.of(context).brightness==Brightness.dark?Colors.white:Colors.black,fontSize: 16)),
                             ],
                           ),
                         ):Container(),

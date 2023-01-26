@@ -329,6 +329,7 @@ class DownloadItem extends StatelessWidget {
                   backgroundImage: NetworkImage(myItem.image)),
               title:  Text(myItem.name),
               subtitle: FAProgressBar(
+
                 direction: Axis.horizontal,
                 size: 4,
                 progressColor: Colors.amber,
@@ -337,7 +338,7 @@ class DownloadItem extends StatelessWidget {
                 changeProgressColor: Colors.amberAccent,
                 borderRadius: BorderRadius.circular(5),
 
-                backgroundColor: Colors.white,
+                backgroundColor: Theme.of(context).brightness==Brightness.dark?Colors.white:Colors.black,
                 currentValue: myItem.progress==100?100:myItem.progress%100,
               ),
               trailing:  Padding(
