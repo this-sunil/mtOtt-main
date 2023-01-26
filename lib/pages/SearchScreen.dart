@@ -153,7 +153,6 @@ class _SearchScreenState extends State<SearchScreen> {
                                           if(isListening==false){
                                             isListening=true;
                                             speechtoText();
-
                                           }
                                           else{
                                             isListening=false;
