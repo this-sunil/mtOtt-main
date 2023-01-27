@@ -68,7 +68,7 @@ class _LatestTrendingScreenState extends State<LatestTrendingScreen> {
                           highlightColor: Colors.transparent,
                           splashColor: Colors.transparent,
                           onTap: (){
-                            if(planBuy==false || state.slider[index].data[index].price!="0"){
+                            if(planBuy==false && state.slider[index].data[index].price!="0"){
                               Navigator.push(context,PageRouteBuilder(
                                 transitionDuration: const Duration(seconds: 1),
                                 pageBuilder: (context, animation, secondaryAnimation) =>  const PlanScreen(),

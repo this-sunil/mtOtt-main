@@ -10,6 +10,7 @@ import 'package:mtott/Service/state/TopPicksState.dart';
 import 'package:mtott/pages/TopPicksScreen.dart';
 import 'package:shimmer/shimmer.dart';
 import 'package:google_mobile_ads/google_mobile_ads.dart';
+import 'package:smooth_page_indicator/smooth_page_indicator.dart';
 import '../Service/admob/AdHelper.dart';
 import '../Service/cubit/UpComingMovieSliderCubit.dart';
 import '../Service/state/MovieSliderState.dart';
@@ -59,31 +60,49 @@ class _MoviesScreenState extends State<MoviesScreen> {
             BlocBuilder<UpComingMovieSliderCubit, MovieSliderState>(
               builder: (context, state) {
                 if (state is LoadedState) {
-                  return Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 15.0,vertical: 10),
-                      child: CarouselSlider.builder(
-                        itemCount: state.slider.length,
-                        carouselController: carouselBannerController,
-                        itemBuilder: (context, index, _) {
-                          return Container(
-                            decoration: BoxDecoration(
-                                borderRadius: BorderRadius.circular(10),
-                                image: DecorationImage(
-                                  fit: BoxFit.cover,
-                                  image: NetworkImage("$baseUrl/${state.slider[index].data[index].image}"),
-                                )),
-                          );
-                        },
-                        options: CarouselOptions(
-                          height: 160,
-                          autoPlayCurve: Curves.easeInOutCubic,
-                          autoPlayAnimationDuration: const Duration(seconds: 3),
-                          autoPlay: true,
-                          viewportFraction: .85,
-                          enlargeCenterPage: true,
-                          onPageChanged: (int index, _) {},
-                        ),
-                      ));
+                  return Column(
+                    children: [
+                      Padding(
+                          padding: const EdgeInsets.symmetric(horizontal: 15.0,vertical: 10),
+                          child: CarouselSlider.builder(
+                            itemCount: state.slider.length,
+                            carouselController: carouselBannerController,
+                            itemBuilder: (context, index, _) {
+                              return Container(
+                                decoration: BoxDecoration(
+                                    borderRadius: BorderRadius.circular(10),
+                                    image: DecorationImage(
+                                      fit: BoxFit.cover,
+                                      image: NetworkImage("$baseUrl/${state.slider[index].data[index].image}"),
+                                    )),
+                              );
+                            },
+                            options: CarouselOptions(
+                              height: 160,
+                              autoPlayCurve: Curves.easeInOutCubic,
+                              autoPlayAnimationDuration: const Duration(seconds: 3),
+                              autoPlay: true,
+                              viewportFraction: .85,
+                              enlargeCenterPage: true,
+                              onPageChanged: (int index, _) {
+                                setState(() {
+                                  currentIndex=index;
+                                });
+                              },
+                            ),
+                          )),
+                      AnimatedSmoothIndicator(
+                          activeIndex: currentIndex,
+                          effect: const ScrollingDotsEffect(
+                            activeDotColor: Colors.amberAccent,
+                            dotWidth: 10,
+                            dotHeight: 10,
+                            radius: 5,
+                            dotColor: Colors.white,
+                          ),
+                          count: state.slider.length),
+                    ],
+                  );
                 }
                 else if (state is LoadingState) {
                   return const Center(child: CircularProgressIndicator());
@@ -242,7 +261,7 @@ class _MoviesScreenState extends State<MoviesScreen> {
                               splashColor: Colors.transparent,
                               highlightColor: Colors.transparent,
                               onTap: (){
-                                if (planBuy == false || state.slider[index].topPicksResponse[index].price!="0") {
+                                if (planBuy == false && state.slider[index].topPicksResponse[index].price!="0") {
                                   Navigator.push(context, PageRouteBuilder(
                                     transitionDuration: const Duration(
                                         seconds: 1),

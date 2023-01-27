@@ -12,6 +12,7 @@ import 'package:mtott/Service/state/MusicCategoryState.dart';
 import 'package:mtott/Service/state/UpComingSongState.dart';
 import 'package:mtott/pages/MusicPlayerScreen.dart';
 import 'package:shimmer/shimmer.dart';
+import 'package:smooth_page_indicator/smooth_page_indicator.dart';
 
 import '../Service/admob/AdHelper.dart';
 import '../Service/state/RunningSongState.dart';
@@ -63,35 +64,53 @@ class _MusicScreenState extends State<MusicScreen> {
                 listener: (context, state) {
             }, builder: (context, state) {
               if (state is LoadedState) {
-                return Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 15.0,vertical: 10),
-                    child: CarouselSlider.builder(
-                      itemCount: state.slider.length,
-                      carouselController: carouselController,
+                return Column(
+                  children: [
+                    Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 15.0,vertical: 10),
+                        child: CarouselSlider.builder(
+                          itemCount: state.slider.length,
+                          carouselController: carouselController,
 
-                      itemBuilder: (context, index, _) {
-                        return Container(
+                          itemBuilder: (context, index, _) {
+                            return Container(
 
-                          decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(10),
-                              image: DecorationImage(
-                                fit: BoxFit.fill,
-                                image: NetworkImage("$baseUrl/${state.slider[index].data[index].image}"),
-                              )),
-                        );
-                      },
-                      options: CarouselOptions(
-                        height: 160,
-                        autoPlay: true,
+                              decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.circular(10),
+                                  image: DecorationImage(
+                                    fit: BoxFit.fill,
+                                    image: NetworkImage("$baseUrl/${state.slider[index].data[index].image}"),
+                                  )),
+                            );
+                          },
+                          options: CarouselOptions(
+                            height: 160,
+                            autoPlay: true,
 
-                        autoPlayCurve: Curves.easeInOutCubic,
+                            autoPlayCurve: Curves.easeInOutCubic,
 
-                        autoPlayAnimationDuration: const Duration(seconds: 5),
-                        viewportFraction:.80,
-                        enlargeCenterPage: true,
-                        onPageChanged: (int index, _) {},
-                      ),
-                    ));
+                            autoPlayAnimationDuration: const Duration(seconds: 5),
+                            viewportFraction:.80,
+                            enlargeCenterPage: true,
+                            onPageChanged: (int index, _) {
+                              setState(() {
+                                currentIndex=index;
+                              });
+                            },
+                          ),
+                        )),
+                    AnimatedSmoothIndicator(
+                        activeIndex: currentIndex,
+                        effect: const ScrollingDotsEffect(
+                          activeDotColor: Colors.amberAccent,
+                          dotWidth: 10,
+                          dotHeight: 10,
+                          radius: 5,
+                          dotColor: Colors.white,
+                        ),
+                        count: state.slider.length),
+                  ],
+                );
               }
               else if (state is LoadingState) {
                 return const Center(child: CircularProgressIndicator());
@@ -132,7 +151,7 @@ class _MusicScreenState extends State<MusicScreen> {
                       itemCount: state.slider.length,
                       carouselController: carouselController,
                       itemBuilder: (context, index, _) {
-                        currentIndex=index+1;
+
                         return Container(
                           decoration: BoxDecoration(
                               borderRadius: BorderRadius.circular(10),
@@ -158,7 +177,9 @@ class _MusicScreenState extends State<MusicScreen> {
                         autoPlayAnimationDuration: const Duration(seconds: 3),
                         viewportFraction: 1,
                         enlargeCenterPage: true,
-                        onPageChanged: (int index, _) {},
+                        onPageChanged: (int index, _) {
+
+                        },
                       ),
                     ));
               } else if (state is LoadingState) {

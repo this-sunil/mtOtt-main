@@ -26,6 +26,7 @@ import 'package:mtott/pages/TVSeriesScreen.dart';
 import 'package:mtott/plan/PlanScreen.dart';
 
 import 'package:shimmer/shimmer.dart';
+import 'package:smooth_page_indicator/smooth_page_indicator.dart';
 import '../Service/admob/AdHelper.dart';
 import '../Service/cubit/RunningHomeSliderCubit.dart';
 import '../Service/cubit/UpComingHomeSliderCubit.dart';
@@ -70,7 +71,7 @@ class _HomeScreenState extends State<HomeScreen> {
     }
   }
 
-
+int current=0;
   @override
   void initState() {
     debugPrint("HomeScreen Upcoming Banner");
@@ -118,35 +119,52 @@ class _HomeScreenState extends State<HomeScreen> {
             BlocBuilder<UpComingHomeSliderCubit,UpComingHomeSliderState>(
               builder: (context,state){
                 if(state is LoadedState){
-                 return Padding(
-                    padding: const EdgeInsets.symmetric(horizontal:15.0,vertical: 10),
-                    child: CarouselSlider.builder(
-                      carouselController: carouselBannerController,
-                      itemCount: state.slider.length, itemBuilder: (context,index,_){
-                      return Container(
-
-                        decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(10),
-                            image: DecorationImage(
-                              fit: BoxFit.cover,
-                              image: NetworkImage("$baseUrl/${state.slider[index].data[index].image}"),
-                            )
-                        ),
-
-                      );
-                    },  options: CarouselOptions(
-                        height: 170,
-                        autoPlay: true,
-                        autoPlayCurve: Curves.easeInOutCubic,
-                        autoPlayAnimationDuration: const Duration(seconds: 3),
-                        viewportFraction:.79,
+                 return Column(
+                   children: [
+                     Padding(
+                        padding: const EdgeInsets.symmetric(horizontal:15.0,vertical: 10),
+                        child: CarouselSlider.builder(
+                          carouselController: carouselBannerController,
+                          itemCount: state.slider.length, itemBuilder: (context,index,_){
 
 
-                        enlargeCenterPage: true,
+                          return Container(
 
-                        onPageChanged: (int index,_){},
-                    ),)
-                  );
+                            decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(10),
+                                image: DecorationImage(
+                                  fit: BoxFit.cover,
+                                  image: NetworkImage("$baseUrl/${state.slider[index].data[index].image}"),
+                                )
+                            ),
+
+                          );
+                        },  options: CarouselOptions(
+                            height: 170,
+                            autoPlay: true,
+                            autoPlayCurve: Curves.easeInOutCubic,
+                            autoPlayAnimationDuration: const Duration(seconds: 3),
+                            viewportFraction:.79,
+                            enlargeCenterPage: true,
+                            onPageChanged: (int index,_){
+                              setState(() {
+                                current=index;
+                              });
+                            },
+                        ))
+                      ),
+                     AnimatedSmoothIndicator(
+                         activeIndex: current,
+                         effect: const ScrollingDotsEffect(
+                           activeDotColor: Colors.amberAccent,
+                           dotWidth: 10,
+                           dotHeight: 10,
+                           radius: 5,
+                           dotColor: Colors.white,
+                         ),
+                         count: state.slider.length)
+                   ],
+                 );
                 }
                 return Padding(
                     padding: const EdgeInsets.symmetric(horizontal:15.0,vertical: 10),
@@ -172,16 +190,18 @@ class _HomeScreenState extends State<HomeScreen> {
                 );
               },
             ),
+
             BlocBuilder<RunningHomeSliderCubit,RuningHomeState>(
 
                 builder: (context,state){
                 if(state is LoadedStates){
                 return Padding(
-                  padding: const EdgeInsets.symmetric(vertical:15.0),
+                  padding: const EdgeInsets.symmetric(vertical:20.0),
                   child: CarouselSlider.builder(
                     options: CarouselOptions(
                         height: 200,
                         autoPlay: true,
+                        enlargeCenterPage: true,
 
                         autoPlayCurve: Curves.easeInOutCubic,
                         autoPlayAnimationDuration: const Duration(seconds: 5),
@@ -317,7 +337,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                       highlightColor: Colors.transparent,
                                       splashColor: Colors.transparent,
                                       onTap: (){
-                                        if(planBuy==false || state.slider[index].data[index].price!="0"){
+                                        if(planBuy==false && state.slider[index].data[index].price!="0"){
                                           Navigator.push(context,PageRouteBuilder(
                                             transitionDuration: const Duration(seconds: 1),
                                             pageBuilder: (context, animation, secondaryAnimation) =>  const PlanScreen(),

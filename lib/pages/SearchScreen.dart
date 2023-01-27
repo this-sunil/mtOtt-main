@@ -199,7 +199,7 @@ class _SearchScreenState extends State<SearchScreen> {
                             print("Search State Length ${state.slider.length}");
                           return InkWell(
                             onTap: (){
-                              if (planBuy == false || state.slider[0].searchResponse.movies[index].price!="0") {
+                              if (planBuy == false && state.slider[0].searchResponse.movies[index].price!="0") {
                                 Navigator.push(context, PageRouteBuilder(
                                   transitionDuration: const Duration(
                                       seconds: 1),

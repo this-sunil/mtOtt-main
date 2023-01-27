@@ -1,12 +1,9 @@
 import 'dart:collection';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:mtott/main.dart';
-
-
 import '../utility/theme/ThemeCubit.dart';
 
 class PreferencesScreen extends StatefulWidget {

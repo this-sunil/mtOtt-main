@@ -78,7 +78,7 @@ class _GenresCategoryScreenState extends State<GenresCategoryScreen> {
                       splashColor: Colors.transparent,
                       highlightColor: Colors.transparent,
                       onTap: (){
-                        if (planBuy == false || state.slider[index].data[index].price!="0") {
+                        if (planBuy == false && state.slider[index].data[index].price!="0") {
                           Navigator.push(context, PageRouteBuilder(
                             transitionDuration: const Duration(
                                 seconds: 1),
