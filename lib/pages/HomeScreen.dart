@@ -137,7 +137,6 @@ int current=0;
                                   image: NetworkImage("$baseUrl/${state.slider[index].data[index].image}"),
                                 )
                             ),
-
                           );
                         },  options: CarouselOptions(
                             height: 170,
@@ -488,9 +487,7 @@ int current=0;
                                     const begin = Offset(0.0, 1.0);
                                     const end = Offset.zero;
                                     const curve = Curves.ease;
-
                                     var tween = Tween(begin: begin, end: end).chain(CurveTween(curve: curve));
-
                                     return SlideTransition(
                                       position: animation.drive(tween),
                                       child: child,
@@ -500,7 +497,6 @@ int current=0;
                               },
                               child: ScaleAnimation(
                                 scale: 0.5,
-
                                 duration: const Duration(seconds: 5),
                                 curve: Curves.easeInOutSine,
                                 delay: const Duration(seconds: 1),
@@ -508,7 +504,6 @@ int current=0;
                                   child: Padding(
                                     padding: const EdgeInsets.all(4.0),
                                     child: Container(
-
                                       height: 400,
                                       width: 200,
                                       decoration: BoxDecoration(

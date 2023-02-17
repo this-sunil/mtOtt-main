@@ -95,6 +95,45 @@ class _SignInScreenState extends State<SignInScreen> {
     }
 
   }
+  signInWithGoogle() async{
+    SharedPreferences pref=await SharedPreferences.getInstance();
+    GoogleSignInAccount? googleSignInAccount =
+    await googleSignIn.signIn();
+
+    if (googleSignInAccount != null) {
+      final GoogleSignInAuthentication
+      googleSignInAuthentication =
+      await googleSignInAccount.authentication;
+
+      final AuthCredential credential =
+      GoogleAuthProvider.credential(
+        accessToken:
+        googleSignInAuthentication.accessToken,
+        idToken: googleSignInAuthentication.idToken,
+      );
+      try {
+        await FirebaseAuth.instance
+            .signInWithCredential(credential).then((
+            value) {
+          setState(() {
+            pref.setString("imageUrl",
+                googleSignInAccount.photoUrl
+                    .toString());
+            pref.setString("fullName", value.user!.displayName.toString());
+            debugPrint(
+                value.additionalUserInfo!.profile
+                    .toString());
+            signUp(googleSignInAccount.email);
+          });
+        });
+      }on FirebaseAuthException catch  (e){
+        pref.remove("imageUrl");
+        ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(
+                backgroundColor: Colors.black,
+                content: Text(e.message.toString(),style: const TextStyle(color: Colors.white))));
+      }}
+  }
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -270,43 +309,7 @@ class _SignInScreenState extends State<SignInScreen> {
                             extendedPadding: const EdgeInsets.symmetric(
                                 horizontal: 200, vertical: 20),
                             onPressed: () async {
-                              SharedPreferences pref=await SharedPreferences.getInstance();
-                               GoogleSignInAccount? googleSignInAccount =
-                                  await googleSignIn.signIn();
-
-                                if (googleSignInAccount != null) {
-                                  final GoogleSignInAuthentication
-                                  googleSignInAuthentication =
-                                  await googleSignInAccount.authentication;
-
-                                  final AuthCredential credential =
-                                  GoogleAuthProvider.credential(
-                                    accessToken:
-                                    googleSignInAuthentication.accessToken,
-                                    idToken: googleSignInAuthentication.idToken,
-                                  );
-                                  try {
-                                  await FirebaseAuth.instance
-                                      .signInWithCredential(credential).then((
-                                      value) {
-                                    setState(() {
-                                      pref.setString("imageUrl",
-                                          googleSignInAccount.photoUrl
-                                              .toString());
-                                      pref.setString("fullName", value.user!.displayName.toString());
-                                      debugPrint(
-                                          value.additionalUserInfo!.profile
-                                              .toString());
-                                      signUp(googleSignInAccount.email);
-                                    });
-                                  });
-                                }on FirebaseAuthException catch  (e){
-                                    pref.remove("imageUrl");
-                                    ScaffoldMessenger.of(context).showSnackBar(
-                                        SnackBar(
-                                            backgroundColor: Colors.black,
-                                            content: Text(e.message.toString(),style: const TextStyle(color: Colors.white))));
-                              }}
+                             signInWithGoogle();
 
                             },
                             label: Row(

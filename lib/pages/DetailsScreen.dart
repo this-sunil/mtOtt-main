@@ -594,7 +594,8 @@ class _DetailsScreenState extends State<DetailsScreen>
                 flexibleSpace: FlexibleSpaceBar(
                   titlePadding: EdgeInsets.zero,
                   collapseMode: CollapseMode.parallax,
-                  background: Stack(fit: StackFit.expand, children: [
+                  background:
+                  Stack(fit: StackFit.expand, children: [
                     PodVideoPlayer(
                       controller: podPlayerController,
                       backgroundColor: Colors.transparent,

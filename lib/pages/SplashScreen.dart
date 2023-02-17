@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:mtott/const.dart';
 import '../main.dart';
 import 'DashBoardScreen.dart';
 import 'SignInScreen.dart';
@@ -43,7 +44,7 @@ class _SplashScreenState extends State<SplashScreen> with SingleTickerProviderSt
             //print("End Of the screen");
 
             if(data!="null"){
-              Navigator.pushReplacement(context, MaterialPageRoute(builder: (context)=>const DashBoardScreen(title: 'MT OTT')));
+              Navigator.pushReplacement(context, MaterialPageRoute(builder: (context)=>const DashBoardScreen(title: appName)));
             }
             else{
               Navigator.pushReplacement(context, MaterialPageRoute(builder: (context)=> SignInScreen()));
@@ -58,15 +59,6 @@ class _SplashScreenState extends State<SplashScreen> with SingleTickerProviderSt
                     colorFilter: ColorFilter.mode(Colors.deepOrangeAccent, BlendMode.colorDodge),
                   ),
                 ),
-                child: Center(
-                  child: Card(
-                    shape: RoundedRectangleBorder(
-                      side: const BorderSide(color: Colors.white),
-                      borderRadius: BorderRadius.circular(10)
-                    ),
-                    child: Image.asset("asset/logo/logo.png",width: animation.value.toDouble(),height: animation.value.toDouble()),
-                  ),
-                )
             );
           }, duration: const Duration(seconds: 3),
         ),

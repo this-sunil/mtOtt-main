@@ -3,7 +3,7 @@ const String baseUrl="https://mtadmin.online";
 const String login="$baseUrl/userapi/api.php?method=login";
 const String socialSignIn="$baseUrl/userapi/api.php?method=googlelogin";
 const String register="$baseUrl/userapi/api.php?method=register";
-const String appName="MT OTT";
+const String appName="24 UA MOVIE";
 const String checkPlanBuyApi="$baseUrl/userapi/api.php?method=check_plansubscription";
 /*Ads Settings*/
 const String bannerAdUnitIdAndroid="ca-app-pub-3940256099942544/6300978111";

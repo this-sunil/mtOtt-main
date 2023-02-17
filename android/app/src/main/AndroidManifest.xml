@@ -14,7 +14,7 @@
 
 
    <application
-        android:label="mtott"
+        android:label="24 UA MOVIE"
         android:name="${applicationName}"
         android:icon="@mipmap/ic_launcher"
        android:hardwareAccelerated="true">

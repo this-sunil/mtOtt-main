@@ -1,6 +1,4 @@
 import 'package:equatable/equatable.dart';
-import 'package:mtott/Service/model/BannerModel.dart';
-
 import '../model/LatestMoviesModel.dart';
 abstract class LatestMovieState extends Equatable{}
 class LatestMovieInitialState extends LatestMovieState {
