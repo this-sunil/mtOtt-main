@@ -1,0 +1,180 @@
+name: CI/CD
+
+on:
+  push:
+    branches: [main, develop]
+  pull_request:
+    branches: [main, develop]
+
+env:
+  FLUTTER_VERSION: "3.24.0"
+
+jobs:
+  # ---------------------------------------------------------------------
+  # Static analysis + formatting gate — fails fast before anything else
+  # runs, since a lint/format failure means the rest of the pipeline is
+  # wasted CI time.
+  # ---------------------------------------------------------------------
+  analyze:
+    name: Analyze & format check
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: subosito/flutter-action@v2
+        with:
+          flutter-version: ${{ env.FLUTTER_VERSION }}
+          channel: stable
+          cache: true
+
+      - name: Install dependencies
+        run: flutter pub get
+
+      - name: Verify formatting
+        run: dart format --output=none --set-exit-if-changed .
+
+      - name: Analyze
+        run: flutter analyze --fatal-infos
+
+  # ---------------------------------------------------------------------
+  # Unit + widget tests with coverage
+  # ---------------------------------------------------------------------
+  test:
+    name: Unit & widget tests
+    runs-on: ubuntu-latest
+    needs: analyze
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: subosito/flutter-action@v2
+        with:
+          flutter-version: ${{ env.FLUTTER_VERSION }}
+          channel: stable
+          cache: true
+
+      - name: Install dependencies
+        run: flutter pub get
+
+      - name: Run tests with coverage
+        run: flutter test --coverage
+
+      - name: Enforce minimum coverage threshold
+        run: |
+          sudo apt-get update && sudo apt-get install -y lcov
+          COVERAGE=$(lcov --summary coverage/lcov.info 2>&1 | grep "lines" | grep -oP '\d+\.\d+(?=%)')
+          echo "Line coverage: ${COVERAGE}%"
+          MIN_COVERAGE=70
+          if (( $(echo "$COVERAGE < $MIN_COVERAGE" | bc -l) )); then
+            echo "::error::Coverage ${COVERAGE}% is below the ${MIN_COVERAGE}% threshold"
+            exit 1
+          fi
+
+      - name: Upload coverage report
+        uses: actions/upload-artifact@v4
+        with:
+          name: coverage-report
+          path: coverage/lcov.info
+
+  # ---------------------------------------------------------------------
+  # Android build (APK for PRs, App Bundle for release branches)
+  # ---------------------------------------------------------------------
+  build_android:
+    name: Build Android
+    runs-on: ubuntu-latest
+    needs: test
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: subosito/flutter-action@v2
+        with:
+          flutter-version: ${{ env.FLUTTER_VERSION }}
+          channel: stable
+          cache: true
+
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: "17"
+
+      - name: Install dependencies
+        run: flutter pub get
+
+      - name: Decode signing keystore
+        if: github.ref == 'refs/heads/main'
+        env:
+          ANDROID_KEYSTORE_BASE64: ${{ secrets.ANDROID_KEYSTORE_BASE64 }}
+        run: |
+          echo "$ANDROID_KEYSTORE_BASE64" | base64 --decode > android/app/release.keystore
+
+      - name: Build App Bundle (release)
+        if: github.ref == 'refs/heads/main'
+        env:
+          ANDROID_KEYSTORE_PASSWORD: ${{ secrets.ANDROID_KEYSTORE_PASSWORD }}
+          ANDROID_KEY_ALIAS: ${{ secrets.ANDROID_KEY_ALIAS }}
+          ANDROID_KEY_PASSWORD: ${{ secrets.ANDROID_KEY_PASSWORD }}
+        run: |
+          flutter build appbundle --release \
+            --dart-define=ENVIRONMENT=production \
+            --dart-define=BASE_API_URL=${{ secrets.PROD_BASE_API_URL }} \
+            --dart-define=API_CERT_PIN_SHA256=${{ secrets.PROD_CERT_PIN_SHA256 }}
+
+      - name: Build debug APK (PRs)
+        if: github.ref != 'refs/heads/main'
+        run: flutter build apk --debug
+
+      - name: Upload build artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: android-build
+          path: |
+            build/app/outputs/bundle/release/*.aab
+            build/app/outputs/flutter-apk/*.apk
+          if-no-files-found: ignore
+
+  # ---------------------------------------------------------------------
+  # iOS build (no codesigning on CI by default — archive step is left to
+  # Xcode Cloud / Codemagic / Fastlane match in a real pipeline, since it
+  # needs provisioning-profile secrets that are out of scope here).
+  # ---------------------------------------------------------------------
+  build_ios:
+    name: Build iOS
+    runs-on: macos-14
+    needs: test
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: subosito/flutter-action@v2
+        with:
+          flutter-version: ${{ env.FLUTTER_VERSION }}
+          channel: stable
+          cache: true
+
+      - name: Install dependencies
+        run: flutter pub get
+
+      - name: Build (no codesign)
+        run: |
+          flutter build ios --release --no-codesign \
+            --dart-define=ENVIRONMENT=production \
+            --dart-define=BASE_API_URL=${{ secrets.PROD_BASE_API_URL }}
+
+  # ---------------------------------------------------------------------
+  # Deploy to internal testers on merge to main (Play Console internal
+  # track + TestFlight via fastlane) — placeholder job showing the
+  # intended shape; actual fastlane lanes live in ios/fastlane &
+  # android/fastlane in a real repo.
+  # ---------------------------------------------------------------------
+  deploy_internal:
+    name: Deploy to internal testers
+    runs-on: ubuntu-latest
+    needs: [build_android, build_ios]
+    if: github.ref == 'refs/heads/main'
+    steps:
+      - uses: actions/checkout@v4
+      - name: Download Android artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: android-build
+          path: build-output
+      - name: Placeholder — publish to Play Console internal track
+        run: echo "Wire up fastlane supply / Codemagic publishing here."
